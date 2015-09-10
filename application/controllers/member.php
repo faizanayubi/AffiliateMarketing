@@ -5,8 +5,18 @@
  * @author Faizan Ayubi
  */
 use Shared\Controller as Controller;
+use Framework\RequestMethods as RequestMethods;
 
 class Member extends Controller {
+    
+    public function index() {
+        $this->seo(array(
+            "title" => "Dashboard",
+            "view" => $this->getLayoutView()
+        ));
+        $view = $this->getActionView();
+        
+    }
     
     public function login() {
         $this->defaultLayout = "layouts/blank";
@@ -33,6 +43,20 @@ class Member extends Controller {
     }
     
     public function register() {
-        
+        $this->defaultLayout = "layouts/blank";
+        $this->setLayout();
+        $this->seo(array(
+            "title" => "Register",
+            "view" => $this->getLayoutView()
+        ));
+        $view = $this->getActionView();
+    }
+    
+    public function profile() {
+        $this->seo(array(
+            "title" => "Profile",
+            "view" => $this->getLayoutView()
+        ));
+        $view = $this->getActionView();
     }
 }

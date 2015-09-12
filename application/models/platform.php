@@ -27,4 +27,12 @@ class Platform extends Shared\Model{
      * @label link
      */
     protected $_link;
+    
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     */
+    protected $_image;
 }

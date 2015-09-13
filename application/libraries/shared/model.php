@@ -48,7 +48,7 @@ namespace Shared {
             $raw = $primary["raw"];
             if (empty($this-> $raw)) {
                 $this->setCreated(date("Y-m-d H:i:s"));
-                $this->setLive(true);
+                $this->setLive(false);
             }
             $this->setModified(date("Y-m-d H:i:s"));
             parent::save();

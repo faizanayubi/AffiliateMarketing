@@ -20,4 +20,11 @@ class Link extends Shared\Model {
      * @type integer
      */
     protected $_item_id;
+    
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     */
+    protected $_user_id;
 }

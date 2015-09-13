@@ -29,14 +29,6 @@ namespace Shared {
         /**
          * @column
          * @readwrite
-         * @type boolean
-         * @index
-         */
-        protected $_deleted;
-
-        /**
-         * @column
-         * @readwrite
          * @type datetime
          */
         protected $_created;
@@ -56,7 +48,6 @@ namespace Shared {
             $raw = $primary["raw"];
             if (empty($this-> $raw)) {
                 $this->setCreated(date("Y-m-d H:i:s"));
-                $this->setDeleted(false);
                 $this->setLive(true);
             }
             $this->setModified(date("Y-m-d H:i:s"));

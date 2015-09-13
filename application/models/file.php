@@ -28,13 +28,6 @@ class File extends Shared\Model {
      * @readwrite
      * @type integer
      */
-    protected $_size;
-
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     */
     protected $_user_id;
 
 }

@@ -59,6 +59,7 @@ class Content extends Admin {
             $item->url = RequestMethods::post("url");
             $item->target = RequestMethods::post("target");
             $item->description = RequestMethods::post("description");
+            $item->live = RequestMethods::post("live", "0");
             
             $item->save();
             $view->set("success", true);

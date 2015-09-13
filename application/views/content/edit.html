@@ -25,7 +25,18 @@
                         </tr>
                         <tr>
                             <td><b>Target</b></td>
-                            <td><input type="text" class="form-control" name="target" value="{echo $item->target}"></td>
+                            <td><input type="url" class="form-control" name="target" value="{echo $item->target}"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Live</b></td>
+                            <td>
+                                <label class="radio-inline">
+                                    <input type="radio" name="live" value="1" {if($item->live == "1")}checked{/if}> Enable
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="live" value="0" {if($item->live == "0")}checked{/if}> Disable
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <td><b>Details</b></td>

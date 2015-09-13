@@ -1,0 +1,33 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header text-center">Manage</h1>
+            <div class="panel panel-default">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Posted</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $content in $contents}
+                        <tr>
+                            <td>{echo $content->id}</td>
+                            <td>{echo $content->title}</td>
+                            <td>{echo $content->created}</td>
+                            <td>
+                                <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
+                                <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit </a>&nbsp;
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+                
+            </div>
+        </div>
+    </div>
+</div>

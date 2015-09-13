@@ -15,6 +15,18 @@ class Admin extends Auth {
     public function index() {
         $this->seo(array("title" => "Dashboard", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+        $now = strftime("%Y-%m-%d", strtotime('now'));
+        
+        $users = User::count();
+        $items = Item::count();
+        $platforms = Platform::count();
+        $links = Link::count();
+        
+        $view->set("now", $now);
+        $view->set("users", $users);
+        $view->set("items", $items);
+        $view->set("platforms", $platforms);
+        $view->set("links", $links);
     }
     
     /**

@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Top Links
+        </h1>
+        {foreach $link in $links}
+        <div class="col-sm-6 col-md-4">
+            <div class="thumbnail">
+                <img src="{echo CDN}/uploads/images/{echo $link->image}" alt="{echo $link->title}">
+                <div class="caption">
+                    <h3>{echo $link->title}</h3>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Generate Short URL!</button>
+                        </span>
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>

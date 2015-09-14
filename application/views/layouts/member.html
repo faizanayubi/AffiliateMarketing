@@ -26,7 +26,12 @@
 
     <div id="wrapper">
         {include layouts/navigation/member.html}
-        {ayield action}
+        
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                {ayield action}
+            </div>
+        </div>
     </div>
 
     <!-- Bootstrap Core JavaScript -->

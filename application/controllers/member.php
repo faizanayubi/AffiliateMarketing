@@ -17,9 +17,35 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
+        $click = 0;
         
         $links = Link::all(array("user_id = ?" => $this->user->id), array("item_id", "short", "created"), "created", "desc", 10, 1);
+        foreach ($links as $link) {
+            $stat = Stat::first(array("link_id = ?" => $link->id), array("shortUrlClicks"));
+            $click += $stat->shortUrlClicks;
+        }
+        
         $view->set("links", $links);
+        $view->set("earnings", $this->totalEarnings()["total"]);
+        $view->set("pending", $this->totalEarnings()["pending"]);
+        $view->set("click", $click);
+    }
+    
+    protected function totalEarnings() {
+        $total_earnings = 0;
+        $pending = 0;
+        $earnings = Earning::all(array("user_id = ?" => $this->user->id), array("amount", "live"));
+        foreach ($earnings as $earning) {
+            $total_earnings += $earning->amount;
+            if($earning->live == "1") {
+                $pending += $earning->amount;
+            }
+        }
+        $earning = array(
+            "total" => $total_earnings,
+            "pending" => $pending
+        );
+        return $earning;
     }
     
     /**
@@ -53,6 +79,22 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
+        
+        $title = RequestMethods::get("title", "");
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        
+        $where = array(
+            "title LIKE ?" => "%{$title}%",
+            "live = ?" => true,
+        );
+        $items = Item::all($where, array("title", "image"), "created", "desc", $limit, $page);
+        $count = Item::count($where);
+        
+        $view->set("limit", $limit);
+        $view->set("page", $page);
+        $view->set("count", $count);
+        $view->set("items", $items);
     }
     
     /**

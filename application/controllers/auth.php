@@ -46,6 +46,7 @@ class Auth extends Controller {
             $exist = User::first(array("email = ?" => RequestMethods::post("email")));
             if (!$exist) {
                 $user = new User(array(
+                    "username" => RequestMethods::post("username"),
                     "name" => RequestMethods::post("name"),
                     "email" => RequestMethods::post("email"),
                     "password" => sha1(RequestMethods::post("password")),

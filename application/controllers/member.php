@@ -150,6 +150,32 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
+        $account = Account::first(array("user_id = ?" => $this->user->id));
+        if(!$account) {
+            $account = new Account();
+        }
+        
+        if (RequestMethods::post('action') == 'saveUser') {
+            $user = User::first(array("id = ?" => $this->user->id));
+            $user->phone = RequestMethods::post('phone');
+            $user->name = RequestMethods::post('name');
+            $user->save();
+            $view->set("success", true);
+            $view->set("user", $user);
+        }
+        
+        if (RequestMethods::get("action") == "saveAccount") {
+            $account->user_id = $this->user->id;
+            $account->name = RequestMethods::post("name");
+            $account->bank = RequestMethods::post("bank");
+            $account->number = RequestMethods::post("number");
+            $account->ifsc = RequestMethods::post("ifsc");
+            
+            $account->save();
+            $view->set("success", true);
+        }
+        
+        $view->set("account", $account);
     }
     
     /**

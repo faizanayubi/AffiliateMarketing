@@ -1,0 +1,48 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">Data Analysis</h1>
+        <form class="form-inline text-center" role="form" id="created_stats">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Model</label>
+                    <select name="model" id="item" class="form-control">
+                        <option value="earning">Earning</option>
+                        <option value="file">File</option>
+                        <option value="item">Content</option>
+                        <option value="link">Link</option>
+                        <option value="platform">Platform</option>
+                        <option value="rpm">RPM</option>
+                        <option value="social">Social</option>
+                        <option value="stat">Stat</option>
+                        <option value="user" selected="selected">Users</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">From</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                    <input type="date" style="width: 200px" name="startdate" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">To</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                    <input type="date" style="width: 200px" name="enddate" class="form-control" />
+                </div>
+            </div>
+            <input type="hidden" name="action" value="dataAnalysis">
+            <button type="submit" class="btn btn-primary">Analyze</button>
+        </form>
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Stats
+            </div>
+            <div class="panel-body">
+                <div id="stats">Select an opportunity and date range and then click on view stats button to show details.</div>
+            </div>
+        </div>
+    </div>
+</div>

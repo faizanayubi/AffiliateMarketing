@@ -1,8 +1,8 @@
 <?php
 
 // initialize Googl
-include("Googl.php");
+include("googl.php");
 
-$googl = new Googl();
+$googl = new googl();
 
 Framework\Registry::set("googl", $googl);

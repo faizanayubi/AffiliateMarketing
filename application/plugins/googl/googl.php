@@ -1,6 +1,6 @@
 <?php
 
-class Googl {
+class googl {
 
     protected $apiKey = 'YOUR-API-KEY';
     protected $baseURL = 'https://www.googleapis.com/urlshortener/v1/url';

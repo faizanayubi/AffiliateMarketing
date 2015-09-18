@@ -10,6 +10,13 @@ class Platform extends Shared\Model{
     /**
      * @column
      * @readwrite
+     * @type integer
+     */
+    protected $_user_id;
+    
+    /**
+     * @column
+     * @readwrite
      * @type text
      * @length 100
      * 

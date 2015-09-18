@@ -57,14 +57,15 @@ class Auth extends Controller {
                 $user->save();
                 
                 $platform = new Platform(array(
+                    "user_id" => $user->id,
                     "name" => "FACEBOOK_PAGE",
                     "link" =>  RequestMethods::post("link"),
                     "image" => $this->_upload("fbadmin", "images")
                 ));
                 $platform->save();
-                $view->set("message", "Your account has been created and will be activate within 24 hours");
+                $view->set("message", "Your account has been created and will be activate within 3 hours after verification.");
             } else {
-                $view->set("message", 'Account exists, login from <a href="/admin/login">here</a>');
+                $view->set("message", 'Username exists, login from <a href="/admin/login">here</a>');
             }
         }
     }

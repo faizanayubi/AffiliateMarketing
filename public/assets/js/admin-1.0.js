@@ -68,6 +68,28 @@ $(document).ready(function () {
         });
     });
     
+    $('#getstats').submit(function (e) {
+        $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');
+        e.preventDefault();
+        var data = $(this).serializeArray();
+        request.read({
+            action: "member/stats",
+            data: data,
+            callback: function (data) {
+                $('#stats').html('');
+                if (data.data) {
+                    Morris.Bar({
+                        element: 'stats',
+                        data: toArray(data.data),
+                        xkey: 'y',
+                        ykeys: ['a'],
+                        labels: ['Total']
+                    });
+                }
+            }
+        });
+    });
+    
     $('button[name=message]').click(function (e) {
         var self = this;
         window.opts.subject = $(this).data("subject");

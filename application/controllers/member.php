@@ -57,6 +57,24 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
+        
+        if (RequestMethods::get("action") == "showStats") {
+            $startdate = RequestMethods::get("startdate");
+            $enddate = RequestMethods::get("enddate");
+            
+            $diff = date_diff(date_create($startdate), date_create($enddate));
+            for ($i = 0; $i < $diff->format("%a"); $i++) {
+                $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));$count = 0;
+                $links = Link::all(array("created LIKE ?" => "%{$date}%"), array("id"));
+                foreach ($links as $link) {
+                    $stat = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("shortUrlClicks"));
+                    $count += $stat->shortUrlClicks;
+                }
+                $obj[] = array('y' => $date, 'a' => $count);
+            }
+            
+            $view->set("data", \Framework\ArrayMethods::toObject($obj));
+        }
     }
     
     /**

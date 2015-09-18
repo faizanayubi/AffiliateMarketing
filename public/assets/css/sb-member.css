@@ -39,6 +39,7 @@ body {
 
     #page-wrapper {
         padding: 10px;
+        min-height:800px;
     }
 }
 

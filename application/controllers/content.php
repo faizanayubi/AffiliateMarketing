@@ -49,6 +49,21 @@ class Content extends Admin {
     /**
      * @before _secure, changeLayout
      */
+    public function platforms() {
+        $this->seo(array("title" => "New User Platforms", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        if (RequestMethods::get("action") == "findUser") {
+            $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+            $live = RequestMethods::get("live", 0);
+            $users = User::all(array("live = ?" => $live, "created LIKE ?" => "%{$date}%"), array("id","name", "created"));
+            $view->set("users", $users);
+        }
+    }
+    
+    /**
+     * @before _secure, changeLayout
+     */
     public function edit($id = NULL) {
         $this->seo(array("title" => "Edit Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();

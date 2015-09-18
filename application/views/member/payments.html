@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Payments</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Transaction Id</th>
+                        <th>Date</th>
+                        <th>Remarks</th>
+                        <th>Paid Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $earn in $payments}
+                    <tr>
+                        <td>{$earn->created}</td>
+                        <td>{$earn->amount}</td>
+                        <td>{$earn->live}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

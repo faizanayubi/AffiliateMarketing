@@ -154,6 +154,28 @@ class Admin extends Auth {
     }
     
     /**
+     * Edits the Value and redirects user back to Referer
+     * 
+     * @before _secure, changeLayout
+     * @param type $model
+     * @param type $id
+     * @param type $property
+     * @param type $value
+     */
+    public function edit($model, $id, $property, $value) {
+        $this->JSONview();
+        $view = $this->getActionView();
+
+        $object = $model::first(array("id = ?" => $id));
+        $object->$property = $value;
+        $object->save();
+        
+        $view->set("object", $object);
+        
+        self::redirect($_SERVER['HTTP_REFERER']);
+    }
+    
+    /**
      * @before _secure, changeLayout
      */
     public function dataAnalysis() {

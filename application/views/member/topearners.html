@@ -1,0 +1,25 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Top Earners</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $earn in $earners}
+                    {script $user = User::first(array("id = ?" => $earn->user_id), array("username"))}
+                    <tr>
+                        <td>{$user->username}</td>
+                        <td>{$earn->amount}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

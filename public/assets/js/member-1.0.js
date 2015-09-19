@@ -1,3 +1,8 @@
+(function (window, Model) {
+    window.request = Model.initialize();
+    window.opts = {};
+}(window, window.Model));
+
 $(function () {
     $('select[value]').each(function () {
         $(this).val(this.getAttribute("value"));

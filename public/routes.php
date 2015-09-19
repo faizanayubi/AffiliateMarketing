@@ -9,6 +9,16 @@ $routes = array(
         "action" => "logout"
     ),
     array(
+        "pattern" => "privacy",
+        "controller" => "home",
+        "action" => "privacy"
+    ),
+    array(
+        "pattern" => "termsofuse",
+        "controller" => "home",
+        "action" => "termsofuse"
+    ),
+    array(
         "pattern" => "home",
         "controller" => "home",
         "action" => "index"

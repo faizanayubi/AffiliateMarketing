@@ -11,6 +11,7 @@
             <button type="submit" class="btn btn-primary">Show</button>
         </form>
         <hr>
+        {if($googl)}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-list fa-fw"></i> Info
@@ -306,6 +307,9 @@
                 </tbody>
             </table>
         </div>
-        
+        {/if}
+        {else}
+        <p class="text-center">Please Enter a Short URL to show analytics.</p>
+        {/else}
     </div>
 </div>

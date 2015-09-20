@@ -25,13 +25,32 @@
                         <textarea class="form-control" name="description" rows="3"></textarea>
                         <span class="help-block">{echo Shared\Markup::errors($errors, "description")}</span>
                     </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input type="file" class="form-control" name="image">
+                        <span class="help-block">Image should be 650px X 315px{echo Shared\Markup::errors($errors, "image")}</span>
+                    </div>
 
                     <hr>
 
                     <div class="form-group">
-                        <label>Image</label>
-                        <input type="file" class="form-control" name="image">
-                        <span class="help-block">{echo Shared\Markup::errors($errors, "image")}</span>
+                        <label>Initial RPM(Rates per thousands Clicks)</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">$</span>
+                            <input type="text" name="value" class="form-control" maxlength="100" required="">
+                        </div>
+                        <span class="help-block">{echo Shared\Markup::errors($errors, "title")}</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Country Traffic</label>
+                        <select class="form-control" name="country">
+                            <option value="IN">India</option>
+                            <option value="US">United States</option>
+                            <option value="AU">Australia</option>
+                            <option value="CA">Canada</option>
+                        </select>
+                        <span class="help-block">More Can be added Later.{echo Shared\Markup::errors($errors, "title")}</span>
                     </div>
 
                     <input type="hidden" name="action" value="content">

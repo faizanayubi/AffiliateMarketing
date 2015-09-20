@@ -80,6 +80,29 @@ class Member extends Auth {
     /**
      * @before _secure, changeLayout
      */
+    public function shortenURL() {
+        $this->seo(array("title" => "Shorten URL", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        if (RequestMethods::get("longURL")) {
+            $longURL = RequestMethods::get("longURL");
+            $googl = Registry::get("googl");
+            $object = $googl->shortenURL($longURL);
+            $link = new Link(array(
+                "user_id" => $this->user->id,
+                "short" => $object->id,
+                "item_id" => RequestMethods::get("item")
+            ));
+            $link->save();
+            
+            $view->set("shortURL", $object->id);
+            $view->set("googl", $object);
+        }
+    }
+    
+    /**
+     * @before _secure, changeLayout
+     */
     public function topearners() {
         $this->seo(array(
             "title" => "Top Earners",
@@ -108,7 +131,7 @@ class Member extends Auth {
             "title LIKE ?" => "%{$title}%",
             "live = ?" => true,
         );
-        $items = Item::all($where, array("title", "image"), "created", "desc", $limit, $page);
+        $items = Item::all($where, array("id", "title", "image", "target"), "created", "desc", $limit, $page);
         $count = Item::count($where);
         
         $view->set("limit", $limit);

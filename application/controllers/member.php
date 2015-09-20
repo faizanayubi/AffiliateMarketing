@@ -112,6 +112,7 @@ class Member extends Auth {
         $count = Item::count($where);
         
         $view->set("limit", $limit);
+        $view->set("title", $title);
         $view->set("page", $page);
         $view->set("count", $count);
         $view->set("items", $items);

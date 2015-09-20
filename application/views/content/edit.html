@@ -43,6 +43,18 @@
                             <td><textarea class="form-control" name="description">{echo $item->description}</textarea></td>
                         </tr>
                         <tr>
+                            <td><b>RPM</b></td>
+                            <td><input type="text" class="form-control" name="value" value="{echo $rpm->value}"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Country</b></td>
+                            <td>
+                                <select name="country" class="form-control" value="{echo $rpm->country}">
+                                    <option value="IN">India</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <td><input type="hidden" name="action" value="update"></td>
                             <td><button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check-circle"></i> Update</button></td>
                         </tr>

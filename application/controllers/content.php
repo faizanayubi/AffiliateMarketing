@@ -39,7 +39,7 @@ class Content extends Admin {
     }
     
     protected function target() {
-        $alias = array("http://bollychitchat.in", "http://filyhub.website", "http://teamkapil.website", "http://teamfilmy.biz");
+        $alias = array("http://bollychitchat.in", "http://filmyhub.website", "http://teamkapil.website", "http://teamfilmy.biz");
         return $alias[rand(0, 3)];
     }
     
@@ -76,6 +76,7 @@ class Content extends Admin {
         $this->seo(array("title" => "Edit Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $item = Item::first(array("id = ?" => $id));
+        $rpm = RPM::first(array("item_id = ?" => $item->id));
         
         if (RequestMethods::post("action") == "update") {
             $item->title = RequestMethods::post("title");
@@ -83,8 +84,11 @@ class Content extends Admin {
             $item->target = RequestMethods::post("target");
             $item->description = RequestMethods::post("description");
             $item->live = RequestMethods::post("live", "0");
+            $rpm->value = RequestMethods::post("value");
+            $rpm->country = RequestMethods::post("country");
             
             $item->save();
+            $rpm->save();
             $view->set("success", true);
             $view->set("errors", $item->getErrors());
         }
@@ -103,7 +107,7 @@ class Content extends Admin {
             $googl = Registry::get("googl");
             $object = $googl->shortenURL($longURL);
             
-            $view->set("longURL", $longURL);
+            $view->set("shortURL", $object->id);
             $view->set("googl", $object);
         }
     }

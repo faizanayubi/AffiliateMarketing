@@ -1,0 +1,311 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">Googl Analytics</h1>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">shortURL</label>
+                    <input type="text" style="width: 300px" name="shortURL" class="form-control" placeholder="value..." value="{$shortURL}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Info
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>{$googl->id}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url</td>
+                        <td>{$googl->longUrl}</td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td>{$googl->status}</td>
+                    </tr>
+                    <tr>
+                        <td>Created</td>
+                        <td>{$googl->created}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Analytics All Time
+            </div>
+            <table class="table text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Short Url Clicks</td>
+                        <td>{$googl->analytics->allTime->shortUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url Clicks</td>
+                        <td>{$googl->analytics->allTime->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Referrers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->allTime->referrers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Countries</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->allTime->countries}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Browsers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->allTime->browsers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Platforms</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->allTime->platforms}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Analytics This Month
+            </div>
+            <table class="table text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Short Url Clicks</td>
+                        <td>{$googl->analytics->month->shortUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url Clicks</td>
+                        <td>{$googl->analytics->month->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Referrers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->month->referrers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Countries</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->month->countries}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Browsers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->month->browsers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Platforms</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->month->platforms}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Analytics This Week
+            </div>
+            <table class="table text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Short Url Clicks</td>
+                        <td>{$googl->analytics->week->shortUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url Clicks</td>
+                        <td>{$googl->analytics->week->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Referrers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->week->referrers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Countries</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->week->countries}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Browsers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->week->browsers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Platforms</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->week->platforms}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Analytics Today
+            </div>
+            <table class="table text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Short Url Clicks</td>
+                        <td>{$googl->analytics->day->shortUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url Clicks</td>
+                        <td>{$googl->analytics->day->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Referrers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->day->referrers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Countries</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->day->countries}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Browsers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->day->browsers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Platforms</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->day->platforms}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Analytics Two Hours
+            </div>
+            <table class="table text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Short Url Clicks</td>
+                        <td>{$googl->analytics->twoHours->shortUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url Clicks</td>
+                        <td>{$googl->analytics->twoHours->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Referrers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->twoHours->referrers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Countries</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->twoHours->countries}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Browsers</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->twoHours->browsers}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                    <tr>
+                        <th colspan="2">Platforms</th>
+                    </tr>
+                    {foreach $refer in $googl->analytics->twoHours->platforms}
+                    <tr>
+                        <td>{$refer->id}</td>
+                        <td>{$refer->count}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>

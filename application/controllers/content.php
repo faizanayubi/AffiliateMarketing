@@ -6,6 +6,7 @@
  * @author Faizan Ayubi
  */
 use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
 class Content extends Admin {
     
@@ -88,6 +89,23 @@ class Content extends Admin {
             $view->set("errors", $item->getErrors());
         }
         $view->set("item", $item);
+    }
+    
+    /**
+     * @before _secure, changeLayout
+     */
+    public function shortenURL() {
+        $this->seo(array("title" => "Shorten URL", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        if (RequestMethods::get("longURL")) {
+            $longURL = RequestMethods::get("longURL");
+            $googl = Registry::get("googl");
+            $object = $googl->shortenURL($longURL);
+            
+            $view->set("longURL", $longURL);
+            $view->set("googl", $object);
+        }
     }
     
     /**

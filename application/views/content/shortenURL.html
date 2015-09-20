@@ -1,0 +1,37 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">Googl URL Shortener</h1>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">longURL</label>
+                    <input type="text" style="width: 300px" name="longURL" class="form-control" placeholder="Long URl..." value="{$longURL}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+        <hr>
+        {if($googl)}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Details
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>{$googl->id}</td>
+                    </tr>
+                    <tr>
+                        <td>Long Url</td>
+                        <td>{$googl->longUrl}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {/if}
+        {else}
+        <p class="text-center">Please Enter a long URL to Shorten it by Googl URL Shortener.</p>
+        {/else}
+    </div>
+</div>

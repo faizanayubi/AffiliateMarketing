@@ -8,7 +8,7 @@
 use Framework\RequestMethods as RequestMethods;
 
 class Admin extends Auth {
-    
+
     /**
      * @before _secure, changeLayout
      */
@@ -16,19 +16,19 @@ class Admin extends Auth {
         $this->seo(array("title" => "Dashboard", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $now = strftime("%Y-%m-%d", strtotime('now'));
-        
+
         $users = User::count();
         $items = Item::count();
         $platforms = Platform::count();
         $links = Link::count();
-        
+
         $view->set("now", $now);
         $view->set("users", $users);
         $view->set("items", $items);
         $view->set("platforms", $platforms);
         $view->set("links", $links);
     }
-    
+
     /**
      * Searchs for data and returns result from db
      * @param type $model the data model
@@ -36,7 +36,7 @@ class Admin extends Auth {
      * @param type $val the value of property
      * @before _secure, changeLayout
      */
-    public function search($model = NULL, $property = NULL, $val = 0, $page=1) {
+    public function search($model = NULL, $property = NULL, $val = 0, $page = 1) {
         $this->seo(array("title" => "Search", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $model = RequestMethods::get("model", $model);
@@ -54,14 +54,15 @@ class Admin extends Auth {
         $view->set("sign", $sign);
 
         if ($model) {
-            if($sign == "like"){
+            if ($sign == "like") {
                 $where = array("{$property} LIKE ?" => "%{$val}%");
             } else {
                 $where = array("{$property} = ?" => $val);
             }
-            
-            $objects = $model::all($where,array("*"),"created", "desc", 10, $page);
-            $count = $model::count($where);$i = 0;
+
+            $objects = $model::all($where, array("*"), "created", "desc", 10, $page);
+            $count = $model::count($where);
+            $i = 0;
             if ($objects) {
                 foreach ($objects as $object) {
                     $properties = $object->getJsonData();
@@ -152,7 +153,7 @@ class Admin extends Auth {
         $view->set("model", $model);
         $view->set("id", $id);
     }
-    
+
     /**
      * Edits the Value and redirects user back to Referer
      * 
@@ -169,12 +170,12 @@ class Admin extends Auth {
         $object = $model::first(array("id = ?" => $id));
         $object->$property = $value;
         $object->save();
-        
+
         $view->set("object", $object);
-        
+
         self::redirect($_SERVER['HTTP_REFERER']);
     }
-    
+
     /**
      * @before _secure, changeLayout
      */

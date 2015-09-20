@@ -56,7 +56,7 @@ $(document).ready(function () {
         e.preventDefault();
         var data = $(this).serializeArray();
         request.read({
-            action: "admin/data",
+            action: "admin/dataAnalysis",
             data: data,
             callback: function (data) {
                 $('#stats').html('');
@@ -72,7 +72,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('#getstats').submit(function (e) {
         $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');
         e.preventDefault();
@@ -94,7 +94,7 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     $('button[name=message]').click(function (e) {
         var self = this;
         window.opts.subject = $(this).data("subject");
@@ -102,7 +102,7 @@ $(document).ready(function () {
         $('#message_modal').modal('show');
     });
 
-    $('#messageform').submit(function(e) {
+    $('#messageform').submit(function (e) {
         e.preventDefault();
         var body = $('#body').val();
         request.create({
@@ -114,10 +114,10 @@ $(document).ready(function () {
             }
         });
     });
-    
+
     // find all the selectors 
     var types = $('#addOptions select');
-    types.on("change", function (){ // bind the change function
+    types.on("change", function () { // bind the change function
         var value = $(this).val();
 
         // if text box is selected then show it and hide the file upload or vice-versa
@@ -129,7 +129,7 @@ $(document).ready(function () {
             $("#type").find("input[type='text']").toggleClass("hide").removeAttr("required");
         }
     });
-    
+
 
 });
 

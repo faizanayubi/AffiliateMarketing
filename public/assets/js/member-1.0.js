@@ -37,6 +37,21 @@ $(document).ready(function () {
         });
     });
     
+    $(".shortenURL").click(function(e) {
+        e.preventDefault();
+        var btn = $(this),
+            longURL = btn.data('longurl'),
+            item = btn.data('item');
+        request.read({
+            action: "member/shortenURL",
+            data: {longURL: longURL, item: item},
+            callback: function (data) {
+                btn.closest('div').find('.shorturl').val(data.shortURL);
+            }
+        });
+
+    });
+    
     $('button[name=message]').click(function (e) {
         var self = this;
         window.opts.subject = $(this).data("subject");

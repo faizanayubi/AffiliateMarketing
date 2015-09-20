@@ -93,6 +93,7 @@ class Content extends Admin {
             $view->set("errors", $item->getErrors());
         }
         $view->set("item", $item);
+        $view->set("rpm", $rpm);
     }
     
     /**

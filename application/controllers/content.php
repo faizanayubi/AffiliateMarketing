@@ -40,7 +40,8 @@ class Content extends Admin {
     
     protected function target() {
         $alias = array("http://bollychitchat.in", "http://filmyhub.website", "http://teamkapil.website", "http://teamfilmy.biz");
-        return $alias[rand(0, 3)];
+        //return $alias[rand(0, 3)];
+        return $alias[0];
     }
     
     /**

@@ -70,6 +70,69 @@ class Auth extends Controller {
         }
     }
     
+    /**
+     * The Main Method to return SendGrid Instance
+     * 
+     * @return \SendGrid\SendGrid Instance of Sendgrid
+     */
+    protected function sendgrid() {
+        $configuration = Registry::get("configuration");
+        $parsed = $configuration->parse("configuration/mail");
+
+        if (!empty($parsed->mail->sendgrid) && !empty($parsed->mail->sendgrid->username)) {
+            $sendgrid = new \SendGrid\SendGrid($parsed->mail->sendgrid->username, $parsed->mail->sendgrid->password);
+            return $sendgrid;
+        }
+    }
+    
+    protected function getBody($options) {
+        $template = $options["template"];
+        $view = new Framework\View(array(
+            "file" => APP_PATH . "/application/views/users/emails/{$template}.html"
+        ));
+        foreach ($options as $key => $value) {
+            $view->set($key, $value);
+            $$key = $value;
+        }
+
+        return $view->render();
+    }
+    
+    protected function notify($options) {
+        $body = $this->getBody($options);
+        $emails = isset($options["emails"]) ? $options["emails"] : array($options["user"]->email);
+
+        switch ($options["delivery"]) {
+            default:
+                $sendgrid = $this->sendgrid();
+                $email = new \SendGrid\Email();
+                $email->setSmtpapiTos($emails)
+                        ->setFrom('info@swiftintern.com')
+                        ->setFromName("Swiftintern Team")
+                        ->setSubject($options["subject"])
+                        ->setHtml($body);
+                $sendgrid->send($email);
+                break;
+        }
+        $this->log(implode(",", $emails));
+    }
+    
+    protected function log($message = "") {
+        $logfile = APP_PATH . "/logs/" . date("Y-m-d") . ".txt";
+        $new = file_exists($logfile) ? false : true;
+        if ($handle = fopen($logfile, 'a')) {
+            $timestamp = strftime("%Y-%m-%d %H:%M:%S", time() + 1800);
+            $content = "[{$timestamp}]{$message}\n";
+            fwrite($handle, $content);
+            fclose($handle);
+            if ($new) {
+                chmod($logfile, 0755);
+            }
+        } else {
+            echo "Could not open log file for writing";
+        }
+    }
+    
     public function logout() {
         $this->setUser(false);
         self::redirect("/home");

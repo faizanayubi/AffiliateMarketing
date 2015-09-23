@@ -3,10 +3,6 @@
 /**
  * Scheduler Class which executes daily and perfoms the initiated job
  * 
- * to dos
- * share experience of company
- * employer feedback and student feedback on swiftintern
- * 
  * @author Faizan Ayubi
  */
 
@@ -20,10 +16,14 @@ class CRON extends Auth {
 
     public function index() {
         $this->_secure();
-        $this->updateStats();
+        $this->variftClick();
     }
     
-    protected function updateStats() {
+    protected function variftClick() {
+        
+    }
+    
+    protected function calculateEarnings() {
         
     }
 

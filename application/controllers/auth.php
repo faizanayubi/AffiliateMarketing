@@ -26,10 +26,13 @@ class Auth extends Controller {
             ));
             if ($user) {
                 $this->setUser($user);
-                self::redirect("/member");
             } else {
                 $view->set("message", "User not exist or blocked");
             }
+        }
+
+        if ($this->user) {
+            self::redirect("/member");
         }
     }
     
@@ -67,6 +70,10 @@ class Auth extends Controller {
             } else {
                 $view->set("message", 'Username exists, login from <a href="/admin/login">here</a>');
             }
+        }
+
+        if ($this->user) {
+            self::redirect("/member");
         }
     }
     

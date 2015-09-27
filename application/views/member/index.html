@@ -113,20 +113,20 @@
                                 <th>Link Title</th>
                                 <th>Short URL</th>
                                 <th>Created</th>
-                                <th>Verified</th>
-                                <th>RPM</th>
+                                <th>Verified Clicks</th>
+                                <th>Total Clicks</th>
                             </tr>
                         </thead>
                         <tbody>
                             {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $rpm = RPM::first(array("id = ?" => $link->item_id), array("value"))}
+                            {script $stat = Link::findStats($link->short)}
                             <tr>
                                 <td>{$item->title}</td>
-                                <td>{$link->short}</td>
+                                <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                                 <td>{$link->created}</td>
                                 <td>0</td>
-                                <td>{$rpm->value}</td>
+                                <td>{$stat->analytics->allTime->shortUrlClicks}</td>
                             </tr>
                             {/foreach}
                         </tbody>

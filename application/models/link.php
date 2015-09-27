@@ -27,4 +27,10 @@ class Link extends Shared\Model {
      * @type integer
      */
     protected $_user_id;
+
+    public static function findStats($shortURL) {
+        $googl = Framework\Registry::get("googl");
+        $object = $googl->analyticsFull($shortURL);
+        return $object;
+    }
 }

@@ -89,12 +89,15 @@ class Member extends Auth {
             $longURL = RequestMethods::get("longURL");
             $googl = Registry::get("googl");
             $object = $googl->shortenURL($longURL);
-            $link = new Link(array(
-                "user_id" => $this->user->id,
-                "short" => $object->id,
-                "item_id" => RequestMethods::get("item")
-            ));
-            $link->save();
+            $link = Link::first(array("short = ?" => $object->id));
+            if (!$link) {
+                $link = new Link(array(
+                    "user_id" => $this->user->id,
+                    "short" => $object->id,
+                    "item_id" => RequestMethods::get("item")
+                ));
+                $link->save();
+            }
             
             $view->set("shortURL", $object->id);
             $view->set("googl", $object);

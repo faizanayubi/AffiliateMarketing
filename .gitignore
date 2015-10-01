@@ -43,3 +43,7 @@ Temporary Items
 .apdisk
 /nbproject/
 sftp-config.json
+
+*.sublime-workspace
+
+link.php

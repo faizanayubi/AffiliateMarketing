@@ -26,5 +26,13 @@ class Analytics extends Admin {
             $view->set("googl", $object);
         }
     }
+
+    /**
+     * @before _secure, changeLayout
+     */
+    public function content($id='') {
+        $this->seo(array("title" => "Content Analytics", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();   
+    }
     
 }

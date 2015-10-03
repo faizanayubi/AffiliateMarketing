@@ -1,0 +1,82 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">{$item->title}</h1>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Info
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>{$item->id}</td>
+                    </tr>
+                    <tr>
+                        <td>Url</td>
+                        <td>{$item->url}</td>
+                    </tr>
+                    <tr>
+                        <td>Title</td>
+                        <td>{$item->title}</td>
+                    </tr>
+                    <tr>
+                        <td>Image</td>
+                        <td><img src="{echo CDN}uploads/images/{$item->image}"></td>
+                    </tr>
+                    <tr>
+                        <td>Target</td>
+                        <td>{$item->target}</td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td>{$item->description}</td>
+                    </tr>
+                    <tr>
+                        <td>Live</td>
+                        <td>{$item->live}</td>
+                    </tr>
+                    <tr>
+                        <td>Created</td>
+                        <td>{$item->created}</td>
+                    </tr>
+                    <tr>
+                        <td>Updated</td>
+                        <td>{$item->modified}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Stats
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Total Links</td>
+                        <td>{$links}</td>
+                        <td>
+                            <a href="/admin/search?model=link&key=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Earnings</td>
+                        <td>{$earn}</td>
+                        <td>
+                            <a href="/admin/search?model=earning&key=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total RPM</td>
+                        <td>{$rpm}</td>
+                        <td>
+                            <a href="/admin/search?model=rpm&ke y=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -32,7 +32,23 @@ class Analytics extends Admin {
      */
     public function content($id='') {
         $this->seo(array("title" => "Content Analytics", "view" => $this->getLayoutView()));
-        $view = $this->getActionView();   
+        $view = $this->getActionView();
+
+        $item = Item::first(array("id = ?" => $id));
+
+        $earn = 0;
+        $earnings = Earning::all(array("item_id = ?" => $item->id), array("amount"));
+        foreach ($earnings as $earning) {
+            $earn += $earning->amount;
+        }
+
+        $links = Link::count(array("item_id = ?" => $item->id));
+        $rpm = RPM::count(array("item_id = ?" => $item->id));
+
+        $view->set("item", $item);
+        $view->set("earn", $earn);
+        $view->set("links", $links);
+        $view->set("rpm", $rpm);
     }
     
 }

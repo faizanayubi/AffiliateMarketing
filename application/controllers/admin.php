@@ -22,11 +22,18 @@ class Admin extends Auth {
         $platforms = Platform::count();
         $links = Link::count();
 
+        $earn = 0;
+        $earnings = Earning::all(array(), array("amount"));
+        foreach ($earnings as $earning) {
+            $earn += $earning->amount;
+        }
+
         $view->set("now", $now);
         $view->set("users", $users);
         $view->set("items", $items);
         $view->set("platforms", $platforms);
         $view->set("links", $links);
+        $view->set("earn", $earn);
     }
 
     /**

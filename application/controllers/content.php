@@ -120,5 +120,25 @@ class Content extends Admin {
     public function delete($id = NULL) {
         $this->seo(array("title" => "Delete Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+
+        $item = Item::first(array("id = ?" => $id));
+        $item->delete();
+
+        $earning = Earning::first(array("item_id = ?" => $item->id));
+        $earning->delete();
+
+        $links = Link::all(array("item_id = ?" => $item->id));
+        foreach ($links as $link) {
+            $stat = Stat::all(array("link_id = ?" => $link->id));
+            $stat->delete();
+            $link->delete();
+        }
+
+        $rpms = RPM::all(array("item_id = ?" => $item->id));
+        foreach ($rpms as $rpm) {
+            $rpm->delete();
+        }
+
+        $view->set("success", "true");
     }
 }

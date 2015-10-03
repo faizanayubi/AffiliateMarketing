@@ -53,7 +53,7 @@ class Content extends Admin {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $contents = Item::all(array(), array("id", "title", "created"), "created", "desc", $limit, $page);
+        $contents = Item::all(array(), array("id", "title", "created", "url"), "created", "desc", $limit, $page);
         $count = Item::count();
         $view->set("contents", $contents);
         $view->set("page", $page);

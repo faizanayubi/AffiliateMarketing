@@ -16,11 +16,11 @@
                         {foreach $content in $contents}
                         <tr>
                             <td>{echo $content->id}</td>
-                            <td>{echo $content->title}</td>
+                            <td><a href="{$content->url}" target="_blank">{echo $content->title}</a></td>
                             <td>{echo $content->created}</td>
                             <td>
                                 <a href="/analytics/content/{$content->id}" class="btn btn-success btn-xs"><i class="fa fa-pie-chart"></i></a>&nbsp;
-                                <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit </a>&nbsp;
+                                <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>&nbsp;
                                 <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
                             </td>
                         </tr>

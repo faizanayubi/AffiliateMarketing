@@ -23,7 +23,9 @@ class Member extends Auth {
         $links = Link::all(array("user_id = ?" => $this->user->id), array("item_id", "short", "created"), "created", "desc", 10, 1);
         foreach ($links as $link) {
             $stat = Stat::first(array("link_id = ?" => $link->id), array("shortUrlClicks"));
-            $click += $stat->shortUrlClicks;
+            if ($stat) {
+                $click += $stat->shortUrlClicks;
+            }
         }
         
         $view->set("links", $links);

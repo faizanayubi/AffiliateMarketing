@@ -119,6 +119,23 @@ class Content extends Admin {
             $view->set("googl", $object);
         }
     }
+
+    /**
+     * @before _secure, changeLayout
+     */
+    public function fraudLinks() {
+        $this->seo(array("title" => "Fraud Links", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        if (RequestMethods::get("longURL")) {
+            $longURL = RequestMethods::get("longURL");
+            $googl = Registry::get("googl");
+            $object = $googl->shortenURL($longURL);
+            
+            $view->set("shortURL", $object->id);
+            $view->set("googl", $object);
+        }
+    }
     
     /**
      * @before _secure, changeLayout

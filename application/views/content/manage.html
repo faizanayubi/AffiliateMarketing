@@ -8,7 +8,6 @@
                         <tr>
                             <th>Id</th>
                             <th>Title</th>
-                            <th>Posted</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -16,10 +15,9 @@
                         {foreach $content in $contents}
                         <tr>
                             <td>{echo $content->id}</td>
-                            <td><a href="{$content->url}" target="_blank">{echo $content->title}</a></td>
-                            <td>{echo $content->created}</td>
+                            <td><a href="/analytics/content/{$content->id}" target="_blank">{echo $content->title}</a></td>
                             <td>
-                                <a href="/analytics/content/{$content->id}" class="btn btn-success btn-xs"><i class="fa fa-pie-chart"></i></a>&nbsp;
+                                <a href="/finance/content/{$content->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i></a>&nbsp;
                                 <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>&nbsp;
                                 <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
                             </td>

@@ -50,9 +50,15 @@ class Content extends Admin {
     public function manage() {
         $this->seo(array("title" => "Manage Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
         
-        $contents = Item::all(array(), array("id", "title", "created"));
+        $contents = Item::all(array(), array("id", "title", "created"), "created", "desc", $limit, $page);
+        $count = Item::count();
         $view->set("contents", $contents);
+        $view->set("page", $page);
+        $view->set("count", $count);
+        $view->set("limit", $limit);
     }
     
     /**

@@ -19,13 +19,25 @@
                             <td>{echo $content->title}</td>
                             <td>{echo $content->created}</td>
                             <td>
-                                <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
+                                <a href="/analytics/content/{$content->id}" class="btn btn-success btn-xs"><i class="fa fa-pie-chart"></i></a>&nbsp;
                                 <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit </a>&nbsp;
+                                <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
                             </td>
                         </tr>
                         {/foreach}
                     </tbody>
                 </table>
+
+                <div class="text-center">
+                    <ul class="pager">
+                        {if($page != 1)}
+                        <li><a href="?page={echo $page - 1}">Previous</a></li>
+                        {/if}
+                        {if($page < $count/$limit)}
+                        <li><a href="?page={echo $page + 1}">Next</a></li>
+                        {/if}
+                    </ul>
+                </div>
                 
             </div>
         </div>

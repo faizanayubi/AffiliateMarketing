@@ -15,7 +15,6 @@ class CRON extends Auth {
     }
 
     public function index() {
-        $this->_secure();
         $this->verify();
     }
     
@@ -25,13 +24,15 @@ class CRON extends Auth {
         foreach ($links as $link) {
             $count = 0;
             $object = $googl->analyticsFull($link->short);
-            foreach ($object->analytics->day->referrers as $referer) {
-                if($referer->id == "l.facebook.com") {
-                    $count += $referer->count;
+            if(isset($object->analytics->day->referrers)) {
+                foreach ($object->analytics->day->referrers as $referer) {
+                    if (strpos($referer->id,'facebook.com') !== false) {
+                        $count += $referer->count;
+                    }
                 }
+                $stat = $this->saveStats($object, $link, $count);
+                $this->saveEarnings($link, $count, $stat);
             }
-            $stat = $this->saveStats($object, $link, $count);
-            $this->saveEarnings($link, $count, $stat);
         }
     }
 
@@ -41,10 +42,10 @@ class CRON extends Auth {
             "verifiedClicks" => $count,
             "shortUrlClicks" => $object->analytics->day->shortUrlClicks,
             "longUrlClicks" => $object->analytics->day->longUrlClicks,
-            "referrers" => $object->analytics->day->referrers,
-            "countries" => $object->analytics->day->countries,
-            "browsers" => $object->analytics->day->browsers,
-            "platforms" => $object->analytics->day->platforms
+            "referrers" => serialize($object->analytics->day->referrers),
+            "countries" => serialize($object->analytics->day->countries),
+            "browsers" => serialize($object->analytics->day->browsers),
+            "platforms" => serialize($object->analytics->day->platforms)
         ));
         $stat->save();
         return $stat;
@@ -52,23 +53,15 @@ class CRON extends Auth {
     
     protected function saveEarnings($link, $count, $stat) {
         $rpm = RPM::first(array("item_id = ?" => $link->item_id));
-        $amount = $count*$rpm->value/1000;
+        $amount = $count*($rpm->value)/1000;
         $earning = new Earning(array(
             "item_id" => $link->item_id,
             "amount" => $amount,
             "user_id" => $link->user_id,
-            "stat_id" => $stat->id
+            "stat_id" => $stat->id,
+            "rpm_id" => $rpm->id
         ));
         $earning->save();
-    }
-
-    /**
-     * @protected
-     */
-    public function _secure() {
-        if ($_SERVER['REMOTE_ADDR'] != $_SERVER['SERVER_ADDR']) {
-            die('access is not permitted');
-        }
     }
 
 }

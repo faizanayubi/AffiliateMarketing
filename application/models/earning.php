@@ -33,4 +33,11 @@ class Earning extends \Shared\Model {
      * @type integer
      */
     protected $_stat_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     */
+    protected $_rpm_id;
 }

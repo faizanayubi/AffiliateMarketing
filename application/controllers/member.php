@@ -81,6 +81,7 @@ class Member extends Auth {
     }
     
     /**
+     * Shortens the url for member
      * @before _secure, changeLayout
      */
     public function shortenURL() {
@@ -96,7 +97,8 @@ class Member extends Auth {
                 $link = new Link(array(
                     "user_id" => $this->user->id,
                     "short" => $object->id,
-                    "item_id" => RequestMethods::get("item")
+                    "item_id" => RequestMethods::get("item"),
+                    "live" => 1
                 ));
                 $link->save();
             }

@@ -71,7 +71,9 @@ class Content extends Admin {
             $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
             $live = RequestMethods::get("live", 0);
             $users = User::all(array("live = ?" => $live, "created LIKE ?" => "%{$date}%"), array("id","name", "created"));
+            
             $view->set("users", $users);
+            $view->set("date", $date);
         }
     }
     

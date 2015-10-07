@@ -15,7 +15,7 @@
                 <div class="input-group">
                     <label class="sr-only">To</label>
                     <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> Date</span>
-                    <input type="date" style="width: 200px" name="date" class="form-control" />
+                    <input type="date" style="width: 200px" name="date" class="form-control" value="{echo $date}" />
                 </div>
             </div>
             <input type="hidden" name="action" value="findUser">
@@ -35,16 +35,15 @@
                 </thead>
                 <tbody>
                     {foreach $user in $users}
-                    {script $platform = Platform::first(array("user_id = ?" => $user->id), array("image", "link"));}
+                    {script $platform = Platform::first(array("user_id = ?" => $user->id), array("image", "link", "created"));}
                     <tr>
                         <td>{echo $user->id}</td>
-                        <td>{echo $user->name}</td>
+                        <td><a href="/admin/info/user/{$user->id}">{echo $user->name}</a></td>
                         <td>
                             <a href="{echo CDN}uploads/images/{$platform->image}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-picture-o"></i> Image </a>&nbsp;
-                            <a href="{echo CDN}uploads/images/{$platform->link}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-external-link"></i> Link </a>&nbsp;
+                            <a href="{$platform->link}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-external-link"></i> Link </a>&nbsp;
                         </td>
-                        <td>{echo $user->phone}</td>
-                        <td>{echo $user->created}</td>
+                        <td>{echo $platform->created}</td>
                         <td>
                             {if($user->live == 0)}
                             <a href="/admin/edit/user/{$user->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Verify </a>&nbsp;

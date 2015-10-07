@@ -95,7 +95,7 @@ class Auth extends Controller {
     protected function getBody($options) {
         $template = $options["template"];
         $view = new Framework\View(array(
-            "file" => APP_PATH . "/application/views/users/emails/{$template}.html"
+            "file" => APP_PATH . "/application/views/layouts/email/{$template}.html"
         ));
         foreach ($options as $key => $value) {
             $view->set($key, $value);

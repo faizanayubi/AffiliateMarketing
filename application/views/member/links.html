@@ -18,7 +18,7 @@
                 <img src="{echo CDN}/uploads/images/{echo $item->image}" alt="{echo $item->title}">
                 <div class="caption">
                     <div class="input-group">
-                        <span class="input-group-btn"><button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->id}&username={$user->username}">Generate URL</button></span>
+                        <span class="input-group-btn"><button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->encode($user->username)}">Generate URL</button></span>
                         <input type="text" class="form-control shorturl">
                     </div>
                 </div>

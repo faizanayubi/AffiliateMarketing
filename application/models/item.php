@@ -51,4 +51,8 @@ class Item extends Shared\Model {
      * @length 255
      */
     protected $_user_id;
+
+    public function encode($username) {
+        return base64_encode("title={$this->title}&image={$this->image}&url={$this->url}&username={$username}");
+    }
 }

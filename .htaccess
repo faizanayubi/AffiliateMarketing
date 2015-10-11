@@ -4,6 +4,10 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_URI} !=/favicon.ico
 RewriteRule ^([^.]+)\.?([a-zA-Z]+)?$ index.php?url=$1&extension=$2 [QSA,L]
 
+## Subdomain adding
+RewriteCond %{HTTP_HOST} ^assets.earnbugs.in
+RewriteRule ^(.*)$ http://earnbugs.in/public/assets/$1 [L,NC,QSA]
+
 <Files "cron.php">
     Order deny,allow
     Allow from 103.3.62.150

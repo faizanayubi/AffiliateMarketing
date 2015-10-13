@@ -14,7 +14,7 @@
                         <i class="fa fa-hand-pointer-o fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{echo $click}</div>
+                        <div class="huge" id="clickToday"><i class="fa fa-spinner fa-pulse"></i></div>
                         <div>Clicks Today!</div>
                     </div>
                 </div>
@@ -36,8 +36,8 @@
                         <i class="fa fa-inr fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{echo $pending}</div>
-                        <div>Earnings Today!</div>
+                        <div class="huge" id="unverifiedEarning"><i class="fa fa-spinner fa-pulse"></i></div>
+                        <div>Unverified Earnings Today!</div>
                     </div>
                 </div>
             </div>
@@ -58,8 +58,8 @@
                         <i class="fa fa-money fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{echo $earnings}</div>
-                        <div>Lifetime Earnings!</div>
+                        <div class="huge">{echo $pending}/{echo $earnings}</div>
+                        <div>Pending/Total Earning!</div>
                     </div>
                 </div>
             </div>
@@ -78,7 +78,7 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Latest RPM Values</h3>
+                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Latest RPM Values(in Rupees)</h3>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped">
@@ -93,11 +93,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{echo $rpm_in->value}</td>
+                            <td>{echo $rpm_us->value}</td>
+                            <td>{echo $rpm_pk->value}</td>
+                            <td>{echo $rpm_au->value}</td>
+                            <td>{echo $rpm_nw->value}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -115,8 +115,8 @@
                             <th>Link Title</th>
                             <th>Short URL</th>
                             <th>Created</th>
-                            <th>Verified Clicks</th>
-                            <th>Total Clicks</th>
+                            <th>Verified Yesterday</th>
+                            <th>Realtime Clicks</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,9 +138,17 @@
             {else}
                 <p>Hi, you have not generated any link to share on your platform.</p>
             {/else}
-            <div class="text-right">
-                <a href="/member/links">View All Links <i class="fa fa-arrow-circle-right"></i></a>
+            <div class="panel-body">
+                <div class="text-right">
+                    <a href="/member/links">View All Links <i class="fa fa-arrow-circle-right"></i></a>
+                </div>
             </div>
+            
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        clickToday();
+    });
+</script>

@@ -18,20 +18,41 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
-        $click = 0;
         
-        $links = Link::all(array("user_id = ?" => $this->user->id), array("item_id", "short", "created"), "created", "desc", 10, 1);
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("item_id", "short", "created"), "created", "desc", 5, 1);
+        $earnings = $this->totalEarnings();
+        $rpm_in = RPM::first(array("country = ?" => "IN"), array("value"));$view->set("rpm_in", $rpm_in);
+        $rpm_us = RPM::first(array("country = ?" => "US"), array("value"));$view->set("rpm_us", $rpm_us);
+        $rpm_pk = RPM::first(array("country = ?" => "PK"), array("value"));$view->set("rpm_pk", $rpm_pk);
+        $rpm_au = RPM::first(array("country = ?" => "AU"), array("value"));$view->set("rpm_au", $rpm_au);
+        $rpm_nw = RPM::first(array("country = ?" => "NW"), array("value"));$view->set("rpm_nw", $rpm_nw);
+
+        $view->set("links", $links);
+        $view->set("earnings", $earnings["total"]);
+        $view->set("pending", $earnings["pending"]);
+    }
+
+    /**
+     * @before _secure
+     */
+    public function clicksToday() {
+        $this->JSONview();
+        $view = $this->getActionView();
+
+        $count = 0;
+        $earning = 0;
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("short", "item_id"));
         foreach ($links as $link) {
-            $stat = Stat::first(array("link_id = ?" => $link->id), array("shortUrlClicks"));
-            if ($stat) {
-                $click += $stat->shortUrlClicks;
+            $stat = Link::findStats($link->short);
+            $count += $stat->analytics->day->shortUrlClicks;
+            if ($stat->analytics->day->shortUrlClicks != 0) {
+                $rpm = RPM::first(array("item_id = ?" => $link->item_id));
+                $earning += (float) ($rpm->value) * $stat->analytics->day->shortUrlClicks/1000;
             }
         }
-        
-        $view->set("links", $links);
-        $view->set("earnings", $this->totalEarnings()["total"]);
-        $view->set("pending", $this->totalEarnings()["pending"]);
-        $view->set("click", $click);
+
+        $view->set("earning", $earning);
+        $view->set("click", $count);
     }
     
     protected function totalEarnings() {

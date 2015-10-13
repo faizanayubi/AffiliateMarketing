@@ -114,3 +114,14 @@ function copy() {
     document.execCommand('SelectAll');
     document.execCommand("Copy", false, null);
 }
+
+function clickToday () {
+    request.read({
+        action: "member/clicksToday",
+        data: {},
+        callback: function(data) {
+            $('#clickToday').html(data.click);
+            $('#unverifiedEarning').html(data.earning);
+        }
+    });
+}

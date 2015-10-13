@@ -40,7 +40,7 @@ class Member extends Auth {
         $earnings = Earning::all(array("user_id = ?" => $this->user->id), array("amount", "live"));
         foreach ($earnings as $earning) {
             $total_earnings += $earning->amount;
-            if($earning->live == "1") {
+            if($earning->live == "0") {
                 $pending += $earning->amount;
             }
         }
@@ -50,11 +50,41 @@ class Member extends Auth {
         );
         return $earning;
     }
+
+    /**
+     * @before _secure, changeLayout
+     */
+    public function mylinks() {
+        $this->seo(array(
+            "title" => "Stats Charts",
+            "view" => $this->getLayoutView()
+        ));
+        $view = $this->getActionView();
+
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime($startdate . " -7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime($startdate . "now")));
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        
+        $where = array(
+            "user_id = ?" => $this->user->id,
+            "created >= ?" => $startdate,
+            "created <= ?" => $enddate
+        );
+
+        $links = Link::all($where, array("item_id", "short", "created"), "created", "desc", $limit, $page);
+        $count = Link::count($where);
+        
+        $view->set("links", $links);
+        $view->set("limit", $limit);
+        $view->set("page", $page);
+        $view->set("count", $count);
+    }
     
     /**
      * @before _secure, changeLayout
      */
-    public function stats() {
+    public function stats($id='') {
         $this->seo(array(
             "title" => "Stats Charts",
             "view" => $this->getLayoutView()
@@ -64,13 +94,14 @@ class Member extends Auth {
         if (RequestMethods::get("action") == "showStats") {
             $startdate = RequestMethods::get("startdate");
             $enddate = RequestMethods::get("enddate");
+
+            $link = Link::first(array("id = ?" => $id, "user_id = ?" => $this->user->id), array("id"));
             
             $diff = date_diff(date_create($startdate), date_create($enddate));
             for ($i = 0; $i < $diff->format("%a"); $i++) {
                 $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));$count = 0;
-                $links = Link::all(array("created LIKE ?" => "%{$date}%"), array("id"));
-                foreach ($links as $link) {
-                    $stat = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("shortUrlClicks"));
+                $stats = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("shortUrlClicks"));
+                foreach ($stats as $stat) {
                     $count += $stat->shortUrlClicks;
                 }
                 $obj[] = array('y' => $date, 'a' => $count);

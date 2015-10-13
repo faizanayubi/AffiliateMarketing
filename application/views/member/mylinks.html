@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Verified Stats</h1>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">From</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                    <input type="date" style="width: 200px" name="startdate" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">To</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                    <input type="date" style="width: 200px" name="enddate" class="form-control" />
+                </div>
+            </div>
+            <input type="hidden" name="action" value="showLinks">
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-links fa-fw"></i> Links
+            </div>
+            {if($links)}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Link Title</th>
+                            <th>Short URL</th>
+                            <th>Created</th>
+                            <th>Verified Clicks</th>
+                            <th>Total Clicks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $link in $links}
+                            {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
+                            {script $stat = Link::findStats($link->short)}
+                            <tr>
+                                <td>{$item->title}</td>
+                                <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
+                                <td>{$link->created}</td>
+                                <td>0</td>
+                                <td>{$stat->analytics->allTime->shortUrlClicks}</td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            {/if}
+            {else}
+                <p>Hi, you have not generated any link to share on your platform.</p>
+            {/else}
+        </div>
+        
+    </div>
+</div>

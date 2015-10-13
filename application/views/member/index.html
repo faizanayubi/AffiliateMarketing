@@ -5,31 +5,8 @@
         </h1>
     </div>
 </div>
-
 <div class="row">
-    <div class="col-lg-3 col-md-6">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-link fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{echo count($links)}</div>
-                        <div>Active Links!</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/member/links">
-                <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -38,11 +15,11 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{echo $click}</div>
-                        <div>Clicks!</div>
+                        <div>Clicks Today!</div>
                     </div>
                 </div>
             </div>
-            <a href="/member/stats">
+            <a href="/member/mylinks">
                 <div class="panel-footer">
                     <span class="pull-left">View Details</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -51,7 +28,7 @@
             </a>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">
@@ -60,7 +37,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{echo $pending}</div>
-                        <div>Pending Amounts!</div>
+                        <div>Earnings Today!</div>
                     </div>
                 </div>
             </div>
@@ -73,7 +50,7 @@
             </a>
         </div>
     </div>
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-4 col-md-6">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
@@ -82,7 +59,7 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{echo $earnings}</div>
-                        <div>Earnings!</div>
+                        <div>Lifetime Earnings!</div>
                     </div>
                 </div>
             </div>
@@ -97,28 +74,53 @@
     </div>
 </div>
 <!-- /.row -->
-
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
+                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Latest RPM Values</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>IN</th>
+                            <th>US</th>
+                            <th>PK</th>
+                            <th>AU</th>
+                            <th>NW</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
             </div>
-            <div class="panel-body">
-                {if($links)}
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th>Link Title</th>
-                                <th>Short URL</th>
-                                <th>Created</th>
-                                <th>Verified Clicks</th>
-                                <th>Total Clicks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {foreach $link in $links}
+            {if($links)}
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Link Title</th>
+                            <th>Short URL</th>
+                            <th>Created</th>
+                            <th>Verified Clicks</th>
+                            <th>Total Clicks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
                             {script $stat = Link::findStats($link->short)}
                             <tr>
@@ -128,17 +130,16 @@
                                 <td>0</td>
                                 <td>{$stat->analytics->allTime->shortUrlClicks}</td>
                             </tr>
-                            {/foreach}
-                        </tbody>
-                    </table>
-                </div>
-                {/if}
-                {else}
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
+            {/if}
+            {else}
                 <p>Hi, you have not generated any link to share on your platform.</p>
-                {/else}
-                <div class="text-right">
-                    <a href="/member/links">View All Links <i class="fa fa-arrow-circle-right"></i></a>
-                </div>
+            {/else}
+            <div class="text-right">
+                <a href="/member/links">View All Links <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>

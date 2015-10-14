@@ -19,7 +19,40 @@ class Finance extends Admin {
         $this->seo(array("title" => "Records Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $earnings = Earning::all();
+        $accounts = array();
+        $startdate = RequestMethods::get("date", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $live = RequestMethods::get("live", 0);
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        
+        $where = array(
+            "live = ?" => $live,
+            "created >= ?" => $startdate,
+            "created <= ?" => $enddate
+        );
+        $earnings = Earning::all($where, array("DISTINCT user_id", "created"), "created", "asc", $limit, $page);
+        $count = Earning::count($where);
+        foreach ($earnings as $earning) {
+            $amount = 0;
+            $earns = Earning::all(array("user_id = ?" => $earning->user_id, "live = ?" => $live), array("amount"));
+            foreach ($earns as $earn) {
+                $amount += $earn->amount;
+            }
+            array_push($accounts, \Framework\ArrayMethods::toObject(array(
+                "user_id" => $earning->user_id,
+                "amount" => $amount,
+                "created" => $earning->created
+            )));
+        }
+        
+        $view->set("accounts", $accounts);
+        $view->set("startdate", $startdate);
+        $view->set("enddate", $enddate);
+        $view->set("count", $count);
+        $view->set("page", $page);
+        $view->set("limit", $limit);
+        $view->set("live", $live);
     }
 
     /**

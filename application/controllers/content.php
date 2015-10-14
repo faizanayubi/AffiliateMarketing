@@ -67,14 +67,12 @@ class Content extends Admin {
         $this->seo(array("title" => "New User Platforms", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
-        if (RequestMethods::get("action") == "findUser") {
-            $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
-            $live = RequestMethods::get("live", 0);
-            $users = User::all(array("live = ?" => $live, "created LIKE ?" => "%{$date}%"), array("id","name", "created"));
+        $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $live = RequestMethods::get("live", 0);
+        $users = User::all(array("live = ?" => $live, "created LIKE ?" => "%{$date}%"), array("id","name", "created"));
             
-            $view->set("users", $users);
-            $view->set("date", $date);
-        }
+        $view->set("users", $users);
+        $view->set("date", $date);
     }
     
     /**
@@ -84,7 +82,12 @@ class Content extends Admin {
         $this->seo(array("title" => "Edit Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $item = Item::first(array("id = ?" => $id));
-        $rpm = RPM::first(array("item_id = ?" => $item->id));
+        $rpm_in = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "IN"));
+        $rpm_us = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "US"));
+        $rpm_pk = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "PK"));
+        $rpm_au = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "AU"));
+        $rpm_nw = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "NW"));
+        $rpm_none = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "NONE"));
         
         if (RequestMethods::post("action") == "update") {
             $item->title = RequestMethods::post("title");
@@ -92,16 +95,33 @@ class Content extends Admin {
             $item->target = RequestMethods::post("target");
             $item->description = RequestMethods::post("description");
             $item->live = RequestMethods::post("live", "0");
-            $rpm->value = RequestMethods::post("value");
-            $rpm->country = RequestMethods::post("country");
             
             $item->save();
-            $rpm->save();
+
+            $rpm_in->value = RequestMethods::post("rpm_in");
+            $rpm_in->save();
+            $rpm_us->value = RequestMethods::post("rpm_us");
+            $rpm_us->save();
+            $rpm_pk->value = RequestMethods::post("rpm_pk");
+            $rpm_pk->save();
+            $rpm_au->value = RequestMethods::post("rpm_au");
+            $rpm_au->save();
+            $rpm_nw->value = RequestMethods::post("rpm_nw");
+            $rpm_nw->save();
+            $rpm_none->value = RequestMethods::post("rpm_none");
+            $rpm_none->save();
+
             $view->set("success", true);
+
             $view->set("errors", $item->getErrors());
         }
         $view->set("item", $item);
-        $view->set("rpm", $rpm);
+        $view->set("rpm_in", $rpm_in);
+        $view->set("rpm_us", $rpm_us);
+        $view->set("rpm_pk", $rpm_pk);
+        $view->set("rpm_au", $rpm_au);
+        $view->set("rpm_nw", $rpm_nw);
+        $view->set("rpm_none", $rpm_none);
     }
     
     /**

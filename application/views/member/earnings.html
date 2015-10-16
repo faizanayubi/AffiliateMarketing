@@ -5,6 +5,7 @@
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>Link</th>
                         <th>Date</th>
                         <th>Amount</th>
                         <th>Status</th>
@@ -12,7 +13,9 @@
                 </thead>
                 <tbody>
                     {foreach $earn in $earnings}
+                    {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
                     <tr>
+                        <td>{$item->title}</td>
                         <td>{$earn->created}</td>
                         <td>{$earn->amount}</td>
                         <td>{$earn->live}</td>

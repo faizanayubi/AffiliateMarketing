@@ -173,7 +173,7 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
-        $earners = Earning::all(array("live = ?" => 1), array("user_id", "amount"), "amount", "desc", 10, 1);
+        $earners = Earning::all(array("live = ?" => 0), array("user_id", "amount"), "amount", "desc", 10, 1);
         $view->set("earners", $earners);
     }
     

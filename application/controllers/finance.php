@@ -9,7 +9,7 @@ use Framework\Registry as Registry;
 use Framework\RequestMethods as RequestMethods;
 
 class Finance extends Admin {
-    
+
     /**
      * All earnings records of persons
      * 
@@ -62,6 +62,31 @@ class Finance extends Admin {
     public function earnings() {
         $this->seo(array("title" => "Earnings Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+
+        $startdate = RequestMethods::get("date", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $website = RequestMethods::get("website", "http://kapilsharmafc.com");
+
+        $amount = 0;
+        $where = array(
+            "url LIKE ?" => "%{$website}%",
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
+        );
+        $items = Item::all($where, array("id"));
+
+        foreach ($items as $item) {
+            $earnings = Earning::all(array("item_id = ?" => $item->id), array("amount"));
+            foreach ($earnings as $earning) {
+                $amount += $earning->amount;
+            }
+        }
+        
+        $view->set("startdate", $startdate);
+        $view->set("enddate", $enddate);
+        $view->set("items", $items);
+        $view->set("website", $website);
+        $view->set("amount", $amount);
     }
 
     /**

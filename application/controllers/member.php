@@ -72,6 +72,10 @@ class Member extends Auth {
         return $earning;
     }
 
+    protected function changeDate($date, $day) {
+        return date_format(date_add(date_create($date),date_interval_create_from_date_string("{$day} day")), 'Y-m-d');;
+    }
+
     /**
      * @before _secure, changeLayout
      */
@@ -89,8 +93,8 @@ class Member extends Auth {
         
         $where = array(
             "user_id = ?" => $this->user->id,
-            "created >= ?" => $startdate,
-            "created <= ?" => $enddate
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
         );
 
         $links = Link::all($where, array("item_id", "short", "created"), "created", "desc", $limit, $page);

@@ -1,0 +1,75 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">URL Debugger</h1>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">URL</label>
+                    <input type="url" style="width: 300px" name="urld" class="form-control" placeholder="value..." value="{$url}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+        <hr>
+        {if($metas)}
+        {script $properties = array_keys($metas)}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-list fa-fw"></i> Swift Bot
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                {foreach $property in $properties}
+                    <tr>
+                        <td>{echo $property}</td>
+                        {if(strpos($property, "image"))}
+                        <td><img src="{echo $metas[$property]}" /></td>
+                        {/if}
+                        {else}
+                        <td>{echo $metas[$property]}</td>
+                        {/else}
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        {script $fbs = array_keys(get_object_vars($facebook))}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-facebook fa-fw"></i> Facebook
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                {foreach $fb in $fbs}
+                    <tr>
+                        <td>{echo $fb}</td>
+                        <td>{echo $facebook->$fb}</td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        {script $tws = array_keys(get_object_vars($twitter))}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-twitter fa-fw"></i> Twitter
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                {foreach $tw in $tws}
+                    <tr>
+                        <td>{echo $tw}</td>
+                        <td>{echo $twitter->$tw}</td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+        {/if}
+        {else}
+        <p class="text-center">Please Enter a Short URL to Debug It.</p>
+        {/else}
+    </div>
+</div>

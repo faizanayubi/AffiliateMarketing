@@ -7,6 +7,7 @@
  */
 use Framework\Registry as Registry;
 use Framework\RequestMethods as RequestMethods;
+use \Curl\Curl;
 
 class Analytics extends Admin {
     
@@ -49,6 +50,37 @@ class Analytics extends Admin {
         $view->set("earn", $earn);
         $view->set("links", $links);
         $view->set("rpm", $rpm);
+    }
+
+    /**
+     * @before _secure, changeLayout
+     */
+    public function urlDebugger() {
+        $this->seo(array("title" => "URL Debugger", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+
+        $url = RequestMethods::get("urld", "http://earnbugs.in/");
+        $metas = get_meta_tags($url);
+
+        $facebook = new Curl();
+        $facebook->get('https://api.facebook.com/method/links.getStats', array(
+            'format' => 'json',
+            'urls' => $url
+        ));
+        $facebook->setOpt(CURLOPT_ENCODING , 'gzip');
+        $facebook->close();
+
+        $twitter = new Curl();
+        $twitter->get('https://cdn.api.twitter.com/1/urls/count.json', array(
+            'url' => $url
+        ));
+        $twitter->setOpt(CURLOPT_ENCODING , 'gzip');
+        $twitter->close();
+
+        $view->set("url", $url);
+        $view->set("metas", $metas);
+        $view->set("facebook", array_values($facebook->response)[0]);
+        $view->set("twitter", $twitter->response);
     }
     
 }

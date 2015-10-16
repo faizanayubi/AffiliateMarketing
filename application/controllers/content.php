@@ -28,12 +28,15 @@ class Content extends Admin {
             ));
             $item->save();
             
-            $rpm = new RPM(array(
-                "item_id" => $item->id,
-                "value" => RequestMethods::post("value"),
-                "country" => RequestMethods::post("country")
-            ));
-            $rpm->save();
+            $rpms = RequestMethods::post("rpm");
+            foreach ($rpms as $key => $value) {
+                $rpm = new RPM(array(
+                    "item_id" => $item->id,
+                    "value" => $value,
+                    "country" => $key
+                ));
+                $rpm->save();
+            }
             $view->set("success", true);
         }
     }

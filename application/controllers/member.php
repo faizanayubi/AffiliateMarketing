@@ -97,7 +97,7 @@ class Member extends Auth {
             "created <= ?" => $this->changeDate($enddate, "1")
         );
 
-        $links = Link::all($where, array("item_id", "short", "created"), "created", "desc", $limit, $page);
+        $links = Link::all($where, array("id", "item_id", "short", "created"), "created", "desc", $limit, $page);
         $count = Link::count($where);
         
         $view->set("links", $links);

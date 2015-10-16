@@ -21,9 +21,6 @@
         </form>
         <hr>
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="fa fa-links fa-fw"></i> Links
-            </div>
             {if($links)}
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped">
@@ -34,18 +31,27 @@
                             <th>Created</th>
                             <th>Verified Clicks</th>
                             <th>Total Clicks</th>
+                            <th>Verified Earnings</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $stat = Link::findStats($link->short)}
+                            {script $googl = Link::findStats($link->short)}
+                            {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))} 
+                            {script $earning = Earning::total($link->id)}
                             <tr>
                                 <td>{$item->title}</td>
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                                 <td>{$link->created}</td>
+                                {if($stat)}
+                                <td>{$stat->verifiedClicks}</td>
+                                {/if}
+                                {else}
                                 <td>0</td>
-                                <td>{$stat->analytics->allTime->shortUrlClicks}</td>
+                                {/else}
+                                <td>{$googl->analytics->allTime->shortUrlClicks}</td>
+                                <td>{$earning}</td>
                             </tr>
                         {/foreach}
                     </tbody>
@@ -53,7 +59,7 @@
             </div>
             {/if}
             {else}
-                <p>Hi, you have not generated any link to share on your platform.</p>
+                <p class="text-center">Hi, you have not generated any link to share on your platform.</p>
             {/else}
         </div>
         

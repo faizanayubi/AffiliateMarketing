@@ -40,4 +40,14 @@ class Earning extends \Shared\Model {
      * @type integer
      */
     protected $_rpm_id;
+
+    public static function total($link_id) {
+        $total = 0;
+        $stats = Stat::all(array("link_id = ?" => $link_id), array("id"));
+        foreach ($stats as $stat) {
+            $earning = Earning::first(array("stat_id = ?" => $stat->id), array("amount"));
+            $total += $earning->amount;
+        }
+        return $total;
+    }
 }

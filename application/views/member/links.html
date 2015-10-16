@@ -1,3 +1,4 @@
+{include member/modal_link.html}
 <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header text-center">Top Trending Links</h1>
@@ -11,24 +12,41 @@
             <button type="submit" class="btn btn-primary">Show</button>
         </form>
         <hr>
-        {foreach $item in $items}
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <b>{echo $item->title}</b>
-                <img src="{echo CDN}/uploads/images/{echo $item->image}" alt="{echo $item->title}">
-                <div class="caption">
-                    <div class="input-group">
-                        <span class="input-group-btn"><button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->encode($user->username)}">Generate URL</button></span>
-                        <input type="text" class="form-control shorturl">
-                    </div>
-                </div>
+    </div>
+    {foreach $item in $items}
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">{echo $item->title}</div>
+            <div class="panel-body">
+                <img src="{echo CDN}/uploads/images/{echo $item->image}" alt="{echo $item->title}" width="240">
             </div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->encode($user->username)}" data-title="{echo $item->title}">Generate URL</button>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control shorturl">
+                        </td>
+                    </tr>
+                    <tr>
+                        {script $rpm_in = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "IN"), array("value"))}
+                        <td>India</td>
+                        <td>{$rpm_in->value}</td>
+                    </tr>
+                    <tr>
+                        {script $rpm_us = RPM::first(array("item_id = ?" => $item->id, "country = ?" => "US"), array("value"))}
+                        <td>United States</td>
+                        <td>{$rpm_us->value}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        {/foreach}
-        <div class="text-center">
-            {if($count > 10)}
-            <a href="{echo URL}&page={echo $page+1}" class="btn btn-primary">Load More</a>
-            {/if}
-        </div>
+    </div>
+    {/foreach}
+    <div class="text-center">
+        {if($count > 10)}
+        <a href="{echo URL}&page={echo $page+1}" class="btn btn-primary">Load More</a> {/if}
     </div>
 </div>

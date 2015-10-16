@@ -139,6 +139,10 @@ class Auth extends Controller {
             echo "Could not open log file for writing";
         }
     }
+
+    protected function changeDate($date, $day) {
+        return date_format(date_add(date_create($date),date_interval_create_from_date_string("{$day} day")), 'Y-m-d');;
+    }
     
     public function logout() {
         $this->setUser(false);

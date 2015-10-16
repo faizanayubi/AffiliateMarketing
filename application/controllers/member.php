@@ -21,11 +21,11 @@ class Member extends Auth {
         
         $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short", "created"), "created", "desc", 5, 1);
         $earnings = $this->totalEarnings();
-        $rpm_in = RPM::first(array("country = ?" => "IN"), array("value"));$view->set("rpm_in", $rpm_in);
-        $rpm_us = RPM::first(array("country = ?" => "US"), array("value"));$view->set("rpm_us", $rpm_us);
-        $rpm_pk = RPM::first(array("country = ?" => "PK"), array("value"));$view->set("rpm_pk", $rpm_pk);
-        $rpm_au = RPM::first(array("country = ?" => "AU"), array("value"));$view->set("rpm_au", $rpm_au);
-        $rpm_nw = RPM::first(array("country = ?" => "NW"), array("value"));$view->set("rpm_nw", $rpm_nw);
+        $rpm_in = RPM::first(array("country = ?" => "IN"), array("value"), "created", "desc");$view->set("rpm_in", $rpm_in);
+        $rpm_us = RPM::first(array("country = ?" => "US"), array("value"), "created", "desc");$view->set("rpm_us", $rpm_us);
+        $rpm_pk = RPM::first(array("country = ?" => "PK"), array("value"), "created", "desc");$view->set("rpm_pk", $rpm_pk);
+        $rpm_au = RPM::first(array("country = ?" => "AU"), array("value"), "created", "desc");$view->set("rpm_au", $rpm_au);
+        $rpm_nw = RPM::first(array("country = ?" => "NW"), array("value"), "created", "desc");$view->set("rpm_nw", $rpm_nw);
 
         $view->set("links", $links);
         $view->set("earnings", $earnings["total"]);
@@ -70,10 +70,6 @@ class Member extends Auth {
             "pending" => $pending
         );
         return $earning;
-    }
-
-    protected function changeDate($date, $day) {
-        return date_format(date_add(date_create($date),date_interval_create_from_date_string("{$day} day")), 'Y-m-d');;
     }
 
     /**

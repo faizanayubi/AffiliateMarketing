@@ -28,4 +28,13 @@ class RPM extends Shared\Model {
      * @length 50
      */
     protected $_country;
+
+    public static function average($item_id) {
+        $rpms = RPM::all(array("item_id = ?" => $item_id), array("value"));
+        $value = 0;
+        foreach ($rpms as $rpm) {
+            $value += $rpm->value;
+        }
+        return $value/count($rpms);
+    }
 }

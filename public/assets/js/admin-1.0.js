@@ -50,6 +50,8 @@ $(document).ready(function () {
     //initialize beautiful datetime picker
     $("input[type=date]").datepicker();
     $("input[type=date]").datepicker("option", "dateFormat", "yy-mm-dd");
+    var dateFormat = $("input[type=date]").datepicker( "option", "dateFormat" );
+    $("input[type=date]").datepicker( "option", "dateFormat", "yy-mm-dd" );
 
     $('#created_stats').submit(function (e) {
         $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');

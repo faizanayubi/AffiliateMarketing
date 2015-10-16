@@ -118,6 +118,7 @@
                             <th>Verified Yesterday</th>
                             <th>Realtime Clicks</th>
                             <th>Verified Earnings</th>
+                            <th>Average RPM</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -126,6 +127,7 @@
                             {script $googl = Link::findStats($link->short)}
                             {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))}
                             {script $earning = Earning::total($link->id)}
+                            {script $average = RPM::average($link->item_id)}
                             <tr>
                                 <td>{$item->title}</td>
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
@@ -138,6 +140,7 @@
                                 {/else}
                                 <td>{$googl->analytics->allTime->shortUrlClicks}</td>
                                 <td>{$earning}</td>
+                                <td>{$average}</td>
                             </tr>
                         {/foreach}
                     </tbody>

@@ -122,13 +122,14 @@
                     <tbody>
                         {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $stat = Link::findStats($link->short)}
+                            {script $googl = Link::findStats($link->short)}
+                            {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))} 
                             <tr>
                                 <td>{$item->title}</td>
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                                 <td>{$link->created}</td>
-                                <td>0</td>
-                                <td>{$stat->analytics->allTime->shortUrlClicks}</td>
+                                <td>{$stat->verifiedClicks}</td>
+                                <td>{$googl->analytics->allTime->shortUrlClicks}</td>
                             </tr>
                         {/foreach}
                     </tbody>

@@ -19,7 +19,7 @@ class Member extends Auth {
         ));
         $view = $this->getActionView();
         
-        $links = Link::all(array("user_id = ?" => $this->user->id), array("item_id", "short", "created"), "created", "desc", 5, 1);
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short", "created"), "created", "desc", 5, 1);
         $earnings = $this->totalEarnings();
         $rpm_in = RPM::first(array("country = ?" => "IN"), array("value"));$view->set("rpm_in", $rpm_in);
         $rpm_us = RPM::first(array("country = ?" => "US"), array("value"));$view->set("rpm_us", $rpm_us);

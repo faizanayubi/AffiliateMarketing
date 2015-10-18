@@ -35,32 +35,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {foreach $link in $links}
-                            {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $googl = Link::findStats($link->short)}
-                            {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))} 
-                            {script $earning = Earning::total($link->id)}
-                            <tr>
-                                <td>{$item->title}</td>
-                                <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
-                                <td>{$link->created}</td>
-                                {if($stat)}
-                                <td>{$stat->verifiedClicks}</td>
-                                {/if}
-                                {else}
-                                <td>0</td>
-                                {/else}
-                                <td>{$googl->analytics->allTime->shortUrlClicks}</td>
-                                <td>{$earning}</td>
-                            </tr>
+                        {foreach $link in $links} {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))} {script $googl = Link::findStats($link->short)} {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))} {script $earning = Earning::total($link->id)}
+                        <tr>
+                            <td>{$item->title}</td>
+                            <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
+                            <td>{$link->created}</td>
+                            {if($stat)}
+                            <td>{$stat->verifiedClicks}</td>
+                            {/if} {else}
+                            <td>0</td>
+                            {/else}
+                            <td>{$googl->analytics->allTime->shortUrlClicks}</td>
+                            <td>{$earning}</td>
+                        </tr>
                         {/foreach}
                     </tbody>
                 </table>
             </div>
-            {/if}
-            {else}
-                <p class="text-center">Hi, you have not generated any link to share on your platform.</p>
+            {/if} {else}
+            <p class="text-center">Hi, you have not generated any link to share on your platform.</p>
             {/else}
+        </div>
+
+        <div class="text-center">
+            <ul class="pager">
+                {if($page != 1)}
+                <li><a href="?page={echo $page - 1}">Previous</a></li>
+                {/if} {if($page
+                < $count/$limit)} <li><a href="?page={echo $page + 1}">Next</a></li>
+                    {/if}
+            </ul>
         </div>
         
     </div>

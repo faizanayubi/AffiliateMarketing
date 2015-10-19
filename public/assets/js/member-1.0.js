@@ -105,6 +105,23 @@ $(document).ready(function() {
         }
     });
 
+    $(".googl").click(function(e) {
+        e.preventDefault();
+        var item = $(this),
+            shortURL = item.data('url'),
+            time = item.data('time'),
+            property = item.data('property');
+        item.html('<i class="fa fa-spinner fa-pulse"></i>');
+        request.read({
+            action: "analytics/full",
+            data: {shortURL: shortURL},
+            callback: function(data) {
+                item.html(data.googl.analytics[time][property]);
+            }
+        });
+
+    });
+
 
 });
 
@@ -115,6 +132,24 @@ function toArray(object) {
     return array;
 }
 
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1);
+        if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
+}
+
 function copy() {
     var copyDiv = $(".shorturl");
     copyDiv.focus();
@@ -123,12 +158,22 @@ function copy() {
 }
 
 function clickToday () {
-    request.read({
-        action: "member/clicksToday",
-        data: {},
-        callback: function(data) {
-            $('#clickToday').html(data.click);
-            $('#unverifiedEarning').html(data.earning);
-        }
-    });
+    var track = getCookie('clickToday');
+    if (track != "") {
+        //cookie exists
+        $('#clickToday').html(getCookie('clickToday'));
+        $('#unverifiedEarning').html(getCookie('unverifiedEarning'));
+    } else {
+        request.read({
+            action: "member/clicksToday",
+            data: {},
+            callback: function(data) {
+                $('#clickToday').html(data.click);
+                setCookie('clickToday', data.click, 1/48);
+
+                $('#unverifiedEarning').html(data.earning);
+                setCookie('unverifiedEarning', data.earning, 1/48);
+            }
+        });
+    }
 }

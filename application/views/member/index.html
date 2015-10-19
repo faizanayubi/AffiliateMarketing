@@ -124,7 +124,6 @@
                     <tbody>
                         {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $googl = Link::findStats($link->short)}
                             {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))}
                             {script $earning = Earning::total($link->id)}
                             {script $average = RPM::average($link->item_id)}
@@ -133,12 +132,14 @@
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                                 <td>{$link->created}</td>
                                 {if($stat)}
-                                <td>{$stat->verifiedClicks}</td>
+                                    <td>{$stat->verifiedClicks}</td>
                                 {/if}
                                 {else}
-                                <td>0</td>
+                                    <td>0</td>
                                 {/else}
-                                <td>{$googl->analytics->allTime->shortUrlClicks}</td>
+                                <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
+                                    <span class="label label-success">View</span>
+                                </td>
                                 <td>{$earning}</td>
                                 <td>{$average}</td>
                             </tr>

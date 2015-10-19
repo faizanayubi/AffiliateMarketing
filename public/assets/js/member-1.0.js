@@ -122,7 +122,6 @@ $(document).ready(function() {
 
     });
 
-
 });
 
 function toArray(object) {

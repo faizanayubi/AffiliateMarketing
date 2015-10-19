@@ -16,12 +16,14 @@
                     <input type="date" style="width: 200px" name="enddate" class="form-control" />
                 </div>
             </div>
-            <input type="hidden" name="action" value="showLinks">
             <button type="submit" class="btn btn-primary">Show</button>
         </form>
         <hr>
         <div class="panel panel-default">
             {if($links)}
+            <div class="panel-body text-center">
+                <p><b>{echo $count}</b> Links found of <b>{echo $total}</b> links</p>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped">
                     <thead>
@@ -65,10 +67,10 @@
         <div class="text-center">
             <ul class="pager">
                 {if($page != 1)}
-                <li><a href="{echo URL}?page={echo $page - 1}">Previous</a></li>
+                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
                 {/if}
                 {if($page < $count/$limit)}
-                <li><a href="{echo URL}?page={echo $page + 1}">Next</a></li>
+                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
                 {/if}
             </ul>
         </div>

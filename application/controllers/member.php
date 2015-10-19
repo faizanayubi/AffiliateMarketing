@@ -95,11 +95,12 @@ class Member extends Auth {
 
         $links = Link::all($where, array("id", "item_id", "short", "created"), "created", "desc", $limit, $page);
         $count = Link::count($where);
-        
+
         $view->set("links", $links);
         $view->set("limit", $limit);
         $view->set("page", $page);
         $view->set("count", $count);
+        $view->set("total", Link::count(array("user_id = ?" => $this->user->id)));
     }
     
     /**

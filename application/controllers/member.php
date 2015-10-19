@@ -244,6 +244,7 @@ class Member extends Auth {
             $user = User::first(array("id = ?" => $this->user->id));
             $user->phone = RequestMethods::post('phone');
             $user->name = RequestMethods::post('name');
+            $user->username = RequestMethods::post('username');
             $user->save();
             $view->set("success", true);
             $view->set("user", $user);

@@ -1,20 +1,21 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Top Earners Today</h1>
+        <h1 class="page-header text-center">Top Earners Today</h1>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover text-center">
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th>Revenue</th>
+                        <th>Clicks</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {foreach $earn in $earners}
-                    {script $user = User::first(array("id = ?" => $earn->user_id), array("username"))}
+                    {foreach $stat in $stats}
+                    {script $link = Link::first(array("id = ?" => $stat->link_id), array("user_id"))}
+                    {script $user = User::first(array("id = ?" => $link->user_id), array("username"))}
                     <tr>
                         <td>{$user->username}</td>
-                        <td>{$earn->amount}</td>
+                        <td>{$stat->verifiedClicks}</td>
                     </tr>
                     {/foreach}
                 </tbody>

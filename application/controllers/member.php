@@ -170,8 +170,13 @@ class Member extends Auth {
             "view" => $this->getLayoutView()
         ));
         $view = $this->getActionView();
-        $earners = Earning::all(array("live = ?" => 0), array("user_id", "amount"), "amount", "desc", 10, 1);
-        $view->set("earners", $earners);
+
+        $where = array(
+            "live = ?" => 0,
+            "created >= ?" => date('Y-m-d', strtotime($startdate . "-1 day"))
+        );
+        $stats = Stat::all($where, array("verifiedClicks", "link_id"), "verifiedClicks", "desc", 10, 1);
+        $view->set("stats", $stats);
     }
     
     /**

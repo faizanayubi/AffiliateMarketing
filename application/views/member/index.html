@@ -58,7 +58,7 @@
                         <i class="fa fa-money fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{echo $pending}/{echo $earnings}</div>
+                        <div class="huge">{echo round($pending)}/{echo round($earnings)}</div>
                         <div>Pending/Total Earning!</div>
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                                     <span class="label label-success">View</span>
                                 </td>
                                 <td>{$earning}</td>
-                                <td>{$average}</td>
+                                <td>{echo round($average)}</td>
                             </tr>
                         {/foreach}
                     </tbody>

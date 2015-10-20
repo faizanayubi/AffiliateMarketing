@@ -6,6 +6,8 @@ define("APP_PATH", str_replace(DIRECTORY_SEPARATOR, "/", dirname(__FILE__)));
 define("URL", "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 define("CDN", "http://earnbugs.in/public/assets/");
 
+date_default_timezone_set('Asia/Kolkata');
+
 try {
     
     // library's class autoloader

@@ -63,8 +63,8 @@ class Finance extends Admin {
         $this->seo(array("title" => "Earnings Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $startdate = RequestMethods::get("date", date('Y-m-d', strtotime("-7 day")));
-        $enddate = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
         $website = RequestMethods::get("website", "http://kapilsharmafc.com");
 
         $amount = 0;
@@ -74,6 +74,7 @@ class Finance extends Admin {
             "created <= ?" => $this->changeDate($enddate, "1")
         );
         $items = Item::all($where, array("id"));
+        $count = Item::count($where);
 
         foreach ($items as $item) {
             $earnings = Earning::all(array("item_id = ?" => $item->id), array("amount"));
@@ -85,6 +86,7 @@ class Finance extends Admin {
         $view->set("startdate", $startdate);
         $view->set("enddate", $enddate);
         $view->set("items", $items);
+        $view->set("count", $count);
         $view->set("website", $website);
         $view->set("amount", $amount);
     }

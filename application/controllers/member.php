@@ -208,7 +208,7 @@ class Member extends Auth {
             "title LIKE ?" => "%{$title}%",
             "live = ?" => true,
         );
-        $items = Item::all($where, array("id", "title", "image", "target", "url"), "created", "desc", $limit, $page);
+        $items = Item::all($where, array("id", "title", "image", "target", "url", "description"), "created", "desc", $limit, $page);
         $count = Item::count($where);
         
         $view->set("limit", $limit);

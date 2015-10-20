@@ -132,7 +132,10 @@ $(document).ready(function () {
         }
     });
 
-
+    $(".selectAll").click(function(e) {
+        $(this).focus();
+        document.execCommand('SelectAll');
+    });
 });
 
 function toArray(object) {

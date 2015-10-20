@@ -19,20 +19,48 @@ class Member extends Auth {
         ));
         $view = $this->getActionView();
         
-        $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short", "created"), "created", "desc", 5, 1);
-        $earnings = $this->totalEarnings();
-        $rpm_in = RPM::first(array("country = ?" => "IN"), array("value"), "created", "desc");$view->set("rpm_in", $rpm_in);
-        $rpm_us = RPM::first(array("country = ?" => "US"), array("value"), "created", "desc");$view->set("rpm_us", $rpm_us);
-        $rpm_pk = RPM::first(array("country = ?" => "PK"), array("value"), "created", "desc");$view->set("rpm_pk", $rpm_pk);
-        $rpm_au = RPM::first(array("country = ?" => "AU"), array("value"), "created", "desc");$view->set("rpm_au", $rpm_au);
-        $rpm_nw = RPM::first(array("country = ?" => "NW"), array("value"), "created", "desc");$view->set("rpm_nw", $rpm_nw);
-
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short"), "created", "desc", 5, 1);
+        $stat = $this->quickStats();
+        
         $view->set("links", $links);
-        $view->set("earnings", $earnings["total"]);
-        $view->set("pending", $earnings["pending"]);
+        $view->set("clicks", $stat["clicks"]);
+        $view->set("earnings", $stat["earning_total"]);
+        $view->set("pending", $stat["earning_pending"]);
+    }
+
+    protected function quickStats() {
+        $total_earnings = 0;$total_clicks = 0;$pending = 0;
+
+        $earnings = Earning::all(array("user_id = ?" => $this->user->id), array("amount", "live", "stat_id"));
+        foreach ($earnings as $earning) {
+            $stat = Stat::first(array("id = ?" => $earning->stat_id), array("shortUrlClicks"));
+            $total_clicks += $stat->shortUrlClicks;
+
+            $total_earnings += $earning->amount;
+            if($earning->live == "0") {
+                $pending += $earning->amount;
+            }
+        }
+        $earning = array(
+            "earning_total" => $total_earnings,
+            "earning_pending" => $pending,
+            "clicks" => $total_clicks
+        );
+        return $earning;
+    }
+
+    protected function totalClicks() {
+        $total_clicks = 0;
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("id"));
+        foreach ($links as $link) {
+            $stat = Stat::first(array("link_id = ?" => $link->id), array("shortUrlClicks"));
+            $total_clicks += $stat->shortUrlClicks;
+        }
+        return $total_clicks;
     }
 
     /**
+     * Total Clicks today from Google Server realtime
      * @before _secure
      */
     public function clicksToday() {
@@ -53,23 +81,6 @@ class Member extends Auth {
 
         $view->set("earning", $earning);
         $view->set("click", $count);
-    }
-    
-    protected function totalEarnings() {
-        $total_earnings = 0;
-        $pending = 0;
-        $earnings = Earning::all(array("user_id = ?" => $this->user->id), array("amount", "live"));
-        foreach ($earnings as $earning) {
-            $total_earnings += $earning->amount;
-            if($earning->live == "0") {
-                $pending += $earning->amount;
-            }
-        }
-        $earning = array(
-            "total" => $total_earnings,
-            "pending" => $pending
-        );
-        return $earning;
     }
 
     /**

@@ -14,8 +14,8 @@
                         <i class="fa fa-hand-pointer-o fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge" id="clickToday"><i class="fa fa-spinner fa-pulse"></i></div>
-                        <div>Clicks Today!</div>
+                        <div class="huge">{$clicks}</div>
+                        <div>Total Verified Clicks!</div>
                     </div>
                 </div>
             </div>
@@ -36,8 +36,8 @@
                         <i class="fa fa-inr fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge" id="unverifiedEarning"><i class="fa fa-spinner fa-pulse"></i></div>
-                        <div>Unverified Earnings Today!</div>
+                        <div class="huge">0</div>
+                        <div>Average RPM!</div>
                     </div>
                 </div>
             </div>
@@ -78,33 +78,6 @@
     <div class="col-lg-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-money fa-fw"></i> Latest RPM Values(in Rupees)</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>IN</th>
-                            <th>US</th>
-                            <th>PK</th>
-                            <th>AU</th>
-                            <th>NW</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{echo $rpm_in->value}</td>
-                            <td>{echo $rpm_us->value}</td>
-                            <td>{echo $rpm_pk->value}</td>
-                            <td>{echo $rpm_au->value}</td>
-                            <td>{echo $rpm_nw->value}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">
                 <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
             </div>
             {if($links)}
@@ -114,33 +87,23 @@
                         <tr>
                             <th>Link Title</th>
                             <th>Short URL</th>
-                            <th>Created</th>
-                            <th>Verified Yesterday</th>
                             <th>Realtime Clicks</th>
-                            <th>Verified Earnings</th>
+                            <th>Earning</th>
                             <th>Average RPM</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $link in $links}
-                            {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                            {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))}
+                            {script $item = Item::first(array("id = ?" => $link->item_id), array("title", "url"))}
                             {script $earning = Earning::total($link->id)}
                             {script $average = RPM::average($link->item_id)}
                             <tr>
-                                <td>{$item->title}</td>
+                                <td><a href="{$item->url}" target="_blank">{$item->title}</a></td>
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
-                                <td>{$link->created}</td>
-                                {if($stat)}
-                                    <td>{$stat->verifiedClicks}</td>
-                                {/if}
-                                {else}
-                                    <td>0</td>
-                                {/else}
                                 <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
                                     <span class="label label-success">View</span>
                                 </td>
-                                <td>{$earning}</td>
+                                <td>₹ {$earning}</td>
                                 <td>{echo round($average)}</td>
                             </tr>
                         {/foreach}
@@ -162,6 +125,6 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function() {
-        clickToday();
+        //clickToday();
     });
 </script>

@@ -117,6 +117,13 @@ $(document).ready(function() {
             data: {shortURL: shortURL},
             callback: function(data) {
                 item.html(data.googl.analytics[time][property]);
+                /*console.log(data);
+                var country_code = ["US", "IN", "AU", "NZ", "PK", "NONE"];
+                country_code.forEach(function(country) {
+                    console.log(country);
+                    data.googl.analytics[time]["countries"];
+                    clicks(country) * rpm(country, shortURL)/1000;
+                });*/
             }
         });
 

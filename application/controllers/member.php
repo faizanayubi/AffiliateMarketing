@@ -186,7 +186,7 @@ class Member extends Auth {
         
         $title = RequestMethods::get("title", "");
         $page = RequestMethods::get("page", 1);
-        $limit = RequestMethods::get("limit", 10);
+        $limit = RequestMethods::get("limit", 9);
         
         $where = array(
             "title LIKE ?" => "%{$title}%",

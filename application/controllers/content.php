@@ -188,4 +188,30 @@ class Content extends Admin {
 
         $view->set("success", "true");
     }
+
+    public function resize($image, $width = 260, $height = 125) {
+        $path = APP_PATH . "/public/assets/uploads/images";
+        $cdn = CDN;$image = base64_decode($image);
+        if ($image) {
+            $filename = pathinfo($image, PATHINFO_FILENAME);
+            $extension = pathinfo($image, PATHINFO_EXTENSION);
+
+            if ($filename && $extension) {
+                $thumbnail = "{$filename}-{$width}x{$height}.{$extension}";
+                if (!file_exists("{$path}/{$thumbnail}")) {
+                    $imagine = new \Imagine\Gd\Imagine();
+                    $size = new \Imagine\Image\Box($width, $height);
+                    $mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
+                    $imagine->open("{$path}/{$image}")->thumbnail($size, $mode)->save("{$path}/resize/{$thumbnail}");
+                }
+                header("Location: {$cdn}uploads/images/resize/{$thumbnail}");
+                exit();
+            }
+            header("Location: /images/{$image}");
+            exit();
+        } else {
+            header("Location: {$cdn}img/logo.png");
+            exit();
+        }
+    }
 }

@@ -168,10 +168,10 @@ function clickToday () {
             data: {},
             callback: function(data) {
                 $('#clickToday').html(data.click);
-                setCookie('clickToday', data.click, 1/48);
+                setCookie('clickToday', data.click, 1/24);
 
                 $('#unverifiedEarning').html(data.earning);
-                setCookie('unverifiedEarning', data.earning, 1/48);
+                setCookie('unverifiedEarning', data.earning, 1/24);
             }
         });
     }

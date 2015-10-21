@@ -113,17 +113,10 @@ $(document).ready(function() {
             property = item.data('property');
         item.html('<i class="fa fa-spinner fa-pulse"></i>');
         request.read({
-            action: "analytics/full",
+            action: "content/rpm",
             data: {shortURL: shortURL},
             callback: function(data) {
-                item.html(data.googl.analytics[time][property]);
-                /*console.log(data);
-                var country_code = ["US", "IN", "AU", "NZ", "PK", "NONE"];
-                country_code.forEach(function(country) {
-                    console.log(country);
-                    data.googl.analytics[time]["countries"];
-                    clicks(country) * rpm(country, shortURL)/1000;
-                });*/
+                item.html('RPM : ₹ '+ data.rpm +', Click : '+ data.click +', Earning : ₹ '+ data.earning);
             }
         });
 
@@ -179,6 +172,24 @@ function clickToday () {
 
                 $('#unverifiedEarning').html(data.earning);
                 setCookie('unverifiedEarning', data.earning, 1/24);
+            }
+        });
+    }
+}
+
+function getRPM (item_id) {
+    var track = getCookie('rpm_'+item_id);
+    if (track != "") {
+        //cookie exists
+        return JSON.parse(track);
+    } else {
+        request.read({
+            action: "content/rpm",
+            data: {item_id: item_id},
+            callback: function(data) {
+                var json_str = JSON.stringify(arr);
+                setCookie('rpm_'+item_id, json_str, 1);
+                return data;
             }
         });
     }

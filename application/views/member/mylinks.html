@@ -32,30 +32,20 @@
                             <th>Link Title</th>
                             <th>Short URL</th>
                             <th>Created</th>
-                            <th>Verified Clicks</th>
-                            <th>Total Clicks</th>
-                            <th>Verified Earnings</th>
+                            <th>Realtime</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $link in $links}
                         {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                        {script $stat = Stat::first(array("link_id = ?" => $link->id), array("verifiedClicks"))}
-                        {script $earning = Earning::total($link->id)}
                         <tr>
                             <td>{$link->id}</td>
                             <td>{$item->title}</td>
                             <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                             <td>{$link->created}</td>
-                            {if($stat)}
-                            <td>{$stat->verifiedClicks}</td>
-                            {/if} {else}
-                            <td>0</td>
-                            {/else}
                             <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
                                 <span class="label label-success">View</span>
                             </td>
-                            <td>{$earning}</td>
                         </tr>
                         {/foreach}
                     </tbody>

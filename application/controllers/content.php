@@ -214,4 +214,48 @@ class Content extends Admin {
             exit();
         }
     }
+
+    public function rpm() {
+        $this->JSONview();
+        $view = $this->getActionView();
+
+        $shortURL = RequestMethods::get("shortURL");
+        $earning = 0;$count = 0;$verified_count = 0;$country_count = 0;
+        $link = Link::first(array("short = ?" => $shortURL), array("item_id", "short"));
+        if ($link) {
+            $stat = Link::findStats($link->short);
+            $total_count = $stat->analytics->allTime->shortUrlClicks;
+            if ($stat->analytics->allTime->shortUrlClicks) {
+                $referrers = $stat->analytics->allTime->referrers;
+                foreach ($referrers as $referer) {
+                    if (strpos($referer->id,'facebook.com') !== false) {
+                        $verified_count += $referer->count;
+                    }
+                }
+                $correct = $verified_count/$total_count;
+
+                $countries = $stat->analytics->allTime->countries;
+
+                $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
+                foreach ($rpms as $rpm) {
+                    foreach ($countries as $country) {
+                        if(strtoupper($rpm->country) == $country->id) {
+                            $earning += $correct*($rpm->value)*($country->count)/1000;
+                            $country_count += $country->count;
+                        }
+                    }
+                    if ($rpm->country == "NONE") {
+                        $earning += ($verified_count - $country_count)*$correct*($rpm->value)/1000;
+                    }
+                }
+                $view->set("rpm", round(($earning*1000)/($verified_count), 2));
+                $view->set("rpms", $rpms);
+            }
+            $view->set("stat", $stat);
+        }
+        
+        $view->set("earning", round($earning, 2));
+        $view->set("click", round($verified_count,2));
+        $view->set("link", $link);
+    }
 }

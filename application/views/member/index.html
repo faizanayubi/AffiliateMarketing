@@ -87,24 +87,18 @@
                         <tr>
                             <th>Link Title</th>
                             <th>Short URL</th>
-                            <th>Realtime Clicks</th>
-                            <th>Earning</th>
-                            <th>Average RPM</th>
+                            <th>Realtime Stats</th>
                         </tr>
                     </thead>
                     <tbody>
                         {foreach $link in $links}
                             {script $item = Item::first(array("id = ?" => $link->item_id), array("title", "url"))}
-                            {script $earning = Earning::total($link->id)}
-                            {script $average = RPM::average($link->item_id)}
                             <tr>
                                 <td><a href="{$item->url}" target="_blank">{$item->title}</a></td>
                                 <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
                                 <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
                                     <span class="label label-success">View</span>
                                 </td>
-                                <td>₹ {$earning}</td>
-                                <td>{echo round($average)}</td>
                             </tr>
                         {/foreach}
                     </tbody>

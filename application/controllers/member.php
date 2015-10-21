@@ -23,6 +23,7 @@ class Member extends Auth {
         $stat = $this->quickStats();
         
         $view->set("links", $links);
+        $view->set("averagerpm", ($stat["earning_total"]*1000)/($stat["clicks"]));
         $view->set("clicks", $stat["clicks"]);
         $view->set("earnings", $stat["earning_total"]);
         $view->set("pending", $stat["earning_pending"]);

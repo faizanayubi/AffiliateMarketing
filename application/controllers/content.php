@@ -232,7 +232,8 @@ class Content extends Admin {
                         $verified_count += $referer->count;
                     }
                 }
-                $correct = $verified_count/$total_count;
+                //$correct = $verified_count/$total_count;
+                $correct = 1;
 
                 $countries = $stat->analytics->allTime->countries;
 
@@ -245,17 +246,20 @@ class Content extends Admin {
                         }
                     }
                     if ($rpm->country == "NONE") {
-                        $earning += ($verified_count - $country_count)*$correct*($rpm->value)/1000;
+                        //$earning += ($verified_count - $country_count)*$correct*($rpm->value)/1000;
+                        $earning += ($total_count - $country_count)*$correct*($rpm->value)/1000;
                     }
                 }
-                $view->set("rpm", round(($earning*1000)/($verified_count), 2));
+                //$view->set("rpm", round(($earning*1000)/($verified_count), 2));
+                $view->set("rpm", round(($earning*1000)/($total_count), 2));
                 $view->set("rpms", $rpms);
             }
             $view->set("stat", $stat);
         }
         
         $view->set("earning", round($earning, 2));
-        $view->set("click", round($verified_count,2));
+        //$view->set("click", round($verified_count,2));
+        $view->set("click", round($total_count,2));
         $view->set("link", $link);
     }
 }

@@ -55,8 +55,19 @@ class Content extends Admin {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $contents = Item::all(array(), array("id", "title", "created", "url"), "created", "desc", $limit, $page);
-        $count = Item::count();
+        $website = RequestMethods::get("website", "");
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
+
+        $where = array(
+            "url LIKE ?" => "%{$website}%",
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
+        );
+        
+        $contents = Item::all($where, array("id", "title", "created", "url"), "created", "desc", $limit, $page);
+        $count = Item::count($where);
+
         $view->set("contents", $contents);
         $view->set("page", $page);
         $view->set("count", $count);

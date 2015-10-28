@@ -202,21 +202,28 @@ class Member extends Auth {
         $view = $this->getActionView();
         
         $title = RequestMethods::get("title", "");
+        $domain = RequestMethods::get("domain");
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 9);
-        
+
         $where = array(
             "title LIKE ?" => "%{$title}%",
+            "url LIKE ?" => "%{$domain}%",
             "live = ?" => true,
         );
+        
         $items = Item::all($where, array("id", "title", "image", "target", "url", "description"), "created", "desc", $limit, $page);
         $count = Item::count($where);
-        
+
+        $session = Registry::get("session");
+
         $view->set("limit", $limit);
         $view->set("title", $title);
         $view->set("page", $page);
         $view->set("count", $count);
         $view->set("items", $items);
+        $view->set("domain", $domain);
+        $view->set("domains", $session->get("domains"));
     }
     
     /**

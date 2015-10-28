@@ -6,6 +6,16 @@
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">Title</label>
+                    <select class="form-control" name="domain" value="{$domain}">
+                    {foreach $domain in $domains}
+                        <option {if($domain == $domain->value)}selected{/if} value="{$domain->value}">{$domain->value}</option>
+                    {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Title</label>
                     <input type="text" style="width: 300px" name="title" class="form-control" placeholder="Search here..." value="{$title}" />
                 </div>
             </div>

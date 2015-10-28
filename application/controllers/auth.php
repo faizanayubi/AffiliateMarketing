@@ -6,6 +6,7 @@
  */
 use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
 class Auth extends Controller {
     
@@ -26,13 +27,10 @@ class Auth extends Controller {
             ));
             if ($user) {
                 $this->setUser($user);
+                $this->session();
             } else {
                 $view->set("message", "User not exist or blocked");
             }
-        }
-
-        if ($this->user) {
-            self::redirect("/member");
         }
     }
     
@@ -71,10 +69,17 @@ class Auth extends Controller {
                 $view->set("message", 'Username exists, login from <a href="/admin/login">here</a>');
             }
         }
+    }
 
-        if ($this->user) {
-            self::redirect("/member");
-        }
+    protected function session() {
+        $session = Registry::get("session");
+        $where = array(
+            "property = ?" => "domain",
+            "live = ?" => true
+        );
+        $domains = Meta::all($where);
+        $session->set("domains", $domains);
+        self::redirect("/member");
     }
     
     /**

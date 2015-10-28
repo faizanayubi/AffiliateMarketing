@@ -42,8 +42,14 @@ class Content extends Admin {
     }
     
     protected function target() {
-        $alias = array("http://bollychitchat.in", "http://filmyhub.website", "http://teamkapil.website", "http://teamfilmy.biz", "http://ikapilsharma.com");
-        return $alias[rand(0, 4)];
+        $session = Registry::get("session");
+        $domains = $session->get("domains");
+
+        $alias = array();
+        foreach ($domains as $domain) {
+            array_push($alias, $domain->value);
+        }
+        return array_rand($alias, 1);
     }
     
     /**
@@ -170,6 +176,33 @@ class Content extends Admin {
             $view->set("shortURL", $object->id);
             $view->set("googl", $object);
         }
+    }
+
+    /**
+     * @before _secure, changeLayout
+     */
+    public function domains() {
+        $this->seo(array("title" => "All Domains", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $domains = Meta::all(array("property = ?" => "domain"));
+
+        if (RequestMethods::get("domain")) {
+            $exist = Meta::first(array("property" => "domain", "value = ?" => RequestMethods::get("domain")));
+            if($exist) {
+                $view->set("message", "Domain Exists");
+            } else {
+                $domain = new Meta(array(
+                    "user_id" => $this->user->id,
+                    "property" => "domain",
+                    "value" => RequestMethods::get("domain")
+                ));
+                $domain->save();
+                array_push($domains, $domain);
+                $view->set("message", "Domain Added Successfully");
+            }
+        }
+
+        $view->set("domains", $domains);
     }
     
     /**

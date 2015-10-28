@@ -19,7 +19,7 @@ class Meta extends Shared\Model {
      * @type text
      * @length 255
      */
-    protected $_key;
+    protected $_property;
     
     /**
      * @column

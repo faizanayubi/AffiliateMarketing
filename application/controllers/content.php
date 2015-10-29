@@ -49,7 +49,8 @@ class Content extends Admin {
         foreach ($domains as $domain) {
             array_push($alias, $domain->value);
         }
-        return array_rand($alias, 1);
+        shuffle($alias);
+        return $alias[0];
     }
     
     /**

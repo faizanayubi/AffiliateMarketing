@@ -36,6 +36,14 @@ class Item extends Shared\Model {
      * @length 255
      */
     protected $_target;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 255
+     */
+    protected $_category;
     
     /**
      * @column

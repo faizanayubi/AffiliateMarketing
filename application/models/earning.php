@@ -11,6 +11,13 @@ class Earning extends \Shared\Model {
      * @type integer
      */
     protected $_item_id;
+
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     */
+    protected $_link_id;
     
     /**
      * @column
@@ -37,9 +44,10 @@ class Earning extends \Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type integer
+     * @type decimal
+     * @lenght 10,3
      */
-    protected $_rpm_id;
+    protected $_rpm;
 
     public static function total($link_id) {
         $total = 0;

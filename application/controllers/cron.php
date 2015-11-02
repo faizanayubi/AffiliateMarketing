@@ -22,16 +22,11 @@ class CRON extends Auth {
         $links = Link::all(array("live = ?" => true));
         $googl = Framework\Registry::get("googl");
         foreach ($links as $link) {
-            $count = 0;
             $object = $googl->analyticsFull($link->short);
-            if(isset($object->analytics->day->referrers)) {
-                foreach ($object->analytics->day->referrers as $referer) {
-                    if (strpos($referer->id,'facebook.com') !== false) {
-                        $count += $referer->count;
-                    }
-                }
+            $count = $object->analytics->day->shortUrlClicks;
+            if ($count) {
                 $stat = $this->saveStats($object, $link, $count);
-                $this->saveEarnings($link, $count, $stat);
+                $this->saveEarnings($link, $count, $stat, $object);
             }
         }
     }
@@ -51,15 +46,29 @@ class CRON extends Auth {
         return $stat;
     }
     
-    protected function saveEarnings($link, $count, $stat) {
-        $rpm = RPM::first(array("item_id = ?" => $link->item_id));
-        $amount = $count*($rpm->value)/1000;
+    protected function saveEarnings($link, $count, $stat, $object) {
+        $countries = $object->analytics->allTime->countries;
+        $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
+        foreach ($rpms as $rpm) {
+            foreach ($countries as $country) {
+                if(strtoupper($rpm->country) == $country->id) {
+                    $earning += ($rpm->value)*($country->count)/1000;
+                    $country_count += $country->count;
+                }
+            }
+            if ($rpm->country == "NONE") {
+                $earning += ($count - $country_count)*$correct*($rpm->value)/1000;
+            }
+        }
+
+        $avgrpm = round(($earning*1000)/($count), 2);
         $earning = new Earning(array(
             "item_id" => $link->item_id,
-            "amount" => $amount,
+            "link_id" => $link->id,
+            "amount" => $earning,
             "user_id" => $link->user_id,
             "stat_id" => $stat->id,
-            "rpm_id" => $rpm->id
+            "rpm" => $avgrpm
         ));
         $earning->save();
     }

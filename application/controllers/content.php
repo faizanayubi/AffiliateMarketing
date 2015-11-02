@@ -23,6 +23,7 @@ class Content extends Admin {
                 "title" => RequestMethods::post("title"),
                 "image" => $this->_upload("image", "images"),
                 "target" => $this->target(),
+                "category" => RequestMethods::post("category", ""),
                 "description" => RequestMethods::post("description"),
                 "user_id" => $this->user->id
             ));
@@ -41,7 +42,8 @@ class Content extends Admin {
         }
     }
     
-    protected function target() {
+    public function target() {
+        $this->noview();
         $session = Registry::get("session");
         $domains = $session->get("domains");
 
@@ -114,6 +116,7 @@ class Content extends Admin {
             $item->title = RequestMethods::post("title");
             $item->url = RequestMethods::post("url");
             $item->target = RequestMethods::post("target");
+            $item->category = RequestMethods::post("category");
             $item->description = RequestMethods::post("description");
             $item->live = RequestMethods::post("live", "0");
             

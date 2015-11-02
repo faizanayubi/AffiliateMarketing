@@ -21,9 +21,38 @@
                         <span class="help-block">{echo Shared\Markup::errors($errors, "url")}</span>
                     </div>
                     <div class="form-group">
+                        <label>Target</label>
+                        <select name="target" class="form-control">
+                            <option value="http://bollychitchat.in">bollychitchat.in</option>
+                            <option value="http://filmyhub.website">filmyhub.website</option>
+                            <option value="http://teamkapil.website">teamkapil.website</option>
+                            <option value="http://teamfilmy.biz">teamfilmy.biz</option>
+                            <option value="http://ikapilsharma.com">ikapilsharma.com</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label>Description</label>
                         <textarea class="form-control" name="description" rows="3"></textarea>
                         <span class="help-block">{echo Shared\Markup::errors($errors, "description")}</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category" class="form-control">
+                            <option value="bollywood">Bollywood</option>
+                            <option value="sports">Sports</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="vehicle">Bike / Cars</option>
+                            <option value="tollywood">Tollywood</option>
+                            <option value="tv">TV Soap</option>
+                            <option value="videos">Videos</option>
+                            <option value="hollywood">Hollywood</option>
+                            <option value="wwe">WWE</option>
+                            <option value="fashion">Fashion</option>
+                            <option value="news">Breaking News</option>
+                            <option value="celebrities">Celebrities</option>
+                            <option value="politics">Politics</option>
+                            <option value="others">Others</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Image</label>
@@ -36,19 +65,19 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">IN</div>
-                                <input type="number" class="form-control" placeholder="India" name="rpm[in]" required="">
+                                <input type="number" class="form-control" placeholder="India" name="rpm[in]" required="" value="135">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">US</div>
-                                <input type="number" class="form-control" placeholder="United States" name="rpm[US]" required="">
+                                <input type="number" class="form-control" placeholder="United States" name="rpm[US]" required="" value="270">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">PK</div>
-                                <input type="number" class="form-control" placeholder="Pakistan" name="rpm[PK]" required="">
+                                <input type="number" class="form-control" placeholder="Pakistan" name="rpm[PK]" required="" value="70">
                             </div>
                         </div>
                     </div>
@@ -56,19 +85,19 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">AU</div>
-                                <input type="number" class="form-control" placeholder="Australia" name="rpm[AU]" required="">
+                                <input type="number" class="form-control" placeholder="Australia" name="rpm[AU]" required="" value="400">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">NW</div>
-                                <input type="number" class="form-control" placeholder="New Zealand" name="rpm[NW]" required="">
+                                <input type="number" class="form-control" placeholder="New Zealand" name="rpm[NW]" required="" value="105">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">Other</div>
-                                <input type="number" class="form-control" placeholder="None" name="rpm[NONE]" required="">
+                                <input type="number" class="form-control" placeholder="None" name="rpm[NONE]" required="" value="105">
                             </div>
                         </div>
                     </div>

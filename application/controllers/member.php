@@ -310,7 +310,7 @@ class Member extends Auth {
             $earning->delete();
         }
 
-        $links = Link::::all(array("user_id = ?" => $user_id));
+        $links = Link::all(array("user_id = ?" => $user_id));
         foreach ($links as $link) {
             $stat = Stat::first(array("link_id = ?" => $link->id));
             $stat->delete();

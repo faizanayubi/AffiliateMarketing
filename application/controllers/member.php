@@ -299,6 +299,37 @@ class Member extends Auth {
         $view = $this->getActionView();
         $view->set("paymens", array());
     }
+
+    /**
+     * @before _secure, _admin
+     */
+    public function delete($user_id) {
+        $this->noview();
+        $earnings = Earning::first(array("user_id = ?" => $user_id));
+        foreach ($earnings as $earning) {
+            $earning->delete();
+        }
+
+        $links = Link::::all(array("user_id = ?" => $user_id));
+        foreach ($links as $link) {
+            $stat = Stat::first(array("link_id = ?" => $link->id));
+            $stat->delete();
+            $link->delete();
+        }
+        
+        $platforms = Platform::all(array("user_id = ?" => $user_id));
+        foreach ($platforms as $platform) {
+            $platform->delete();
+        }
+
+        $social = Social::first(array("user_id = ?" => $user_id));
+        $social->delete();
+
+        $account = Account::first(array("user_id = ?" => $user_id));
+        $account->delete();
+
+        self::redirect($_SERVER["HTTP_REFERER"]);
+    }
     
     public function changeLayout() {
         $this->defaultLayout = "layouts/member";

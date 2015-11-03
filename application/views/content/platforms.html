@@ -51,6 +51,7 @@
                             {else}
                             <a href="/admin/edit/user/{$user->id}/live/0" class="btn btn-ban btn-xs"><i class="fa fa-check"></i> Block </a>&nbsp;
                             {/else}
+                            <a href="/member/delete/{$user->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete </a>
                         </td>
                     </tr>
                     {/foreach}

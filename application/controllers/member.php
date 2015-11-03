@@ -313,7 +313,9 @@ class Member extends Auth {
         $links = Link::all(array("user_id = ?" => $user_id));
         foreach ($links as $link) {
             $stat = Stat::first(array("link_id = ?" => $link->id));
-            $stat->delete();
+            if ($stat) {
+                $stat->delete();
+            }
             $link->delete();
         }
         
@@ -323,10 +325,14 @@ class Member extends Auth {
         }
 
         $social = Social::first(array("user_id = ?" => $user_id));
-        $social->delete();
+        if ($social) {
+            $social->delete();
+        }
 
         $account = Account::first(array("user_id = ?" => $user_id));
-        $account->delete();
+        if ($account) {
+            $account->delete();
+        }
 
         self::redirect($_SERVER["HTTP_REFERER"]);
     }

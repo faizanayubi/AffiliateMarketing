@@ -146,7 +146,7 @@ class Content extends Member {
             $item->title = RequestMethods::post("title");
             $item->url = RequestMethods::post("url");
             $item->target = RequestMethods::post("target");
-            $item->category = RequestMethods::post("category");
+            $item->category = implode(",", RequestMethods::post("category"));
             $item->description = RequestMethods::post("description");
             $item->live = RequestMethods::post("live", "0");
             
@@ -176,6 +176,7 @@ class Content extends Member {
         $view->set("rpm_au", $rpm_au);
         $view->set("rpm_nw", $rpm_nw);
         $view->set("rpm_none", $rpm_none);
+        $view->set("categories", explode(",", $item->category));
     }
     
     /**

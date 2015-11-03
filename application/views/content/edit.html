@@ -51,6 +51,26 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><b>Category</b></td>
+                            <td>
+                                <select name="category[]" class="form-control" multiple="">
+                                    <option {if(in_array("bollywood", $categories))}selected{/if} value="bollywood">Bollywood</option>
+                                    <option {if(in_array("sports", $categories))}selected{/if} value="sports">Sports</option>
+                                    <option {if(in_array("entertainment", $categories))}selected{/if} value="entertainment">Entertainment</option>
+                                    <option {if(in_array("vehicle", $categories))}selected{/if} value="vehicle">Bike / Cars</option>
+                                    <option {if(in_array("tollywood", $categories))}selected{/if} value="tollywood">Tollywood</option>
+                                    <option {if(in_array("tv", $categories))}selected{/if} value="tv">TV Soap</option>
+                                    <option {if(in_array("videos", $categories))}selected{/if} value="videos">Videos</option>
+                                    <option {if(in_array("hollywood", $categories))}selected{/if} value="hollywood">Hollywood</option>
+                                    <option {if(in_array("wwe", $categories))}selected{/if} value="wwe">WWE</option>
+                                    <option {if(in_array("fashion", $categories))}selected{/if} value="fashion">Fashion</option>
+                                    <option {if(in_array("news", $categories))}selected{/if} value="news">Breaking News</option>
+                                    <option {if(in_array("celebrities", $categories))}selected{/if} value="celebrities">Celebrities</option>
+                                    <option {if(in_array("politics", $categories))}selected{/if} value="politics">Politics</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <td><b>Details</b></td>
                             <td>
                                 <textarea class="form-control" name="description">{echo $item->description}</textarea>

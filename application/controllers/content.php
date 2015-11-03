@@ -54,7 +54,7 @@ class Content extends Member {
                 "title" => RequestMethods::post("title"),
                 "image" => $this->_upload("image", "images"),
                 "target" => RequestMethods::post("target", $this->target()),
-                "category" => RequestMethods::post("category", ""),
+                "category" => implode(",", RequestMethods::post("category", "")),
                 "description" => RequestMethods::post("description"),
                 "user_id" => $this->user->id
             ));

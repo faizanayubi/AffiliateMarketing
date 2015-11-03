@@ -10,6 +10,7 @@ class Stat extends Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_link_id;
 

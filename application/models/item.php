@@ -18,6 +18,7 @@ class Item extends Shared\Model {
      * @readwrite
      * @type text
      * @length 255
+     * @index
      */
     protected $_title;
     

@@ -11,6 +11,7 @@ class Link extends Shared\Model {
      * @readwrite
      * @type text
      * @length 255
+     * @index
      */
     protected $_short;
     
@@ -18,6 +19,7 @@ class Link extends Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_item_id;
     
@@ -25,6 +27,7 @@ class Link extends Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_user_id;
 

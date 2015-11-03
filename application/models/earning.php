@@ -9,6 +9,7 @@ class Earning extends \Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_item_id;
 
@@ -16,6 +17,7 @@ class Earning extends \Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_link_id;
     
@@ -31,6 +33,7 @@ class Earning extends \Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_user_id;
     
@@ -38,6 +41,7 @@ class Earning extends \Shared\Model {
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
     protected $_stat_id;
 

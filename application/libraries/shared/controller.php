@@ -48,6 +48,17 @@ namespace Shared {
             }
         }
 
+        /**
+         * @protected
+         */
+        public function _session() {
+            $user = $this->getUser();
+            if ($user) {
+                header("Location: /member.html");
+                exit();
+            }
+        }
+
         public static function redirect($url) {
             header("Location: {$url}");
             exit();

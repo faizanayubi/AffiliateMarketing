@@ -10,6 +10,9 @@ use Framework\Registry as Registry;
 
 class Auth extends Controller {
     
+    /**
+     * @before _session
+     */
     public function login() {
         $this->defaultLayout = "layouts/blank";
         $this->setLayout();
@@ -34,6 +37,9 @@ class Auth extends Controller {
         }
     }
     
+    /**
+     * @before _session
+     */
     public function register() {
         $this->defaultLayout = "layouts/blank";
         $this->setLayout();

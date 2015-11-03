@@ -10,7 +10,7 @@ use Framework\Registry as Registry;
 class Member extends Auth {
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function index() {
         $this->seo(array(
@@ -85,7 +85,7 @@ class Member extends Auth {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function mylinks() {
         $this->seo(array(
@@ -116,7 +116,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function stats($id='') {
         $this->seo(array(
@@ -147,7 +147,7 @@ class Member extends Auth {
     
     /**
      * Shortens the url for member
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function shortenURL() {
         $this->seo(array("title" => "Shorten URL", "view" => $this->getLayoutView()));
@@ -174,7 +174,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function topearners() {
         $this->seo(array(
@@ -192,7 +192,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function links() {
         $this->seo(array(
@@ -227,7 +227,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function earnings() {
         $this->seo(array(
@@ -240,7 +240,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function faqs() {
         $this->seo(array(
@@ -251,7 +251,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function profile() {
         $this->seo(array(
@@ -289,7 +289,7 @@ class Member extends Auth {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, memberLayout
      */
     public function payments() {
         $this->seo(array(
@@ -337,7 +337,7 @@ class Member extends Auth {
         self::redirect($_SERVER["HTTP_REFERER"]);
     }
     
-    public function changeLayout() {
+    public function memberLayout() {
         $this->defaultLayout = "layouts/member";
         $this->setLayout();
     }

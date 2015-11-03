@@ -25,7 +25,7 @@ class Content extends Member {
         $where = array(
             "title LIKE ?" => "%{$title}%",
             "category LIKE ?" => "%{$category}%",
-            "live = ?" => true,
+            "live = ?" => true
         );
         
         $items = Item::all($where, array("id", "title", "image", "target", "url", "description"), "created", "desc", $limit, $page);

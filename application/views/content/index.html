@@ -1,0 +1,50 @@
+{include member/modal_link.html}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header text-center">{$category}</h1>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Title</label>
+                    <input type="text" style="width: 300px" name="title" class="form-control" placeholder="Search here..." value="{$title}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Show</button>
+        </form>
+        <hr>
+    </div>
+    <div class="row cols" id="masonry">
+        {foreach $item in $items}
+        <div class="box">
+            <div class="panel panel-default">
+                <div class="panel-heading">{echo $item->title}</div>
+                <div class="panel-body">
+                    <a href="{echo $item->url}" target="_blank"><img src="/content/resize/{echo base64_encode($item->image)}" alt="{echo $item->title}"></a>
+                </div>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->encode($user->username)}" data-title="{echo $item->title}">Generate URL</button>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control shorturl">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+    <div class="text-center">
+        <ul class="pager">
+            {if($page != 1)}
+            <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+            {/if}
+            {if($page < $count/$limit)}
+            <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+            {/if}
+        </ul>
+    </div>
+</div>

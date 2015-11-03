@@ -7,8 +7,8 @@
                 <div class="input-group">
                     <label class="sr-only">Title</label>
                     <select class="form-control" name="domain" value="{$domain}">
-                    {foreach $domain in $domains}
-                        <option {if($domain == $domain->value)}selected{/if} value="{$domain->value}">{$domain->value}</option>
+                    {foreach $dn in $domains}
+                        <option {if($domain == $dn)}selected{/if} value="{$dn}">{$dn}</option>
                     {/foreach}
                     </select>
                 </div>

@@ -7,7 +7,7 @@
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
 
-class Member extends Auth {
+class Member extends Admin {
     
     /**
      * @before _secure, memberLayout
@@ -223,7 +223,7 @@ class Member extends Auth {
         $view->set("count", $count);
         $view->set("items", $items);
         $view->set("domain", $domain);
-        $view->set("domains", $session->get("domains"));
+        $view->set("domains", array("filmycity.in", "filmymagic.com", "viraltabloid.in", "kapilsharmafc.com"));
     }
     
     /**

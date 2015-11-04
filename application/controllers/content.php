@@ -54,6 +54,7 @@ class Content extends Member {
                 "title" => RequestMethods::post("title"),
                 "image" => $this->_upload("image", "images"),
                 "target" => RequestMethods::post("target", $this->target()),
+                "commission" => RequestMethods::post("commission", "4.99"),
                 "category" => implode(",", RequestMethods::post("category", "")),
                 "description" => RequestMethods::post("description"),
                 "user_id" => $this->user->id
@@ -71,6 +72,8 @@ class Content extends Member {
             }
             $view->set("success", true);
         }
+
+        $view->set("target", $this->target());
     }
     
     protected function target() {

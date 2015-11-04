@@ -41,6 +41,14 @@ class Item extends Shared\Model {
     /**
      * @column
      * @readwrite
+     * @type decimal
+     * @length 4,2
+     */
+    protected $_commission;
+
+    /**
+     * @column
+     * @readwrite
      * @type text
      * @length 255
      */

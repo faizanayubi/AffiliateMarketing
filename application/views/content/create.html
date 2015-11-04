@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label>Target</label>
-                        <select name="target" class="form-control">
+                        <select name="target" class="form-control" value="{$target}">
                             <option value="http://bollychitchat.in">bollychitchat.in</option>
                             <option value="http://filmyhub.website">filmyhub.website</option>
                             <option value="http://teamkapil.website">teamkapil.website</option>
@@ -53,6 +53,11 @@
                             <option value="politics">Politics</option>
                             <option value="">Others</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Commission</label>
+                        <input type="number" class="form-control" name="commission" value="4.99">
+                        <span class="help-block">The Percentage for Earnbugs Team, 4.99% by default</span>
                     </div>
                     <div class="form-group">
                         <label>Image</label>

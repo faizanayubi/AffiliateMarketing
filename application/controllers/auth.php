@@ -59,6 +59,7 @@ class Auth extends Controller {
                     "password" => sha1(RequestMethods::post("password")),
                     "phone" => RequestMethods::post("phone"),
                     "admin" => 0,
+                    "currency" => "INR",
                     "live" => 0
                 ));
                 $user->save();

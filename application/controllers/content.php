@@ -149,6 +149,7 @@ class Content extends Member {
             $item->title = RequestMethods::post("title");
             $item->url = RequestMethods::post("url");
             $item->target = RequestMethods::post("target");
+            $item->commission = RequestMethods::post("commission");
             $item->category = implode(",", RequestMethods::post("category"));
             $item->description = RequestMethods::post("description");
             $item->live = RequestMethods::post("live", "0");

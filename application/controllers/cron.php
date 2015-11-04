@@ -56,10 +56,10 @@ class CRON extends Auth {
             "verifiedClicks" => $count,
             "shortUrlClicks" => $object->analytics->day->shortUrlClicks,
             "longUrlClicks" => $object->analytics->day->longUrlClicks,
-            "referrers" => serialize($object->analytics->day->referrers),
-            "countries" => serialize($object->analytics->day->countries),
-            "browsers" => serialize($object->analytics->day->browsers),
-            "platforms" => serialize($object->analytics->day->platforms)
+            "referrers" => json_encode($object->analytics->day->referrers),
+            "countries" => json_encode($object->analytics->day->countries),
+            "browsers" => json_encode($object->analytics->day->browsers),
+            "platforms" => json_encode($object->analytics->day->platforms)
         ));
         $stat->save();
         return $stat;

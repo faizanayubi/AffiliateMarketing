@@ -6,6 +6,7 @@
  * @author Faizan Ayubi
  */
 use Framework\RequestMethods as RequestMethods;
+use Framework\Registry as Registry;
 
 class Admin extends Auth {
 
@@ -22,18 +23,19 @@ class Admin extends Auth {
         $platforms = Platform::count();
         $links = Link::count();
 
-        $earn = 0;
-        $earnings = Earning::all(array(), array("amount"));
-        foreach ($earnings as $earning) {
-            $earn += $earning->amount;
-        }
+        $database = Registry::get("database");
+        $earnings = $database->query()->from("earnings", array("SUM(amount)" => "earn"))->all();
+        $stats = $database->query()->from("stats", array("SUM(verifiedClicks)" => "clicks"))->all();
+        $payments = $database->query()->from("payments", array("SUM(amount)" => "payment"))->all();
 
         $view->set("now", $now);
         $view->set("users", $users);
         $view->set("items", $items);
         $view->set("platforms", $platforms);
         $view->set("links", $links);
-        $view->set("earn", $earn);
+        $view->set("earn", round($earnings[0]["earn"], 2));
+        $view->set("clicks", round($stats[0]["clicks"], 2));
+        $view->set("payment", round($payments[0]["payment"], 2));
     }
 
     /**

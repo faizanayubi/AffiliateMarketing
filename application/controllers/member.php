@@ -244,7 +244,7 @@ class Member extends Admin {
         );
 
         $view = $this->getActionView();
-        $earnings = Earning::all($where, array("link_id", "amount", "live", "created", "id"), "created", "desc", $limit, $page);
+        $earnings = Earning::all($where, array("link_id", "stat_id", "rpm", "amount", "live", "created", "id"), "created", "desc", $limit, $page);
         $count = Earning::count($where);
 
         $view->set("earnings", $earnings);

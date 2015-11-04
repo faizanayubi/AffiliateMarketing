@@ -27,6 +27,8 @@
                     <tr>
                         <th>Id</th>
                         <th>Link</th>
+                        <th>Clicks</th>
+                        <th>Avg RPM</th>
                         <th>Date</th>
                         <th>Amount</th>
                         <th>Status</th>
@@ -35,11 +37,14 @@
                 <tbody>
                     {foreach $earn in $earnings}
                     {script $link = Link::first(array("id = ?" => $earn->link_id), array("short"))}
+                    {script $stat = Stat::first(array("id = ?" => $earn->stat_id), array("verifiedClicks"))}
                     <tr>
                         <td>{$earn->id}</td>
                         <td>{$link->short}</td>
-                        <td>{echo \Framework\StringMethods::datetime_to_text($earn->created)}</td>
-                        <td>{$earn->amount}</td>
+                        <td>{$stat->verifiedClicks}</td>
+                        <td>₹ {$earn->rpm}</td>
+                        <td>{echo \Framework\StringMethods::only_date($earn->created)}</td>
+                        <td>₹ {echo round($earn->amount, 2)}</td>
                         <td>
                             {if($earn->live)}
                             <span class="label label-success">Paid</span>

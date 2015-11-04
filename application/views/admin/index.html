@@ -8,26 +8,24 @@
                     <div class="col-lg-4 col-md-4">
                         <div class="list-group">
                             <a class="list-group-item active text-center">
-                                <i class="fa fa-line-chart"></i> Stats
+                                <i class="fa fa-line-chart"></i> Data
                             </a>
                             <a href="admin/search?model=user&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-users fa-2x"></i>  Users <span class="badge">{echo $users}</span></a>
                             <a href="/content/manage" class="list-group-item"><i class="fa fa-file fa-2x"></i> Contents <span class="badge">{echo $items}</span></a>
                             <a href="admin/search?model=platform&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-desktop fa-2x"></i>  Platforms <span class="badge">{echo $platforms}</span></a>
                             <a href="admin/search?model=link&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-link fa-2x"></i>  Links <span class="badge">{echo $links}</span></a>
-                            <a href="admin/search?model=earning&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-inr fa-2x"></i>  Earnings <span class="badge">{echo $earn}</span></a>
                         </div>
                     </div>
 
                     <div class="col-lg-4 col-md-4">
                         <div class="list-group">
                             <a class="list-group-item active text-center">
-                                <i class="fa fa-link"></i> Quick Links
+                                <i class="fa fa-pie-chart"></i> Total Statistics
                             </a>
-                            <a href="https://adwords.google.com/cm/CampaignMgmt" class="list-group-item"><i class="fa fa-google fa-2x"></i>  Google Adwords</a>
-                            <a href="https://www.google.com/analytics/web" class="list-group-item"><i class="fa fa-pie-chart fa-2x"></i>  Google Analytics</a>
-                            <a href="https://www.google.com/webmasters/tools/dashboard" class="list-group-item"><i class="fa fa-globe fa-2x"></i>  Google Webmaster</a>
-                            <a href="https://www.facebook.com/ads/manager/account/campaigns/?act=591454987540654&pid=p1" class="list-group-item"><i class="fa fa-facebook-official fa-2x"></i>  Facebook Campaigns</a>
-                            <a href="https://tagmanager.google.com" class="list-group-item"><i class="fa fa-tag fa-2x"></i>  Google TagManager</a>
+                            <a href="admin/search?model=user&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-bank fa-2x"></i>  Payment Done <span class="badge">{echo $payment}</span></a>
+                            <a href="admin/search?model=platform&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-hand-pointer-o fa-2x"></i>  Total Clicks <span class="badge">{echo $clicks}</span></a>
+                            <a href="admin/search?model=link&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-inr fa-2x"></i> Average Profit <span class="badge">{echo round(0.05*$earn, 2)}</span></a>
+                            <a href="admin/search?model=earning&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-exchange fa-2x"></i>  Earnings <span class="badge">{echo $earn}</span></a>
                         </div>
                     </div>
 
@@ -38,8 +36,7 @@
                             </a>
                             <a href="https://earnbugs.in:8083/" class="list-group-item"><i class="fa fa-globe fa-2x"></i>  cPanel</a>
                             <a href="http://earnbugs.in/webmail/" class="list-group-item"><i class="fa fa-envelope fa-2x"></i>  WebMail</a>
-                            <a href="https://github.com/faizanayubi/AffiliateMarketing/issues" class="list-group-item"><i class="fa fa-exclamation-circle fa-2x"></i>  Submit a Issue</a>
-                            <a href="https://cloudstuffs.com/support/" class="list-group-item"><i class="fa fa-ticket fa-2x"></i>  Support Tickets</a>
+                            <a href="https://cloudstuffs.com/auth/login" class="list-group-item"><i class="fa fa-ticket fa-2x"></i>  Support Tickets</a>
                             <a href="http://earnbugs.in/vstats/" class="list-group-item"><i class="fa fa-line-chart fa-2x"></i>  Stats</a>
                         </div>
                     </div>

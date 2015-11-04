@@ -230,13 +230,28 @@ class Member extends Admin {
      * @before _secure, memberLayout
      */
     public function earnings() {
-        $this->seo(array(
-            "title" => "Earnings",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Earnings", "view" => $this->getLayoutView()));
+
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        
+        $where = array(
+            "user_id = ?" => $this->user->id,
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
+        );
+
         $view = $this->getActionView();
-        $earnings = Earning::all(array("user_id = ?" => $this->user->id), array("item_id", "amount", "live", "created"), "id", "desc", 10, 1);
+        $earnings = Earning::all($where, array("link_id", "amount", "live", "created", "id"), "created", "desc", $limit, $page);
+        $count = Earning::count($where);
+
         $view->set("earnings", $earnings);
+        $view->set("limit", $limit);
+        $view->set("page", $page);
+        $view->set("count", $count);
+        $view->set("total", Earning::count(array("user_id = ?" => $this->user->id)));
     }
     
     /**

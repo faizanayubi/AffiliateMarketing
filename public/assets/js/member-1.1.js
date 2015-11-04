@@ -42,6 +42,7 @@ $(document).ready(function() {
         var btn = $(this),
             longURL = btn.data('longurl'),
             description = btn.data('description'),
+            title = btn.data('title'),
             item = btn.data('item');
         request.read({
             action: "member/shortenURL",
@@ -52,7 +53,7 @@ $(document).ready(function() {
             callback: function(data) {
                 btn.closest('div').find('.shorturl').val(data.shortURL);
                 btn.closest('div').find('.shorturl').focus();
-                $('#link_data').val(description+"\n"+data.shortURL);
+                $('#link_data').val(title+"\n"+description+"\n"+data.shortURL);
                 $('#link_modal').modal('show');
                 document.execCommand('SelectAll');
                 document.execCommand("Copy", false, null);

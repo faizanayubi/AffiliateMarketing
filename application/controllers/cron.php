@@ -34,7 +34,7 @@ class CRON extends Auth {
         foreach ($links as $link) {
             $object = $googl->analyticsFull($link->short);
             $count = $object->analytics->day->shortUrlClicks;
-            //minimum count to count earning
+            //minimum count for earning
             if ($count > 50) {
                 $item = Item::first(array("id = ?" => $link->item_id), array("commission"));
                 $stat = $this->saveStats($object, $link, $count);
@@ -83,7 +83,7 @@ class CRON extends Auth {
         }
 
         $avgrpm = round(($revenue*1000)/($count), 2);
-        $revenue = $revenue * (100 - ($item->commission));
+        $revenue = ($revenue * (100 - ($item->commission)))/100;
         $earning = new Earning(array(
             "item_id" => $link->item_id,
             "link_id" => $link->id,

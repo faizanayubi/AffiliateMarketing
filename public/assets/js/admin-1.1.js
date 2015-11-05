@@ -136,6 +136,31 @@ $(document).ready(function () {
         $(this).focus();
         document.execCommand('SelectAll');
     });
+
+    $("#searchModel").change(function() {
+        var self = $(this);
+        $('#searchField').html('');
+        request.read({
+            action: "admin/fields/" + this.value,
+            callback: function(data) {
+                var d = $.parseJSON(data);
+                $.each(d, function (field, property) {
+                    $('#searchField').append('<option value="'+ field +'">'+ field +'</option>');
+                })
+            }
+        });
+    });
+
+    $(document).on('change', '#searchField', function(event) {
+        var fields = ["created", "modified"],
+            date = $.inArray(this.value, fields);
+        if (date !== -1) {
+            $("input[name=value]").val('');
+            $("input[name=value]").datepicker();
+            $("input[name=value]").datepicker("option", "dateFormat", "yy-mm-dd");
+        };
+    });
+
 });
 
 function toArray(object) {

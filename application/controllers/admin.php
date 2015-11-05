@@ -235,6 +235,17 @@ class Admin extends Auth {
         $db->sync(new $model);
     }
 
+    /**
+     * @before _secure
+     */
+    public function fields($model = "user") {
+        $this->noview();
+        $class = ucfirst($model);
+        $object = new $class;
+
+        echo json_encode($object->columns);
+    }
+
     public function changeLayout() {
         $this->defaultLayout = "layouts/admin";
         $this->setLayout();

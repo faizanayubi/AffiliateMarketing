@@ -61,30 +61,6 @@ class Member extends Admin {
     }
 
     /**
-     * Total Clicks today from Google Server realtime
-     * @before _secure
-     */
-    public function clicksToday() {
-        $this->JSONview();
-        $view = $this->getActionView();
-
-        $count = 0;
-        $earning = 0;
-        $links = Link::all(array("user_id = ?" => $this->user->id), array("short", "item_id"));
-        foreach ($links as $link) {
-            $stat = Link::findStats($link->short);
-            $count += $stat->analytics->day->shortUrlClicks;
-            if ($stat->analytics->day->shortUrlClicks != 0) {
-                $rpm = RPM::first(array("item_id = ?" => $link->item_id));
-                $earning += (float) ($rpm->value) * $stat->analytics->day->shortUrlClicks/1000;
-            }
-        }
-
-        $view->set("earning", $earning);
-        $view->set("click", $count);
-    }
-
-    /**
      * @before _secure, memberLayout
      */
     public function mylinks() {

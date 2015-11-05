@@ -6,7 +6,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-4 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -15,20 +15,19 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{$clicks}</div>
-                        <div>Total Verified Clicks!</div>
                     </div>
                 </div>
             </div>
             <a href="/member/mylinks">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">Total Verified Clicks!</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>
         </div>
     </div>
-    <div class="col-lg-4 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <div class="panel panel-green">
             <div class="panel-heading">
                 <div class="row">
@@ -37,39 +36,46 @@
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge">{echo round($averagerpm)}</div>
-                        <div>Average RPM!</div>
                     </div>
                 </div>
             </div>
             <a href="/member/earnings">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">Average RPM!</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>
         </div>
     </div>
-    <div class="col-lg-4 col-md-4">
+    <div class="col-lg-3 col-md-3">
         <div class="panel panel-red">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-money fa-5x"></i>
+                        <i class="fa fa-exchange fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{echo round($pending)}/{echo round($earnings)}</div>
-                        <div>Pending/Total Earning!</div>
+                        {echo round($pending)}/{echo round($earnings)}
                     </div>
                 </div>
             </div>
             <a href="/member/earnings">
                 <div class="panel-footer">
-                    <span class="pull-left">View Details</span>
+                    <span class="pull-left">Pending/Total Earning!</span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-3">
+        <div class="panel panel-default">
+            <ul class="list-group" onclick="realtime();">
+                <li class="list-group-item">Clicks Today<span class="badge" id="realtime_clicks">View</span></li>
+                <li class="list-group-item">Average RPM <span class="badge" id="realtime_avgrpm">View</span></li>
+                <li class="list-group-item">Earnings Today <span class="badge" id="realtime_earnings">View</span></li>
+            </ul>
         </div>
     </div>
 </div>
@@ -117,8 +123,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    $(document).ready(function() {
-        //clickToday();
-    });
-</script>

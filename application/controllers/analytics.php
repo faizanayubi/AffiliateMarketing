@@ -82,5 +82,59 @@ class Analytics extends Admin {
         $view->set("facebook", array_values($facebook->response)[0]);
         $view->set("twitter", $twitter->response);
     }
+
+    /**
+     * Total Stats today from Google Server realtime
+     * @before _secure
+     */
+    public function realtime() {
+        $this->JSONview();
+        $view = $this->getActionView();
+
+        $shortURL = RequestMethods::get("shortURL");
+        $earning = 0;$count = 0;
+        $links = Link::all(array("user_id = ?" => $this->user->id, "created >= ?" => date('Y-m-d', strtotime("-3 day"))), array("short", "item_id"));
+        foreach ($links as $link) {
+            $country_count = 0;$nonverified_count = 0;$verified_count = 0;
+            $stat = Link::findStats($link->short);
+            $total_count = $stat->analytics->allTime->shortUrlClicks;
+            if ($stat->analytics->allTime->shortUrlClicks) {
+                $referrers = $stat->analytics->allTime->referrers;
+                foreach ($referrers as $referer) {
+                    if ($referer->id == 'earnbugs.in') {
+                        $nonverified_count += $referer->count;
+                    }
+                }
+                $verified_count = $total_count - $nonverified_count;
+                $correct = 0.95;
+
+                $countries = $stat->analytics->allTime->countries;
+
+                $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
+                $rpms_country = array();
+                $rpms_value = array();
+
+                foreach ($rpms as $rpm) {
+                    $rpms_country[] = strtoupper($rpm->country);
+                    $rpms_value[strtoupper($rpm->country)] = $rpm->value;
+                }
+                foreach ($countries as $country) {
+                    if (in_array($country->id, $rpms_country)) {
+                        $earning += $correct*($rpms_value[$country->id])*($country->count)/1000;
+                        $country_count += $country->count;
+                    }
+                }
+                if ($verified_count > $country_count) {
+                    $earning += ($verified_count - $country_count)*$correct*($rpms_value["NONE"])/1000;
+                }
+            }
+
+            $count += $verified_count;
+        }
+
+        $view->set("avgrpm", round(($earning*1000)/($count), 2));
+        $view->set("earnings", round($earning, 2));
+        $view->set("clicks", $count);
+    }
     
 }

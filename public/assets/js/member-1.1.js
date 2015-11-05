@@ -178,6 +178,22 @@ function clickToday () {
     }
 }
 
+function realtime () {
+    $('#realtime_avgrpm').html('<i class="fa fa-spinner fa-pulse"></i>');
+    $('#realtime_earnings').html('<i class="fa fa-spinner fa-pulse"></i>');
+    $('#realtime_clicks').html('<i class="fa fa-spinner fa-pulse"></i>');
+    
+    request.read({
+        action: "analytics/realtime",
+        data: {},
+        callback: function(data) {
+            $('#realtime_avgrpm').html(data.avgrpm);
+            $('#realtime_earnings').html(data.earnings);
+            $('#realtime_clicks').html(data.clicks);
+        }
+    });
+}
+
 function getRPM (item_id) {
     var track = getCookie('rpm_'+item_id);
     if (track != "") {

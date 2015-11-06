@@ -66,24 +66,38 @@ class CRON extends Auth {
     }
     
     protected function saveEarnings($link, $count, $stat, $object, $item) {
-        $countries = $object->analytics->allTime->countries;
+        $revenue = 0;$country_count = 0;$nonverified_count = 0;$verified_count = 0;
+
+        $referrers = $object->analytics->day->referrers;
+        foreach ($referrers as $referer) {
+            if ($referer->id == 'earnbugs.in') {
+                $nonverified_count += $referer->count;
+            }
+        }
+        $verified_count = $count - $nonverified_count;
+        $correct = (100 - ($item->commission))/100;
+
+        $countries = $object->analytics->day->countries;
+
         $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
-        $revenue = 0;
-        
+        $rpms_country = array();
+        $rpms_value = array();
+
         foreach ($rpms as $rpm) {
-            foreach ($countries as $country) {
-                if(strtoupper($rpm->country) == $country->id) {
-                    $revenue += ($rpm->value)*($country->count)/1000;
-                    $country_count += $country->count;
-                }
+            $rpms_country[] = strtoupper($rpm->country);
+            $rpms_value[strtoupper($rpm->country)] = $rpm->value;
+        }
+        foreach ($countries as $country) {
+            if (in_array($country->id, $rpms_country)) {
+                $revenue += $correct*($rpms_value[$country->id])*($country->count)/1000;
+                $country_count += $country->count;
             }
-            if ($rpm->country == "NONE") {
-                $revenue += ($count - $country_count)*$correct*($rpm->value)/1000;
-            }
+        }
+        if ($verified_count > $country_count) {
+            $revenue += ($verified_count - $country_count)*$correct*($rpms_value["NONE"])/1000;
         }
 
         $avgrpm = round(($revenue*1000)/($count), 2);
-        $revenue = ($revenue * (100 - ($item->commission)))/100;
         $earning = new Earning(array(
             "item_id" => $link->item_id,
             "link_id" => $link->id,

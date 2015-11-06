@@ -58,4 +58,15 @@ class Account extends \Shared\Model {
      * @label ifsc code
      */
     protected $_ifsc;
+
+    /**
+     * @column
+     * @readwrite
+     * @type text
+     * @length 32
+     * 
+     * @validate required, min(2), max(32)
+     * @label instamojo username
+     */
+    protected $_instamojo;    
 }

@@ -109,6 +109,27 @@ class Finance extends Admin {
             ->where("user_id=?",$user_id)
             ->where("live=?",1)
             ->all();
+
+        if (RequestMethods::post("action") == "payment") {
+            $earnings = Earning::all(array("user_id = ?" => $user_id, "live = ?" => 1));
+            foreach ($earnings as $earning) {
+                $earning->live = null;
+                $earning->save();
+            }
+            $payment = new Payment(array(
+                "user_id" => $user_id,
+                "amount" => round($amount[0]["earn"], 2),
+                "mode" => RequestMethods::post("mode"),
+                "ref_id" => RequestMethods::post("ref_id"),
+                "requested" => null,
+                "live" => 1
+            ));
+
+            $payment->save();
+
+            self::redirect("/finance/records");
+        }
+
         $payee = User::first(array("id = ?" => $user_id));
         $account = Account::first(array("user_id = ?" => $user_id));
 

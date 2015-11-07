@@ -14,7 +14,7 @@ class Analytics extends Admin {
     /**
      * @before _secure, changeLayout
      */
-    public function full() {
+    public function googl() {
         $this->seo(array("title" => "shortURL Analytics", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         

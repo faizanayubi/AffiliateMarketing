@@ -10,11 +10,13 @@
                         <option value="earning">Earning</option>
                         <option value="item">Item</option>
                         <option value="link">Link</option>
+                        <option value="meta">Meta</option>
+                        <option value="payment">Payment</option>
                         <option value="platform">Platform</option>
                         <option value="rpm">RPM</option>
                         <option value="social">Social</option>
                         <option value="stat">Stat</option>
-                        <option value="user" selected="selected">Users</option>
+                        <option value="user" selected="selected">User</option>
                     </select>
                 </div>
             </div>
@@ -78,11 +80,18 @@
                     {/foreach}
                 </tbody>
             </table>
-            <div class="text-center">
-                {if($count > 10)}
-                <a href="{echo URL}&page={echo $page+1}" class="btn btn-primary">Load More</a>
-                {/if}
-            </div>
         </div>
+    
+        <div class="text-center">
+            <ul class="pager">
+                {if($page != 1)}
+                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                {/if}
+                {if($page < $count/$limit)}
+                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                {/if}
+            </ul>
+        </div>
+
     </div>
 </div>

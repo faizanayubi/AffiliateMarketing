@@ -18,7 +18,8 @@ class Payment extends Shared\Model {
     /**
      * @column
      * @readwrite
-     * @type integer
+     * @type text
+     * @length 255
      */
     protected $_amount;
 

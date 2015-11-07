@@ -22,10 +22,10 @@
                             <a class="list-group-item active text-center">
                                 <i class="fa fa-pie-chart"></i> Total Statistics
                             </a>
-                            <a href="admin/search?model=user&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-bank fa-2x"></i>  Payment Done <span class="badge">{echo $payment}</span></a>
+                            <a href="admin/search?model=payment&key=live&sign=like&value=1" class="list-group-item"><i class="fa fa-bank fa-2x"></i>  Payment Done <span class="badge">{echo $payment}</span></a>
                             <a href="admin/search?model=platform&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-hand-pointer-o fa-2x"></i>  Total Clicks <span class="badge">{echo $clicks}</span></a>
-                            <a href="admin/search?model=link&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-inr fa-2x"></i> Average Profit <span class="badge">{echo round(0.05*$earn, 2)}</span></a>
-                            <a href="admin/search?model=earning&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-exchange fa-2x"></i>  Earnings <span class="badge">{echo $earn}</span></a>
+                            <a href="/finance/records" class="list-group-item"><i class="fa fa-inr fa-2x"></i> Average Profit <span class="badge">{echo round(0.05*$earn, 2)}</span></a>
+                            <a href="/finance/earnings" class="list-group-item"><i class="fa fa-exchange fa-2x"></i>  Earnings <span class="badge">{echo $earn}</span></a>
                         </div>
                     </div>
 

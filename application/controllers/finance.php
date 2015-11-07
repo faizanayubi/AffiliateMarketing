@@ -97,6 +97,27 @@ class Finance extends Admin {
     }
 
     /**
+     * @before _secure, changeLayout
+     */
+    public function makepayment($user_id) {
+        $this->seo(array("title" => "Make Payment", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+
+        $database = Registry::get("database");
+        $amount = $database->query()
+            ->from("earnings", array("SUM(amount)" => "earn"))
+            ->where("user_id=?",$user_id)
+            ->where("live=?",1)
+            ->all();
+        $payee = User::first(array("id = ?" => $user_id));
+        $account = Account::first(array("user_id = ?" => $user_id));
+
+        $view->set("payee", $payee);
+        $view->set("account", $account);
+        $view->set("amount", $amount[0]["earn"]);
+    }
+
+    /**
      * Earning on a Content
      * @before _secure, changeLayout
      */

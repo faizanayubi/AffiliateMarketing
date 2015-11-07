@@ -12,6 +12,7 @@ class Finance extends Admin {
 
     /**
      * All earnings records of persons
+     * 1 - unpaid, 0 - paid
      * 
      * @before _secure, changeLayout
      */
@@ -20,29 +21,33 @@ class Finance extends Admin {
         $view = $this->getActionView();
 
         $accounts = array();
-        $startdate = RequestMethods::get("date", date('Y-m-d', strtotime("-7 day")));
-        $enddate = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
-        $live = RequestMethods::get("live", 0);
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
+        $live = RequestMethods::get("live", 1);
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
+
+        $database = Registry::get("database");
         
         $where = array(
             "live = ?" => $live,
-            "created >= ?" => $startdate,
-            "created <= ?" => $enddate
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
         );
-        $earnings = Earning::all($where, array("DISTINCT user_id", "created"), "created", "asc", $limit, $page);
-        $count = Earning::count($where);
+        $earnings = Earning::all($where, array("DISTINCT user_id"), "created", "asc", $limit, $page);
+        $count = count($earnings);
+
         foreach ($earnings as $earning) {
-            $amount = 0;
-            $earns = Earning::all(array("user_id = ?" => $earning->user_id, "live = ?" => $live), array("amount"));
-            foreach ($earns as $earn) {
-                $amount += $earn->amount;
-            }
+            $amount = $database->query()
+            ->from("earnings", array("SUM(amount)" => "earn"))
+            ->where("user_id=?",$earning->user_id)
+            ->where("created >= ?",$this->changeDate($startdate, "-1"))
+            ->where("created <= ?",$this->changeDate($enddate, "1"))
+            ->where("live=?",$live)
+            ->all();
             array_push($accounts, \Framework\ArrayMethods::toObject(array(
                 "user_id" => $earning->user_id,
-                "amount" => $amount,
-                "created" => $earning->created
+                "amount" => $amount[0]["earn"]
             )));
         }
         

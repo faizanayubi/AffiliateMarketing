@@ -5,9 +5,10 @@
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">Status</label>
-                    <select name="live" class="form-control">
-                        <option value="0">Unpaid</option>
-                        <option value="1">Paid</option>
+                    <select name="live" class="form-control" value="{$live}">
+                        <option>Payment Status</option>
+                        <option value="null">Paid</option>
+                        <option value="1">Unpaid</option>
                     </select>
                 </div>
             </div>
@@ -15,14 +16,14 @@
                 <div class="input-group">
                     <label class="sr-only">From</label>
                     <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> Start</span>
-                    <input type="date" style="width: 200px" name="date" class="form-control" value="{echo $date}" />
+                    <input type="date" style="width: 200px" name="startdate" class="form-control" value="{echo $startdate}" />
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">To</label>
                     <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> End</span>
-                    <input type="date" style="width: 200px" name="date" class="form-control" value="{echo $date}" />
+                    <input type="date" style="width: 200px" name="enddate" class="form-control" value="{echo $enddate}" />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Show</button>
@@ -34,26 +35,23 @@
                     <tr>
                         <th>Name</th>
                         <th>Amount</th>
-                        <th>Created</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {foreach $account in $accounts}
-                    {script $user = User::first(array("id = ?" => $account->user_id), array("name"))}
+                    {script $user = User::first(array("id = ?" => $account->user_id), array("name", "id"))}
                     {script $bank = Account::first(array("id = ?" => $account->user_id), array("id"))}
                     <tr>
                         <td><a href="/admin/info/user/{$user->id}">{echo $user->name}</a></td>
-                        <td>{$account->amount}</td>
-                        <td>{$account->created}</td>
+                        <td>₹ {echo round($account->amount, 2)}</td>
                         <td>
-                            {if($user->live == 0)}
-                            <a href="/admin/edit/user/{$user->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Paid </a>&nbsp;
-                            {/if}
-                            {else}
-                            <a href="/admin/edit/user/{$user->id}/live/0" class="btn btn-primary btn-xs"><i class="fa fa-ban"></i> Unpaid </a>&nbsp;
-                            {/else}
-                            <a href="/admin/info/account/{$bank->id}" class="btn btn-info btn-xs"><i class="fa fa-bank"></i> Bank </a>&nbsp;
+                        {if($live)}
+                            <a href="/finance/makepayment/{$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Make Payment </a>&nbsp;
+                        {/if}
+                        {else}
+                            <a href="/finance/payhistory/{$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Payment History </a>
+                        {/else}
                         </td>
                     </tr>
                     {/foreach}

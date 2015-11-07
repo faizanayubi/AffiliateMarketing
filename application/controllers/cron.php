@@ -104,7 +104,8 @@ class CRON extends Auth {
             "amount" => $revenue,
             "user_id" => $link->user_id,
             "stat_id" => $stat->id,
-            "rpm" => $avgrpm
+            "rpm" => $avgrpm,
+            "live" => 1
         ));
         $earning->save();
     }

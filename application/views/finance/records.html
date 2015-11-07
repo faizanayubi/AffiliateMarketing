@@ -33,6 +33,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>User Id</th>
                         <th>Name</th>
                         <th>Amount</th>
                         <th>Action</th>
@@ -43,6 +44,7 @@
                     {script $user = User::first(array("id = ?" => $account->user_id), array("name", "id"))}
                     {script $bank = Account::first(array("id = ?" => $account->user_id), array("id"))}
                     <tr>
+                        <td>{$user->id}</td>
                         <td><a href="/admin/info/user/{$user->id}">{echo $user->name}</a></td>
                         <td>₹ {echo round($account->amount, 2)}</td>
                         <td>
@@ -52,6 +54,7 @@
                         {else}
                             <a href="/finance/payhistory/{$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Payment History </a>
                         {/else}
+                        <a href="/admin/search?model=earning&key=user_id&sign=equal&value={$user->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i> Earnings Details</a>&nbsp;
                         </td>
                     </tr>
                     {/foreach}

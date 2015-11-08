@@ -97,9 +97,9 @@ class Analytics extends Admin {
         foreach ($links as $link) {
             $country_count = 0;$nonverified_count = 0;$verified_count = 0;
             $stat = Link::findStats($link->short);
-            $total_count = $stat->analytics->allTime->shortUrlClicks;
-            if ($stat->analytics->allTime->shortUrlClicks) {
-                $referrers = $stat->analytics->allTime->referrers;
+            $total_count = $stat->analytics->day->shortUrlClicks;
+            if ($stat->analytics->day->shortUrlClicks) {
+                $referrers = $stat->analytics->day->referrers;
                 foreach ($referrers as $referer) {
                     if ($referer->id == 'earnbugs.in') {
                         $nonverified_count += $referer->count;
@@ -108,7 +108,7 @@ class Analytics extends Admin {
                 $verified_count = $total_count - $nonverified_count;
                 $correct = 0.95;
 
-                $countries = $stat->analytics->allTime->countries;
+                $countries = $stat->analytics->day->countries;
 
                 $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
                 $rpms_country = array();

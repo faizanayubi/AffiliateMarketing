@@ -13,9 +13,16 @@
             </div>
             <div class="form-group">
                 <div class="input-group">
+                    <label class="sr-only">From</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                    <input type="date" style="width: 150px" name="startdate" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
                     <label class="sr-only">To</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> Date</span>
-                    <input type="date" style="width: 200px" name="date" class="form-control" value="{echo $date}" />
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                    <input type="date" style="width: 150px" name="enddate" class="form-control" />
                 </div>
             </div>
             <input type="hidden" name="action" value="findUser">
@@ -38,7 +45,7 @@
                     {script $platform = Platform::first(array("user_id = ?" => $user->id), array("image", "link", "created"));}
                     <tr>
                         <td>{echo $user->id}</td>
-                        <td><a href="/admin/info/user/{$user->id}">{echo $user->name}</a></td>
+                        <td><a href="/admin/info/user/{$user->id}" target="_blank">{$user->name}</a></td>
                         <td>
                             <a href="{echo CDN}uploads/images/{$platform->image}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-picture-o"></i> Image </a>&nbsp;
                             <a href="{$platform->link}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-external-link"></i> Link </a>&nbsp;

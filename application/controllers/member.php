@@ -295,6 +295,10 @@ class Member extends Admin {
      * @before _secure, _admin
      */
     public function delete($user_id) {
+        $user = User::first(array("id = ?" => $user_id));
+        if($user->admin){
+            die('Cannot Delete Admin');
+        }
         $this->noview();
         $earnings = Earning::first(array("user_id = ?" => $user_id));
         foreach ($earnings as $earning) {
@@ -325,6 +329,7 @@ class Member extends Admin {
             $account->delete();
         }
 
+        $user->delete();
         self::redirect($_SERVER["HTTP_REFERER"]);
     }
     

@@ -123,12 +123,19 @@ class Content extends Member {
         $this->seo(array("title" => "New User Platforms", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
-        $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
         $live = RequestMethods::get("live", 0);
-        $users = User::all(array("live = ?" => $live, "created LIKE ?" => "%{$date}%"), array("id","name", "created"));
-            
+        $where = array(
+            "live = ?" => $live,
+            "created >= ?" => $this->changeDate($startdate, "-1"),
+            "created <= ?" => $this->changeDate($enddate, "1")
+        );
+        $users = User::all($where, array("id","name", "created"));
+
         $view->set("users", $users);
-        $view->set("date", $date);
+        $view->set("startdate", $startdate);
+        $view->set("enddate", $enddate);
     }
     
     /**

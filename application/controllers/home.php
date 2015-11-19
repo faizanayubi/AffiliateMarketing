@@ -48,4 +48,5 @@ class Home extends Controller {
             $view->set("success", TRUE);
         }
     }
+    
 }

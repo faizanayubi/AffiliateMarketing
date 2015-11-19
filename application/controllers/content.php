@@ -298,6 +298,40 @@ class Content extends Member {
         }
     }
 
+    /**
+     * @before _secure, memberLayout
+     */
+    public function popular() {
+        $this->seo(array("title" => "Popular Content", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        $limit = RequestMethods::get("limit", 10);
+        $page = RequestMethods::get("page", 1);
+        if($page == 1) {
+            $offset = 0;
+        } else {
+            $offset = ($page - 1) * 10 + 1;
+        }
+
+        $database = Registry::get("database");
+        $result = $database->execute("SELECT DISTINCT item_id, COUNT(item_id) FROM links GROUP BY item_id ORDER BY 2 DESC LIMIT {$offset}, {$limit}");
+        $count = count(Link::all(array(), array("DISTINCT id")));
+
+        $items = array();
+        for ($i = 0; $i < $result->num_rows; $i++) {
+            $data = $result->fetch_array(MYSQLI_ASSOC);
+            array_push($items, array(
+                "item_id" => $data["item_id"],
+                "count" => $data["CountOf"]
+            ));
+        }
+
+        $view->set("items", $items);
+        $view->set("count", $count);
+        $view->set("page", $page);
+        $view->set("limit", $limit);
+    }
+
     public function rpm() {
         $this->JSONview();
         $view = $this->getActionView();

@@ -23,16 +23,25 @@ class Auth extends Controller {
         $view = $this->getActionView();
         
         if (RequestMethods::post("action") == "login") {
-            $user = User::first(array(
-                "email = ?" => RequestMethods::post("email"),
-                "password = ?" => sha1(RequestMethods::post("password")),
-                "live" => TRUE
-            ));
-            if ($user) {
-                $this->setUser($user);
-                $this->session();
+            $exist = User::first(array("email = ?" => RequestMethods::post("email")), array("id"));
+            if($exist) {
+                $user = User::first(array(
+                    "email = ?" => RequestMethods::post("email"),
+                    "password = ?" => sha1(RequestMethods::post("password"))
+                ));
+                if($user) {
+                    if ($user->live) {
+                        $this->setUser($user);
+                        $this->session();
+                    } else {
+                        $view->set("message", "User account not verified");
+                    }
+                } else{
+                    $view->set("message", 'Wrong Password, Try again or <a href="/auth/forgotpassword">Reset Password</a>');
+                }
+                
             } else {
-                $view->set("message", "User not exist or blocked");
+                $view->set("message", 'User doesnot exist. Please signup <a href="/auth/register">here</a>');
             }
         }
     }
@@ -87,6 +96,16 @@ class Auth extends Controller {
         $domains = Meta::all($where);
         $session->set("domains", $domains);
         self::redirect("/member");
+    }
+
+    public function forgotpassword() {
+        $this->defaultLayout = "layouts/blank";
+        $this->setLayout();
+        $this->seo(array(
+            "title" => "Register",
+            "view" => $this->getLayoutView()
+        ));
+        $view = $this->getActionView();
     }
     
     /**

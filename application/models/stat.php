@@ -39,7 +39,6 @@ class Stat extends Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 255
      */
     protected $_referrers;
     

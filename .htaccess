@@ -13,7 +13,7 @@ RewriteRule ^([^.]+)\.?([a-zA-Z]+)?$ index.php?url=$1&extension=$2 [QSA,L]
 
 <Files "cron.php">
     Order deny,allow
-    Allow from 103.3.62.150
+    Allow from 128.199.253.234
     Deny from all
 </Files>
 

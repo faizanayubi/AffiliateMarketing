@@ -91,7 +91,6 @@ class Analytics extends Admin {
         $this->JSONview();
         $view = $this->getActionView();
 
-        $shortURL = RequestMethods::get("shortURL");
         $earning = 0;$count = 0;
         $links = Link::all(array("user_id = ?" => $this->user->id, "created >= ?" => date('Y-m-d', strtotime("-3 day"))), array("short", "item_id"));
         foreach ($links as $link) {

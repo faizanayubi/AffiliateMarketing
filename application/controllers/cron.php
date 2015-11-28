@@ -42,7 +42,7 @@ class CRON extends Auth {
 
                 //sleep the script
                 if ($counter == 100) {
-                    sleep(5);
+                    sleep(3);
                     $counter = 0;
                 }
                 ++$counter;
@@ -108,6 +108,14 @@ class CRON extends Auth {
             "live" => 1
         ));
         $earning->save();
+    }
+
+    protected function timeLimit($time) {
+        for ($i=0; $i < $time; $i++) { 
+            sleep(1);
+        }
+
+        return $time;
     }
 
 }

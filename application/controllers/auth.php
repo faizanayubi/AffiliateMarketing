@@ -159,7 +159,7 @@ class Auth extends Controller {
         $logfile = APP_PATH . "/logs/" . date("Y-m-d") . ".txt";
         $new = file_exists($logfile) ? false : true;
         if ($handle = fopen($logfile, 'a')) {
-            $timestamp = strftime("%Y-%m-%d %H:%M:%S", time() + 1800);
+            $timestamp = strftime("%Y-%m-%d %H:%M:%S", time());
             $content = "[{$timestamp}]{$message}\n";
             fwrite($handle, $content);
             fclose($handle);

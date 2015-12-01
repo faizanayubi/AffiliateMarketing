@@ -14,7 +14,7 @@ class Finance extends Admin {
      * All earnings records of persons
      * 1 - unpaid, 0 - paid
      * 
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function records() {
         $this->seo(array("title" => "Records Finance", "view" => $this->getLayoutView()));
@@ -62,7 +62,7 @@ class Finance extends Admin {
 
     /**
      * Finds the earning from a website
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function earnings() {
         $this->seo(array("title" => "Earnings Finance", "view" => $this->getLayoutView()));
@@ -97,7 +97,7 @@ class Finance extends Admin {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function makepayment($user_id) {
         $this->seo(array("title" => "Make Payment", "view" => $this->getLayoutView()));
@@ -140,7 +140,7 @@ class Finance extends Admin {
 
     /**
      * Earning on a Content
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function content($id='') {
         $this->seo(array("title" => "Content Finance", "view" => $this->getLayoutView()));

@@ -11,7 +11,7 @@ use Framework\Registry as Registry;
 class Admin extends Auth {
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function index() {
         $this->seo(array("title" => "Dashboard", "view" => $this->getLayoutView()));
@@ -43,7 +43,7 @@ class Admin extends Auth {
      * @param type $model the data model
      * @param type $property the property of modal
      * @param type $val the value of property
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function search($model = NULL, $property = NULL, $val = 0, $page = 1, $limit = 10) {
         $this->seo(array("title" => "Search", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
@@ -98,7 +98,7 @@ class Admin extends Auth {
     /**
      * Shows any data info
      * 
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      * @param type $model the model to which shhow info
      * @param type $id the id of object model
      */
@@ -134,7 +134,7 @@ class Admin extends Auth {
     /**
      * Updates any data provide with model and id
      * 
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      * @param type $model the model object to be updated
      * @param type $id the id of object
      */
@@ -168,7 +168,7 @@ class Admin extends Auth {
     /**
      * Edits the Value and redirects user back to Referer
      * 
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      * @param type $model
      * @param type $id
      * @param type $property
@@ -188,7 +188,7 @@ class Admin extends Auth {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function dataAnalysis() {
         $this->seo(array("title" => "Data Analysis", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
@@ -209,28 +209,8 @@ class Admin extends Auth {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, _admin
      */
-    public function fileEditor() {
-        $this->seo(array("title" => "File Editor", "keywords" => "admin", "description" => "admin", "view" => $this->getLayoutView()));
-        $view = $this->getActionView();
-
-        $file = APP_PATH . "/public/assets/js/admin-1.0.js";
-        if (isset($_POST['text'])) {
-            // save the text contents
-            file_put_contents($file, $_POST['text']);
-
-            // redirect to form again
-            header(sprintf('Location: %s', URL));
-            printf('<a href="%s">Moved</a>.', htmlspecialchars(URL));
-            exit();
-        }
-
-        $text = file_get_contents($file);
-
-        $view->set("text", $text);
-    }
-
     protected function sync($model) {
         $this->noview();
         $db = Framework\Registry::get("database");
@@ -238,7 +218,7 @@ class Admin extends Auth {
     }
 
     /**
-     * @before _secure
+     * @before _secure, _admin
      */
     public function fields($model = "user") {
         $this->noview();

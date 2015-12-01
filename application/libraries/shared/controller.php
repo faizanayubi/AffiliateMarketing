@@ -33,6 +33,7 @@ namespace Shared {
          */
         public function _admin() {
             if (!$this->user->admin) {
+                $this->setUser(false);
                 throw new Router\Exception\Controller("Not a valid admin user account");
             }
         }

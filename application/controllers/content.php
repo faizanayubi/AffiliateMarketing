@@ -42,7 +42,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function create() {
         $this->seo(array("title" => "Create Content", "view" => $this->getLayoutView()));
@@ -89,7 +89,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function manage() {
         $this->seo(array("title" => "Manage Content", "view" => $this->getLayoutView()));
@@ -117,7 +117,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function platforms() {
         $this->seo(array("title" => "New User Platforms", "view" => $this->getLayoutView()));
@@ -139,7 +139,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function edit($id = NULL) {
         $this->seo(array("title" => "Edit Content", "view" => $this->getLayoutView()));
@@ -191,7 +191,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function shortenURL() {
         $this->seo(array("title" => "Shorten URL", "view" => $this->getLayoutView()));
@@ -208,7 +208,7 @@ class Content extends Member {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function fraudLinks() {
         $this->seo(array("title" => "Fraud Links", "view" => $this->getLayoutView()));
@@ -225,7 +225,7 @@ class Content extends Member {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function domains() {
         $this->seo(array("title" => "All Domains", "view" => $this->getLayoutView()));
@@ -252,7 +252,7 @@ class Content extends Member {
     }
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function delete($id = NULL) {
         $this->seo(array("title" => "Delete Content", "view" => $this->getLayoutView()));

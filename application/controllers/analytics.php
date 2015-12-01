@@ -12,7 +12,7 @@ use \Curl\Curl;
 class Analytics extends Admin {
     
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function googl() {
         $this->seo(array("title" => "shortURL Analytics", "view" => $this->getLayoutView()));
@@ -29,7 +29,7 @@ class Analytics extends Admin {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function content($id='') {
         $this->seo(array("title" => "Content Analytics", "view" => $this->getLayoutView()));
@@ -53,7 +53,7 @@ class Analytics extends Admin {
     }
 
     /**
-     * @before _secure, changeLayout
+     * @before _secure, changeLayout, _admin
      */
     public function urlDebugger() {
         $this->seo(array("title" => "URL Debugger", "view" => $this->getLayoutView()));

@@ -21,16 +21,6 @@
                         <span class="help-block">{echo Shared\Markup::errors($errors, "url")}</span>
                     </div>
                     <div class="form-group">
-                        <label>Target</label>
-                        <select name="target" class="form-control" value="{$target}">
-                            <option value="http://bollychitchat.in">bollychitchat.in</option>
-                            <option value="http://filmyhub.website">filmyhub.website</option>
-                            <option value="http://teamkapil.website">teamkapil.website</option>
-                            <option value="http://teamfilmy.biz">teamfilmy.biz</option>
-                            <option value="http://ikapilsharma.com">ikapilsharma.com</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label>Description</label>
                         <textarea class="form-control" name="description" rows="3"></textarea>
                         <span class="help-block">{echo Shared\Markup::errors($errors, "description")}</span>
@@ -56,8 +46,7 @@
                     </div>
                     <div class="form-group">
                         <label>Commission</label>
-                        <input type="number" class="form-control" name="commission" value="4.99">
-                        <span class="help-block">The Percentage for Earnbugs Team, 4.99% by default</span>
+                        <input type="number" class="form-control" name="commission" value="1.00">
                     </div>
                     <div class="form-group">
                         <label>Image</label>
@@ -70,19 +59,19 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">IN</div>
-                                <input type="number" class="form-control" placeholder="India" name="rpm[in]" required="" value="135">
+                                <input type="number" class="form-control" placeholder="India" name="rpm[IN]" required="" value="135">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">US</div>
-                                <input type="number" class="form-control" placeholder="United States" name="rpm[US]" required="" value="270">
+                                <input type="number" class="form-control" placeholder="United States" name="rpm[US]" required="" value="220">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">PK</div>
-                                <input type="number" class="form-control" placeholder="Pakistan" name="rpm[PK]" required="" value="70">
+                                <div class="input-group-addon">CA</div>
+                                <input type="number" class="form-control" placeholder="Canada" name="rpm[CA]" required="" value="220">
                             </div>
                         </div>
                     </div>
@@ -90,19 +79,19 @@
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">AU</div>
-                                <input type="number" class="form-control" placeholder="Australia" name="rpm[AU]" required="" value="400">
+                                <input type="number" class="form-control" placeholder="Australia" name="rpm[AU]" required="" value="220">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">NW</div>
-                                <input type="number" class="form-control" placeholder="New Zealand" name="rpm[NW]" required="" value="105">
+                                <div class="input-group-addon">UK</div>
+                                <input type="number" class="form-control" placeholder="United Kingdom" name="rpm[GB]" required="" value="220">
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-addon">Other</div>
-                                <input type="number" class="form-control" placeholder="None" name="rpm[NONE]" required="" value="105">
+                                <input type="number" class="form-control" placeholder="Others" name="rpm[NONE]" required="" value="100">
                             </div>
                         </div>
                     </div>

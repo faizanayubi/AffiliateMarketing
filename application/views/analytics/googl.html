@@ -38,6 +38,48 @@
             </table>
         </div>
         <hr>
+    
+        {if($item)}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-user fa-fw"></i> User Details
+            </div>
+            <table class="table table-striped text-center table-hover table-bordered">
+                <tbody>
+                    <tr>
+                        <td>Username</td>
+                        <td>{echo $item["username"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Url</td>
+                        <td>{echo $item["url"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Title</td>
+                        <td>{echo $item["title"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                        <td>{echo $item["description"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Image</td>
+                        <td><img src="/public/assets/uploads/images/{echo $item['image']}"></td>
+                    </tr>
+                    <tr>
+                        <td>UserId</td>
+                        <td>{echo $item["user_id"]}</td>
+                    </tr>
+                    <tr>
+                        <td>Item Id</td>
+                        <td>{echo $item["id"]}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        {/if}
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-list fa-fw"></i> Analytics All Time
@@ -51,6 +93,10 @@
                     <tr>
                         <td>Long Url Clicks</td>
                         <td>{$googl->analytics->allTime->longUrlClicks}</td>
+                    </tr>
+                    <tr>
+                        <td>Verified Clicks</td>
+                        <td>{$verified->click}</td>
                     </tr>
                     <tr>
                         <th colspan="2">Referrers</th>

@@ -12,7 +12,7 @@
                 <div class="input-group">
                     <label class="sr-only">Domain</label>
                     <span class="add-on input-group-addon"><i class="fa fa-globe fa-fw"></i> New Domain</span>
-                    <input type="url" style="width: 200px" name="domain" class="form-control" />
+                    <input type="url" style="width: 200px" name="domain" class="form-control" value="http://" />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Add</button>
@@ -39,6 +39,7 @@
                             {else}
                                 <a href="/admin/edit/meta/{$domain->id}/live/0" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i> Block </a>&nbsp;
                             {/else}
+                            <a href="/admin/delete/meta/{$domain->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                     </tr>
                     {/foreach}

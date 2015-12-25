@@ -8,28 +8,9 @@
 use Framework\Registry as Registry;
 use Framework\RequestMethods as RequestMethods;
 use \Curl\Curl;
+use ClusterPoint\DB as DB;
 
 class Analytics extends Admin {
-
-    /**
-     * @before _secure, changeLayout, _admin
-     */
-    public function logs() {
-        $this->seo(array("title" => "Activity Logs", "view" => $this->getLayoutView()));
-        $view = $this->getActionView();
-
-        $logs = array();
-        $path = APP_PATH . "/logs";
-        $iterator = new DirectoryIterator($path);
-
-        foreach ($iterator as $item) {
-            if (!$item->isDot()) {
-                array_push($logs, $item->getFilename());
-            }
-        }
-
-        $view->set("logs", $logs);
-    }
     
     /**
      * @before _secure, changeLayout, _admin
@@ -42,9 +23,24 @@ class Analytics extends Admin {
             $shortURL = RequestMethods::get("shortURL");
             $googl = Registry::get("googl");
             $object = $googl->analyticsFull($shortURL);
-            
+            $link = Link::first(array("short = ?" => $shortURL), array("item_id", "user_id"));
+            if ($link) {
+                $view->set("verified", $link->clusterpoint());
+            }
+
+            $longUrl = explode("?item=", $object->longUrl);
+            if($longUrl) {
+                $str = base64_decode($longUrl[1]);
+                $datas = explode("&", $str);
+                foreach ($datas as $data) {
+                    $property = explode("=", $data);
+                    $item[$property[0]] = $property[1];
+                }
+            }
+
             $view->set("shortURL", $shortURL);
             $view->set("googl", $object);
+            $view->set("item", $item);
         }
     }
 
@@ -58,9 +54,9 @@ class Analytics extends Admin {
         $item = Item::first(array("id = ?" => $id));
 
         $earn = 0;
-        $earnings = Earning::all(array("item_id = ?" => $item->id), array("amount"));
-        foreach ($earnings as $earning) {
-            $earn += $earning->amount;
+        $stats = Stat::all(array("item_id = ?" => $item->id), array("amount"));
+        foreach ($stats as $stat) {
+            $earn += $stat->amount;
         }
 
         $links = Link::count(array("item_id = ?" => $item->id));
@@ -79,7 +75,7 @@ class Analytics extends Admin {
         $this->seo(array("title" => "URL Debugger", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $url = RequestMethods::get("urld", "http://earnbugs.in/");
+        $url = RequestMethods::get("urld", "http://likesbazar.in/");
         $metas = get_meta_tags($url);
 
         $facebook = new Curl();
@@ -104,56 +100,103 @@ class Analytics extends Admin {
     }
 
     /**
-     * Total Stats today from Google Server realtime
      * @before _secure
      */
-    public function realtime() {
+    public function link($duration = "allTime") {
         $this->JSONview();
         $view = $this->getActionView();
 
-        $earning = 0;$count = 0;
-        $links = Link::all(array("user_id = ?" => $this->user->id, "created >= ?" => date('Y-m-d', strtotime("-3 day"))), array("short", "item_id"));
+        $shortURL = RequestMethods::get("shortURL");
+        $link = Link::first(array("short = ?" => $shortURL), array("item_id", "short", "user_id"));
+        $result = $link->stat($duration);
+        
+        $view->set("earning", $result["earning"]);
+        $view->set("click", $result["click"]);
+        $view->set("rpm", $result["rpm"]);
+        $view->set("verified", $result["verified"]);
+    }
+
+    /**
+     * @before _secure
+     */
+    public function realtime($duration = "allTime") {
+        $this->JSONview();
+        $view = $this->getActionView();
+
+        $earnings = 0;
+        $clicks = 0;
+        $verified = 0;
+        $links = Link::all(array("user_id = ?" => $this->user->id, "created >= ?" => date('Y-m-d', strtotime("-3 day"))), array("short", "item_id", "user_id"));
         foreach ($links as $link) {
-            $country_count = 0;$nonverified_count = 0;$verified_count = 0;
-            $stat = Link::findStats($link->short);
-            $total_count = $stat->analytics->day->shortUrlClicks;
-            if ($stat->analytics->day->shortUrlClicks) {
-                $referrers = $stat->analytics->day->referrers;
-                foreach ($referrers as $referer) {
-                    if ($referer->id == 'earnbugs.in') {
-                        $nonverified_count += $referer->count;
-                    }
-                }
-                $verified_count = $total_count - $nonverified_count;
-                $correct = 0.95;
+            $result = $link->stat($duration);
+            if ($result) {
+                $clicks += $result["click"];
+                $earnings += $result["earning"];
+                $verified += $result["verified"];
+            }
+            $result = 0;
+        }
 
-                $countries = $stat->analytics->day->countries;
+        $view->set("avgrpm", round(($earnings*1000)/($clicks), 2));
+        $view->set("earnings", $earnings);
+        $view->set("clicks", $clicks);
+        $view->set("verified", $verified);
+    }
 
-                $rpms = RPM::all(array("item_id = ?" => $link->item_id), array("value", "country"));
-                $rpms_country = array();
-                $rpms_value = array();
+    /**
+     * @before _secure, changeLayout
+     */
+    public function logs($action = "", $name = "") {
+        $this->seo(array("title" => "Activity Logs", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
 
-                foreach ($rpms as $rpm) {
-                    $rpms_country[] = strtoupper($rpm->country);
-                    $rpms_value[strtoupper($rpm->country)] = $rpm->value;
-                }
-                foreach ($countries as $country) {
-                    if (in_array($country->id, $rpms_country)) {
-                        $earning += $correct*($rpms_value[$country->id])*($country->count)/1000;
-                        $country_count += $country->count;
-                    }
-                }
-                if ($verified_count > $country_count) {
-                    $earning += ($verified_count - $country_count)*$correct*($rpms_value["NONE"])/1000;
+        if ($action == "unlink") {
+            $file = APP_PATH ."/logs/". $name . ".txt";
+            @unlink($file);
+            self::redirect("/analytics/logs");
+        }
+
+        $logs = array();
+        $path = APP_PATH . "/logs";
+        $iterator = new DirectoryIterator($path);
+
+        foreach ($iterator as $item) {
+            if (!$item->isDot()) {
+                array_push($logs, $item->getFilename());
+            }
+        }
+
+        $view->set("logs", $logs);
+    }
+
+    protected function today() {
+        $today = strftime("%Y-%m-%d", strtotime('now'));
+        $m = new MongoClient();
+        $db = $m->stats;
+        $collection = $db->hits;
+        $stats = array();$stat = array();
+
+        $records = $collection->find(array('user_id' => $this->user->id, 'created' => $today));
+        if (isset($records)) {
+            foreach ($records as $record) {
+                if (isset($stats[$record['country']])) {
+                    $stats[$record['country']] += $record['click'];
+                } else {
+                    $stats[$record['country']] = $record['click'];
                 }
             }
 
-            $count += $verified_count;
+            foreach ($stats as $key => $value) {
+                array_push($stat, array(
+                    "country" => $key,
+                    "count" => $value
+                ));
+            }
+            
+            return $stat;
+        } else{
+            return 0;
         }
-
-        $view->set("avgrpm", round(($earning*1000)/($count), 2));
-        $view->set("earnings", round($earning, 2));
-        $view->set("clicks", $count);
     }
     
 }

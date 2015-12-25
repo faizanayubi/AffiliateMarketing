@@ -31,7 +31,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Id</th>
+                            <th>Image</th>
                             <th>Title</th>
                             <th>Action</th>
                         </tr>
@@ -39,30 +39,37 @@
                     <tbody>
                         {foreach $content in $contents}
                         <tr>
-                            <td>{echo $content->id}</td>
-                            <td><a href="/analytics/content/{$content->id}" target="_blank">{echo $content->title}</a></td>
+                            <td><a href="/public/assets/uploads/images/{$content->image}" target="_blank"><img src="/content/resize/{echo base64_encode($content->image)}/50/50"></a></td>
+                            <td><a href="/admin/info/item/{$content->id}" target="_blank">{echo $content->title}</a></td>
                             <td>
-                                <a href="/finance/content/{$content->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i></a>&nbsp;
-                                <a href="/content/edit/{$content->id}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i></a>&nbsp;
-                                <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>&nbsp;
+                                <a href="/analytics/content/{$content->id}" class="btn btn-default btn-xs"><i class="fa fa-pie-chart"></i></a>
+                                {if($content->live)}
+                                    <a href="/admin/edit/item/{$content->id}/live/0" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                                {/if}
+                                {else}
+                                    <a href="/admin/edit/item/{$content->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
+                                {/else}
+                                <a href="/finance/content/{$content->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i></a>
+                                <a href="/content/edit/{$content->id}" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></a>
+                                <a href="/content/delete/{$content->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         {/foreach}
                     </tbody>
-                </table>
-
-                <div class="text-center">
-                    <ul class="pager">
-                        {if($page != 1)}
-                        <li><a href="?page={echo $page - 1}">Previous</a></li>
-                        {/if}
-                        {if($page < $count/$limit)}
-                        <li><a href="?page={echo $page + 1}">Next</a></li>
-                        {/if}
-                    </ul>
-                </div>
-                
+                </table>   
             </div>
+            
+            <div class="text-center">
+                <ul class="pager">
+                    {if($page != 1)}
+                    <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                    {/if}
+                    {if($page < $count/$limit)}
+                    <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                    {/if}
+                </ul>
+            </div>
+
         </div>
     </div>
 </div>

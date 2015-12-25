@@ -6,6 +6,15 @@
  * @author Faizan Ayubi
  */
 class Stat extends Shared\Model {
+
+    /**
+     * @column
+     * @readwrite
+     * @type integer
+     * @index
+     */
+    protected $_user_id;
+
     /**
      * @column
      * @readwrite
@@ -27,39 +36,29 @@ class Stat extends Shared\Model {
      * @type integer
      */
     protected $_shortUrlClicks;
-    
+
     /**
      * @column
      * @readwrite
      * @type integer
+     * @index
      */
-    protected $_longUrlClicks;
-    
+    protected $_item_id;
+
     /**
      * @column
      * @readwrite
      * @type text
+     * @length 255
      */
-    protected $_referrers;
-    
+    protected $_amount;
+
     /**
      * @column
      * @readwrite
-     * @type text
+     * @type decimal
+     * @lenght 10,3
      */
-    protected $_countries;
+    protected $_rpm;
     
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     */
-    protected $_browsers;
-    
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     */
-    protected $_platforms;
 }

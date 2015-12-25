@@ -17,25 +17,19 @@ class Admin extends Auth {
         $this->seo(array("title" => "Dashboard", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $now = strftime("%Y-%m-%d", strtotime('now'));
-
-        $users = User::count();
-        $items = Item::count();
-        $platforms = Platform::count();
-        $links = Link::count();
+        $yesterday = strftime("%Y-%m-%d", strtotime('-1 day'));
+        $record = Stat::first(array(), array("created"), "created", "desc");
+        $latest = strftime("%Y-%m-%d", strtotime($record->created));
 
         $database = Registry::get("database");
-        $earnings = $database->query()->from("earnings", array("SUM(amount)" => "earn"))->all();
-        $stats = $database->query()->from("stats", array("SUM(verifiedClicks)" => "clicks"))->all();
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks", "SUM(verifiedClicks)" => "vclicks"))->where("created LIKE ?", "%{$latest}%")->all();
         $payments = $database->query()->from("payments", array("SUM(amount)" => "payment"))->all();
-
+        $yesterday = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks", "SUM(verifiedClicks)" => "vclicks"))->where("created LIKE ?", "%{$yesterday}%")->all();
+        
         $view->set("now", $now);
-        $view->set("users", $users);
-        $view->set("items", $items);
-        $view->set("platforms", $platforms);
-        $view->set("links", $links);
-        $view->set("earn", round($earnings[0]["earn"], 2));
-        $view->set("clicks", round($stats[0]["clicks"], 2));
+        $view->set("total", $total);
         $view->set("payment", round($payments[0]["payment"], 2));
+        $view->set("yesterday", $yesterday);
     }
 
     /**
@@ -188,6 +182,24 @@ class Admin extends Auth {
     }
 
     /**
+     * Updates any data provide with model and id
+     * 
+     * @before _secure, changeLayout, _admin
+     * @param type $model the model object to be updated
+     * @param type $id the id of object
+     */
+    public function delete($model = NULL, $id = NULL) {
+        $view = $this->getActionView();
+        $this->JSONview();
+        
+        $object = $model::first(array("id = ?" => $id));
+        $object->delete();
+        $view->set("deleted", true);
+        
+        self::redirect($_SERVER['HTTP_REFERER']);
+    }
+
+    /**
      * @before _secure, changeLayout, _admin
      */
     public function dataAnalysis() {
@@ -208,9 +220,6 @@ class Admin extends Auth {
         }
     }
 
-    /**
-     * @before _secure, _admin
-     */
     protected function sync($model) {
         $this->noview();
         $db = Framework\Registry::get("database");
@@ -218,7 +227,7 @@ class Admin extends Auth {
     }
 
     /**
-     * @before _secure, _admin
+     * @before _secure
      */
     public function fields($model = "user") {
         $this->noview();
@@ -232,5 +241,4 @@ class Admin extends Auth {
         $this->defaultLayout = "layouts/admin";
         $this->setLayout();
     }
-
 }

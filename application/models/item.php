@@ -6,6 +6,7 @@
  * @author Faizan Ayubi
  */
 class Item extends Shared\Model {
+    
     /**
      * @column
      * @readwrite
@@ -29,14 +30,6 @@ class Item extends Shared\Model {
      * @length 255
      */
     protected $_image;
-    
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 255
-     */
-    protected $_target;
 
     /**
      * @column
@@ -69,7 +62,7 @@ class Item extends Shared\Model {
      */
     protected $_user_id;
 
-    public function encode($username) {
-        return base64_encode("id={$this->id}&title={$this->title}&description={$this->description}&image={$this->image}&url={$this->url}&username={$username}&time=".time());
+    public function encode($username, $user_id) {
+        return base64_encode("id={$this->id}&title={$this->title}&description={$this->description}&image={$this->image}&url={$this->url}&username={$username}&user_id={$user_id}");
     }
 }

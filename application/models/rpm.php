@@ -6,6 +6,7 @@
  * @author Faizan Ayubi
  */
 class RPM extends Shared\Model {
+    
     /**
      * @column
      * @readwrite
@@ -18,24 +19,14 @@ class RPM extends Shared\Model {
      * @column
      * @readwrite
      * @type text
-     * @length 50
+     * @length 255
      */
     protected $_value;
     
-    /**
-     * @column
-     * @readwrite
-     * @type text
-     * @length 50
-     */
-    protected $_country;
-
     public static function average($item_id) {
-        $rpms = RPM::all(array("item_id = ?" => $item_id), array("value"));
-        $value = 0;
-        foreach ($rpms as $rpm) {
-            $value += $rpm->value;
-        }
-        return $value/count($rpms);
+        $rpm = RPM::first(array("item_id = ?" => $item_id), array("value"));
+        $data = json_decode($rpm->value);
+
+        return ($data->IN + $data->US + $data->CA + $data->AU + $data->GB + $data->NONE)/6;
     }
 }

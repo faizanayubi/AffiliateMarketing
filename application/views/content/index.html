@@ -9,26 +9,32 @@
                     <input type="text" style="width: 300px" name="title" class="form-control" placeholder="Search here..." value="{$title}" />
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary">Show</button>
+            <button type="submit" class="btn btn-primary">Search</button>
         </form>
         <hr>
+        {if($user->domain)}
+            <p class="text-center"><i>Your Custom domain is <strong id="domain">{$user->domain}</strong></i></p>
+        {/if}
+        {else}
+            <p class="text-center"><strong>You have not created your custom domain create one <a href="/member/profile">here</a></strong></p>
+        {/else}
     </div>
-    <div class="row cols" id="masonry">
+    <div class="row">
         {foreach $item in $items}
-        <div class="box">
+        <div class="col-md-4 col-lg-4 col-sm-6 col-xs-6">
             <div class="panel panel-default">
-                <div class="panel-heading">{echo $item->title}</div>
+                <div class="panel-heading">{echo substr($item->title, 0, 30)}</div>
                 <div class="panel-body">
-                    <a href="{echo $item->url}" target="_blank"><img src="/content/resize/{echo base64_encode($item->image)}" alt="{echo $item->title}"></a>
+                    <a href="{echo $item->url}" target="_blank"><img src="/content/resize/{echo base64_encode($item->image)}" alt="{echo $item->title}" width="290"></a>
                 </div>
                 <table class="table">
                     <tbody>
                         <tr>
                             <td>
-                                <button class="btn btn-default shortenURL" data-item="{echo $item->id}" data-longurl="{echo $item->target}?item={echo $item->encode($user->username)}" data-title="{echo $item->title}">Generate URL</button>
+                                <input type="text" class="form-control shorturl">
                             </td>
                             <td>
-                                <input type="text" class="form-control shorturl">
+                                <button class="btn btn-success shortenURL" data-item="{echo $item->id}" data-hash="{echo $item->encode($user->username, $user->id)}" data-title="{echo $item->title}">Generate Link</button>
                             </td>
                         </tr>
                     </tbody>

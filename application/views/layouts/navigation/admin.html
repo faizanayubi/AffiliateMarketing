@@ -35,7 +35,6 @@
                 <a href="#"><i class="fa fa-area-chart fa-fw"></i> Analytics<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="/admin/dataAnalysis">Data Analysis</a></li>
-                    <li><a href="/analytics/logs">CRON Logs</a></li>
                     <li><a href="/analytics/googl">Googl</a></li>
                     <li><a href="/analytics/urlDebugger">URL Debugger</a></li>
                 </ul>
@@ -43,7 +42,8 @@
             <li>
                 <a href="#"><i class="fa fa-money fa-fw"></i> Finance<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="/finance/records">Records</a></li>
+                    <li><a href="/finance/pending">Pending</a></li>
+                    <li><a href="/finance/payments">Payments</a></li>
                     <li><a href="/finance/earnings">Earnings</a></li>
                 </ul>
             </li>
@@ -51,18 +51,27 @@
                 <a href="#"><i class="fa fa-folder fa-fw"></i> Contents<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li><a href="/content/create">Create</a></li>
-                    <li><a href="/content/manage">Manage</a></li>
+                    <li><a href="/content/all">Manage</a></li>
                     <li><a href="/content/shortenURL">Shorten URL</a></li>
                 </ul>
             </li>
             <li>
                 <a href="#"><i class="fa fa-bookmark fa-fw"></i> Management<span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li><a href="/content/platforms?live=0&action=findUser">Unverified</a></li>
-                    <li><a href="/content/fraudLinks">Fraud</a></li>
                     <li><a href="/content/domains">Domains</a></li>
+                    <li><a href="/publisher/fraud">Fraud</a></li>
+                    <li><a href="/application/libraries/MongoDB/admin.php?db=stats&collection=hits">Verified</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="#"><i class="fa fa-bullhorn fa-fw"></i> Publishers<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="/member/all">Members</a></li>
+                    <li><a href="/member/news">Publish News</a></li>
+                    <li><a href="/publisher/settings">Settings</a></li>
+                </ul>
+            </li>
+            <li><a href="/analytics/logs"><i class="fa fa-file-archive-o fa-fw"></i> Logs</a></li>
         </ul>
     </div>
 </nav>

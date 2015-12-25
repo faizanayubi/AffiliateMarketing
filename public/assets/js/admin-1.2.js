@@ -161,6 +161,23 @@ $(document).ready(function () {
         };
     });
 
+    $(".googl").click(function(e) {
+        e.preventDefault();
+        var item = $(this),
+            shortURL = item.data('url'),
+            time = item.data('time'),
+            property = item.data('property');
+        item.html('<i class="fa fa-spinner fa-pulse"></i>');
+        request.read({
+            action: "analytics/link",
+            data: {shortURL: shortURL},
+            callback: function(data) {
+                item.html('RPM : <i class="fa fa-inr"></i> '+ data.rpm +', Click : '+ data.click +', Earning : <i class="fa fa-inr"></i> '+ data.earning+', Verified : <i class="fa fa-check"></i> '+ data.verified);
+            }
+        });
+
+    });
+
 });
 
 function toArray(object) {

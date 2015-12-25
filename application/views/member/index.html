@@ -1,85 +1,95 @@
 <div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">
-            Dashboard <small>Statistics Overview</small>
-        </h1>
+    <div class="col-lg-12"><br>
+        {if isset($news)}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {$news->value}
+            </div>
+        {/if}
+        {if($today)}
+        <div class="panel panel-success">
+            <div class="panel-heading text-center">
+                <strong>Today Clicks</strong>
+            </div>
+            <table class="table">
+                <tr>
+                    {foreach $t in $today}
+                    <td>{echo $t['country']}: {echo $t['count']}</td>
+                    {/foreach}
+                </tr>
+            </table>
+        </div>
+        {/if}
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-3 col-md-3">
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-hand-pointer-o fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{$clicks}</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/member/mylinks">
-                <div class="panel-footer">
-                    <span class="pull-left">Total Verified Clicks!</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-inr fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge">{echo round($averagerpm)}</div>
-                    </div>
-                </div>
-            </div>
-            <a href="/member/earnings">
-                <div class="panel-footer">
-                    <span class="pull-left">Average RPM!</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
-    <div class="col-lg-3 col-md-3">
-        <div class="panel panel-red">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-exchange fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        {echo round($pending)}/{echo round($earnings)}
-                    </div>
-                </div>
-            </div>
-            <a href="/member/earnings">
-                <div class="panel-footer">
-                    <span class="pull-left">Pending/Total Earning!</span>
-                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-        </div>
-    </div>
+
     <div class="col-lg-3 col-md-3">
         <div class="panel panel-default">
             <ul class="list-group" onclick="realtime();">
-                <li class="list-group-item">Clicks Today<span class="badge" id="realtime_clicks">View</span></li>
+                <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Last 3 Day Links</li>
+                <li class="list-group-item">Clicks<span class="badge" id="realtime_clicks">View</span></li>
                 <li class="list-group-item">Average RPM <span class="badge" id="realtime_avgrpm">View</span></li>
-                <li class="list-group-item">Earnings Today <span class="badge" id="realtime_earnings">View</span></li>
+                <li class="list-group-item">Earnings <span class="badge" id="realtime_earnings">View</span></li>
             </ul>
         </div>
     </div>
+
+    <div class="col-lg-3 col-md-3">
+        <div class="panel panel-default">
+            <ul class="list-group">
+                <li class="list-group-item active text-center"><i class="fa fa-line-chart"></i> Yesterday Stats</li>
+                <li class="list-group-item">Clicks <span class="badge">{$yesterdayClicks}</span></li>
+                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $yesterdayRPM}</span></li>
+                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {$yesterdayEarning}</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3">
+        <div class="panel panel-default">
+            <ul class="list-group">
+                <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Verified Stats</li>
+                <li class="list-group-item">Clicks <span class="badge">{$totalClicks}</span></li>
+                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $totalRPM}</span></li>
+                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {$totalEarning}</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-3">
+        <div class="panel panel-default">
+            <ul class="list-group">
+                <li class="list-group-item active text-center"><i class="fa fa-money"></i> Total Payments</li>
+                <li class="list-group-item">Earned <span class="badge"><i class="fa fa-inr"></i> {$totalEarning}</span></li>
+                <li class="list-group-item">Paid <span class="badge"><i class="fa fa-inr"></i> {$paid}</span></li>
+                <li class="list-group-item">Pending <span class="badge"><i class="fa fa-inr"></i> {echo $totalEarning-$paid}</span></li>
+            </ul>
+        </div>
+    </div>
+
 </div>
-<!-- /.row -->
+
+{if($user->domain == "")}
+<div class="row text-center">
+    <form class="form-horizontal" method="post" action="/member/profile">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Custom Domain</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-addon">http://</span>
+                    <input type="text" name="domain" class="form-control" placeholder="Enter Custom Domain name" required="">
+                    <span class="input-group-addon">.{$domain}</span>
+                    <input type="hidden" name="target" value=".{$domain}">
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="action" value="saveUser">
+    </form>
+    <strong>Note : </strong><i>You can only set custom domain once, do not include any special characters or space</i>
+</div>
+{/if}
+
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">

@@ -150,7 +150,7 @@ try {
         foreach ($classes as $class) {
             if ($class == $exception) {
                 header("Content-type: text/html");
-                include(APP_PATH . "/application/views/errors/{$template}.php");
+                include(APP_PATH . "/application/views/layouts/errors/{$template}.php");
                 exit;
             }
         }

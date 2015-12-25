@@ -14,14 +14,16 @@
         {if($user->admin == "1")}
         <li><a href="/admin"><i class="fa fa-user-secret"></i> Admin Panel</a></li>
         {/if}
+        <li><a href="/content"><i class="fa fa-link"></i> Get Link</a></li>
+        <li><a href="#"><i class="fa fa-facebook-square"></i> Join Group</a></li>
         <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {$user->name} <b class="caret"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {$user->name} (ID: {$user->id}) <b class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li>
                     <a href="/member/profile"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li>
                 <li>
-                    <a href="/member/faqs"><i class="fa fa-fw fa-gear"></i> FAQs</a>
+                    <a href="/member/earnings"><i class="fa fa-fw fa-inr"></i> Earnings</a>
                 </li>
                 <li class="divider"></li>
                 <li>
@@ -36,11 +38,9 @@
             <li><a href="/member"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
             <li><a href="/member/mylinks"><i class="fa fa-fw fa-bar-chart-o"></i> Link Stats</a></li>
             <li><a href="/member/topearners"><i class="fa fa-fw fa-table"></i> Top Earners</a></li>
-            <li><a href="/member/links"><i class="fa fa-fw fa-link"></i> Top Links</a></li>
             <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo" class="collapsed" aria-expanded="false"><i class="fa fa-fw fa-star"></i> Favorite Categories <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse" aria-expanded="false" style="height: 0px;">
-                    <li><a href="/content/popular">Trending Links</a></li>
                     <li><a href="/content?category[]=bollywood">Bollywood</a></li>
                     <li><a href="/content?category[]=sports">Sports</a></li>
                     <li><a href="/content?category[]=entertainment">Entertainment</a></li>
@@ -61,6 +61,7 @@
                 <a href="javascript:;" data-toggle="collapse" data-target="#profile"><i class="fa fa-fw fa-user"></i> Profile <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="profile" class="collapse">
                     <li><a href="/member/payments">Payments</a></li>
+                    <li><a href="/member/platforms">Platforms</a></li>
                     <li><a href="/member/profile">Settings</a></li>
                 </ul>
             </li>

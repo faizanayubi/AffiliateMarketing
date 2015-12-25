@@ -1,0 +1,49 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">Finance Records</h1>
+        <div class="panel panel-default">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>User Id</th>
+                        <th>Name</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {foreach $account in $accounts}
+                    {script $user = User::first(array("id = ?" => $account['user_id']), array("name", "id"))}
+                    <tr>
+                        <td>{$user->id}</td>
+                        <td><a href="/admin/info/user/{$user->id}">{echo $user->name}</a></td>
+                        <td><i class="fa fa-inr"></i> {echo round($account['pending'], 2)}</td>
+                        <td>
+                        {if($account['paid'])}
+                            <a href="/finance/payments?user_id={$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Payment History </a>
+                        {/if}
+                        {else}
+                            <a href="/finance/makepayment/{$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Make Payment </a>&nbsp;
+                        {/else}
+                        <a href="/admin/search?model=stat&key=user_id&sign=equal&value={$user->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i> Earnings Details</a>&nbsp;
+                        <a href="/auth/loginas/{$user->id}" class="btn btn-warning btn-xs"><i class="fa fa-sign-in"></i> Login As</a>
+                        </td>
+                    </tr>
+                {/foreach}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="text-center">
+            <ul class="pager">
+                {if($page != 1)}
+                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                {/if}
+                {if($count == 10)}
+                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                {/if}
+            </ul>
+        </div>
+
+    </div>
+</div>

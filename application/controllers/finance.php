@@ -12,49 +12,33 @@ class Finance extends Admin {
 
     /**
      * All earnings records of persons
-     * 1 - unpaid, 0 - paid
+     * 1 - paid, 0 - unpaid
      * 
      * @before _secure, changeLayout, _admin
      */
-    public function records() {
+    public function pending() {
         $this->seo(array("title" => "Records Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $accounts = array();
-        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
-        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
-        $live = RequestMethods::get("live", 1);
+        $live = RequestMethods::get("live", 0);
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
-
+        $offset = $limit * ($page - 1);
+        
+        $accounts = array();
+        
         $database = Registry::get("database");
-        
-        $where = array(
-            "live = ?" => $live,
-            "created >= ?" => $this->changeDate($startdate, "-1"),
-            "created <= ?" => $this->changeDate($enddate, "1")
-        );
-        $earnings = Earning::all($where, array("DISTINCT user_id"), "created", "asc", $limit, $page);
-        $count = count($earnings);
-
-        foreach ($earnings as $earning) {
-            $amount = $database->query()
-            ->from("earnings", array("SUM(amount)" => "earn"))
-            ->where("user_id=?",$earning->user_id)
-            ->where("created >= ?",$this->changeDate($startdate, "-1"))
-            ->where("created <= ?",$this->changeDate($enddate, "1"))
-            ->where("live=?",$live)
-            ->all();
-            array_push($accounts, \Framework\ArrayMethods::toObject(array(
-                "user_id" => $earning->user_id,
-                "amount" => $amount[0]["earn"]
-            )));
+        $result = $database->execute("SELECT SUM(`amount`) AS earn, user_id FROM `stats` WHERE live = {$live} GROUP BY `user_id` LIMIT {$offset}, {$limit}");
+        for ($i=0; $i<$result->num_rows; $i++) {
+            $row=(object) $result->fetch_array(MYSQLI_ASSOC);
+            $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?",$row->user_id)->all();
+            $pending = $row->earn - $paid[0]['earn'];
+            array_push($accounts, array("user_id" => $row->user_id, "pending" => $pending, "paid" => $paid[0]['earn']));
         }
-        
+        //echo "<pre>", print_r($row), "</pre>";
+
         $view->set("accounts", $accounts);
-        $view->set("startdate", $startdate);
-        $view->set("enddate", $enddate);
-        $view->set("count", $count);
+        $view->set("count", count($accounts));
         $view->set("page", $page);
         $view->set("limit", $limit);
         $view->set("live", $live);
@@ -70,7 +54,7 @@ class Finance extends Admin {
 
         $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
         $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
-        $website = RequestMethods::get("website", "http://kapilsharmafc.com");
+        $website = RequestMethods::get("website", "http://www.khattimithi.com");
 
         $amount = 0;
         $where = array(
@@ -102,36 +86,45 @@ class Finance extends Admin {
     public function makepayment($user_id) {
         $this->seo(array("title" => "Make Payment", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+        $record = Stat::first(array("user_id = ?" => $user_id), array("created"), "created", "desc");
+        $latest = strftime("%Y-%m-%d", strtotime($record->created));
+        $payee = User::first(array("id = ?" => $user_id), array("id", "name", "email", "phone"));
+        $account = Account::first(array("user_id = ?" => $user_id));
 
         $database = Registry::get("database");
         $amount = $database->query()
-            ->from("earnings", array("SUM(amount)" => "earn"))
+            ->from("stats", array("SUM(amount)" => "earn"))
             ->where("user_id=?",$user_id)
-            ->where("live=?",1)
+            ->where("created LIKE ?", "%{$latest}%")
+            ->where("live=?",0)
+            ->all();
+
+        $paid = $database->query()
+            ->from("payments", array("SUM(amount)" => "earn"))
+            ->where("user_id=?",$user_id)
             ->all();
 
         if (RequestMethods::post("action") == "payment") {
-            $earnings = Earning::all(array("user_id = ?" => $user_id, "live = ?" => 1));
-            foreach ($earnings as $earning) {
-                $earning->live = null;
-                $earning->save();
-            }
             $payment = new Payment(array(
                 "user_id" => $user_id,
-                "amount" => round($amount[0]["earn"], 2),
+                "amount" => round($amount[0]["earn"] - $paid[0]["earn"], 2),
                 "mode" => RequestMethods::post("mode"),
                 "ref_id" => RequestMethods::post("ref_id"),
-                "requested" => null,
                 "live" => 1
             ));
 
             $payment->save();
 
+            $this->notify(array(
+                "template" => "makePayment",
+                "subject" => "Payments From ChocoGhar Team",
+                "user" => $payee,
+                "payment" => $payment,
+                "account" => $account
+            ));
+
             self::redirect("/finance/records");
         }
-
-        $payee = User::first(array("id = ?" => $user_id));
-        $account = Account::first(array("user_id = ?" => $user_id));
 
         $view->set("payee", $payee);
         $view->set("account", $account);
@@ -161,6 +154,34 @@ class Finance extends Admin {
         $view->set("earn", $earn);
         $view->set("links", $links);
         $view->set("rpm", $rpm);
+    }
+
+    /**
+     * @before _secure, changeLayout, _admin
+     */
+    public function payments() {
+        $this->seo(array("title" => "Payments", "view" => $this->getLayoutView()));
+
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        $user_id = RequestMethods::get("user_id");
+        if (!empty($user_id)) {
+            $where = array(
+                "user_id = ?" => $user_id
+            );
+        } else{
+            $where = array();
+        }
+
+        $view = $this->getActionView();
+        $payments = Payment::all($where, array("*"), "created", "desc", $limit, $page);
+        $count = Payment::count($where);
+
+        $view->set("payments", $payments);
+        $view->set("limit", $limit);
+        $view->set("page", $page);
+        $view->set("count", $count);
+        $view->set("user_id", $user_id);
     }
     
 }

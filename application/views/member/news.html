@@ -1,0 +1,49 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h1 class="page-header text-center">News</h1>
+        {if isset($message)}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {$message}
+            </div>
+        {/if}
+        <form class="form-inline text-center" role="form" method="post" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">News</label>
+                    <input type="text" style="width: 400px" name="news" class="form-control" placeholder="Enter Any news to publish" required />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        <hr>
+        <div class="panel panel-default">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>News</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $news in $allnews}
+                    <tr>
+                        <td>{echo $news->value}</td>
+                        <td>{echo $news->created}</td>
+                        <td>
+                            {if($news->live == 0)}
+                                <a href="/admin/edit/meta/{$news->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i> Publish </a>&nbsp;
+                            {/if}
+                            {else}
+                                <a href="/admin/edit/meta/{$news->id}/live/0" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i> UnPublish </a>&nbsp;
+                            {/else}
+                            <a href="/admin/delete/meta/{$news->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

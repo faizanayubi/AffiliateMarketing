@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header text-center">Platforms</h3>
+        <form class="form-inline text-center" method="post" action="" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="sr-only">Link</label>
+                <input type="url" name="link" class="form-control" placeholder="Page Link" required="">
+            </div>
+            <div class="form-group">
+                <label class="sr-only">Image</label>
+                <input type="file" name="fbadmin" class="form-control" placeholder="Image" required=>
+            </div>
+            <input type="hidden" name="action" value="addPlatform">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <hr>
+        {if isset($message)}
+            <div class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                {$message}
+            </div>
+        {/if}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Link</th>
+                        <th>Image</th>
+                        <!--<th>Status</th>-->
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $platform in $platforms}
+                    <tr>
+                        <td>{$platform->id}</td>
+                        <td><a href="{$platform->link}" target="_blank">{$platform->link}</a></td>
+                        <td><a href="/public/assets/uploads/images/{$platform->image}" target="_blank"><img src="/content/resize/{echo base64_encode($platform->image)}/50/50"></a></td>
+                        <!--<td>
+                            {if($platform->live)}
+                                <span class="label label-success">Verified</span>
+                            {/if}
+                            {else}
+                                <span class="label label-warning">Unverified</span>
+                            {/else}
+                        </td>-->
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

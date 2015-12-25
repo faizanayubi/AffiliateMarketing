@@ -40,55 +40,35 @@ $(document).ready(function() {
     $(".shortenURL").click(function(e) {
         e.preventDefault();
         var btn = $(this),
-            longURL = btn.data('longurl'),
-            description = btn.data('description'),
+            hash = btn.data('hash'),
             title = btn.data('title'),
             item = btn.data('item');
-        request.read({
-            action: "member/shortenURL",
-            data: {
-                longURL: longURL,
-                item: item
-            },
-            callback: function(data) {
-                btn.closest('div').find('.shorturl').val(data.shortURL);
-                btn.closest('div').find('.shorturl').focus();
-                $('#link_data').val(title+"\n"+description+"\n"+data.shortURL);
-                $('#link_modal').modal('show');
-                document.execCommand('SelectAll');
-                document.execCommand("Copy", false, null);
-            }
-        });
+
+        if ($('#domain').length) {
+            request.read({
+                action: "member/shortenURL",
+                data: {
+                    hash: hash,
+                    item: item
+                },
+                callback: function(data) {
+                    btn.closest('div').find('.shorturl').val(data.shortURL);
+                    btn.closest('div').find('.shorturl').focus();
+                    $('#link_data').val(title+"\n"+data.shortURL);
+                    $('#link_modal').modal('show');
+                    document.execCommand('SelectAll');
+                    document.execCommand("Copy", false, null);
+                }
+            });
+        } else {
+            alert("Select your domain first");
+            window.location.href = "/member/profile";
+        };
 
     });
 
     $('#link_data').mouseup(function() {
         $(this)[0].select();
-    });
-
-    $('button[name=message]').click(function(e) {
-        var self = this;
-        window.opts.subject = $(this).data("subject");
-        window.opts.email = $(this).data("from");
-        $('#message_modal').modal('show');
-    });
-
-    $('#messageform').submit(function(e) {
-        e.preventDefault();
-        var body = $('#body').val();
-        request.create({
-            action: "employer/messages",
-            data: {
-                action: 'support',
-                subject: window.opts.subject,
-                email: window.opts.email,
-                body: body
-            },
-            callback: function(data) {
-                $('#status').html('Message Sent Successfully!!!');
-                $('#message_modal').modal('hide');
-            }
-        });
     });
 
     // find all the selectors 
@@ -114,10 +94,10 @@ $(document).ready(function() {
             property = item.data('property');
         item.html('<i class="fa fa-spinner fa-pulse"></i>');
         request.read({
-            action: "content/rpm",
+            action: "analytics/link",
             data: {shortURL: shortURL},
             callback: function(data) {
-                item.html('RPM : ₹ '+ data.rpm +', Click : '+ data.click +', Earning : ₹ '+ data.earning);
+                item.html('RPM : <i class="fa fa-inr"></i> '+ data.rpm +', Click : '+ data.click +', Earning : <i class="fa fa-inr"></i> '+ data.earning);
             }
         });
 
@@ -157,57 +137,25 @@ function copy() {
     document.execCommand("Copy", false, null);
 }
 
-function clickToday () {
-    var track = getCookie('clickToday');
-    if (track != "") {
-        //cookie exists
-        $('#clickToday').html(getCookie('clickToday'));
-        $('#unverifiedEarning').html(getCookie('unverifiedEarning'));
-    } else {
-        request.read({
-            action: "member/clicksToday",
-            data: {},
-            callback: function(data) {
-                $('#clickToday').html(data.click);
-                setCookie('clickToday', data.click, 1/24);
-
-                $('#unverifiedEarning').html(data.earning);
-                setCookie('unverifiedEarning', data.earning, 1/24);
-            }
-        });
-    }
-}
-
 function realtime () {
-    $('#realtime_avgrpm').html('<i class="fa fa-spinner fa-pulse"></i>');
     $('#realtime_earnings').html('<i class="fa fa-spinner fa-pulse"></i>');
     $('#realtime_clicks').html('<i class="fa fa-spinner fa-pulse"></i>');
-    
+    $('#realtime_avgrpm').html('<i class="fa fa-spinner fa-pulse"></i>');
+
     request.read({
         action: "analytics/realtime",
         data: {},
         callback: function(data) {
-            $('#realtime_avgrpm').html(data.avgrpm);
-            $('#realtime_earnings').html(data.earnings);
+            $('#realtime_avgrpm').html('<i class="fa fa-inr"></i>' + data.avgrpm);
+            $('#realtime_earnings').html('<i class="fa fa-inr"></i>' + data.earnings);
             $('#realtime_clicks').html(data.clicks);
         }
     });
 }
 
-function getRPM (item_id) {
-    var track = getCookie('rpm_'+item_id);
-    if (track != "") {
-        //cookie exists
-        return JSON.parse(track);
-    } else {
-        request.read({
-            action: "content/rpm",
-            data: {item_id: item_id},
-            callback: function(data) {
-                var json_str = JSON.stringify(arr);
-                setCookie('rpm_'+item_id, json_str, 1);
-                return data;
-            }
-        });
-    }
-}
+//zopim chat
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="//v2.zopim.com/?3UYLJ4Bx85yteg0JLqupr1VkHpkSBm5L";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");

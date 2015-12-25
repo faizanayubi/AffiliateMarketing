@@ -1,22 +1,26 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">Payments</h1>
+        <h3 class="page-header">Payments</h3>
+        <p>For any payments related issue leave us a message below</p>
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
-                        <th>Transaction Id</th>
-                        <th>Date</th>
-                        <th>Remarks</th>
+                        <th>Id</th>
+                        <th>Mode</th>
                         <th>Paid Amount</th>
+                        <th>Ref Id</th>
+                        <th>Date</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {foreach $earn in $payments}
+                    {foreach $payment in $payments}
                     <tr>
-                        <td>{$earn->created}</td>
-                        <td>{$earn->amount}</td>
-                        <td>{$earn->live}</td>
+                        <td>{$payment->id}</td>
+                        <td>{$payment->mode}</td>
+                        <td>{$payment->amount}</td>
+                        <td>{$payment->ref_id}</td>
+                        <td>{$payment->created}</td>
                     </tr>
                     {/foreach}
                 </tbody>

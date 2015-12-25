@@ -1,0 +1,55 @@
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h3 class="page-header text-center">Payments</h3>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" style="width: 150px" name="user_id" class="form-control" placeholder="Enter User Id" value="{$user_id}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <hr>
+        <div class="panel panel-default">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PaymentId</th>
+                        <th>UserId</th>
+                        <th>Name</th>
+                        <th>Mode</th>
+                        <th>Paid Amount</th>
+                        <th>Ref Id</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foreach $payment in $payments}
+                    {script $user = User::first(array("id = ?" => $payment->user_id), array("id", "name"))}
+                    <tr>
+                        <td>{$payment->id}</td>
+                        <td>{$user->id}</td>
+                        <td>{$user->name}</td>
+                        <td>{$payment->mode}</td>
+                        <td>{$payment->amount}</td>
+                        <td>{$payment->ref_id}</td>
+                        <td>{$payment->created}</td>
+                    </tr>
+                    {/foreach}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center">
+            <ul class="pager">
+                {if($page != 1)}
+                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                {/if}
+                {if($page < $count/$limit)}
+                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                {/if}
+            </ul>
+        </div>
+
+    </div>
+</div>

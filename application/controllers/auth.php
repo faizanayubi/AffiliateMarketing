@@ -159,7 +159,7 @@ class Auth extends Controller {
         );
         $domains = Meta::all($where);
         $session->set("domains", $domains);
-        self::redirect("/member");
+        self::redirect("/publisher");
     }
 
     /**

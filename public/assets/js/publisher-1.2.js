@@ -20,7 +20,7 @@ $(document).ready(function() {
         e.preventDefault();
         var data = $(this).serializeArray();
         request.read({
-            action: "member/stats",
+            action: "publisher/stats",
             data: data,
             callback: function(data) {
                 $('#stats').html('');
@@ -46,7 +46,7 @@ $(document).ready(function() {
 
         if ($('#domain').length) {
             request.read({
-                action: "member/shortenURL",
+                action: "publisher/shortenURL",
                 data: {
                     hash: hash,
                     item: item
@@ -62,7 +62,7 @@ $(document).ready(function() {
             });
         } else {
             alert("Select your domain first");
-            window.location.href = "/member/profile";
+            window.location.href = "/publisher/profile";
         };
 
     });

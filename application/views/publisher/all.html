@@ -1,6 +1,6 @@
 <div id="page-wrapper">
     <div class="row col-lg-12">
-        <h1 class="page-header text-center">Members</h1>
+        <h1 class="page-header text-center">Publishers</h1>
         <form class="form-inline text-center" role="form" method="get" action="">
             <div class="form-group">
                 <div class="input-group">
@@ -62,7 +62,7 @@
                             {else}
                                 <a href="/admin/edit/user/{$user->id}/live/0" class="btn btn-warning btn-xs"><i class="fa fa-ban"></i></a>&nbsp;
                             {/else}
-                            <a href="/member/delete/{$user->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
+                            <a href="/publisher/delete/{$user->id}" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></a>
                             <a href="/admin/update/user/{$user->id}" class="btn btn-info btn-xs"><i class="fa fa-edit"></i></a>
                             <a href="/auth/loginas/{$user->id}" class="btn btn-default btn-xs"><i class="fa fa-sign-in"></i> Login As</a>
                         </td>

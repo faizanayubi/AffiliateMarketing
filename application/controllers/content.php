@@ -8,7 +8,7 @@
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
 
-class Content extends Member {
+class Content extends Publisher {
 
     protected $rpm = array(
         "IN" => 135,
@@ -20,7 +20,7 @@ class Content extends Member {
     );
 
     /**
-     * @before _secure, memberLayout
+     * @before _secure, publisherLayout
      */
     public function index() {
         $this->seo(array("title" => "Favourite Categories", "view" => $this->getLayoutView()));

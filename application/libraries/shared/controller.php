@@ -55,7 +55,7 @@ namespace Shared {
         public function _session() {
             $user = $this->getUser();
             if ($user) {
-                header("Location: /member.html");
+                header("Location: /publisher.html");
                 exit();
             }
         }

@@ -1,6 +1,18 @@
 <div class="row">
     <div class="col-lg-12"><br>
-        {if isset($news)}
+        {if(!$user->domain)}
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <h4>Custom Domain Not Created!</h4>
+            <p>Hi there, you have not created your custom domain by which we will track your links, also add your bank account number for payouts.</p>
+            <p>
+                <a href="/publisher/profile" class="btn btn-default">Create Domain</a>
+            </p>
+        </div>
+        {/if}
+        {if(isset($news))}
             <div class="alert alert-success alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                 {$news->value}
@@ -70,26 +82,6 @@
 
 </div>
 
-{if($user->domain == "")}
-<div class="row text-center">
-    <form class="form-horizontal" method="post" action="/member/profile">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Custom Domain</label>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    <span class="input-group-addon">http://</span>
-                    <input type="text" name="domain" class="form-control" placeholder="Enter Custom Domain name" required="">
-                    <span class="input-group-addon">.{$domain}</span>
-                    <input type="hidden" name="target" value=".{$domain}">
-                </div>
-            </div>
-        </div>
-        <input type="hidden" name="action" value="saveUser">
-    </form>
-    <strong>Note : </strong><i>You can only set custom domain once, do not include any special characters or space</i>
-</div>
-{/if}
-
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">
@@ -126,7 +118,7 @@
             {/else}
             <div class="panel-body">
                 <div class="text-right">
-                    <a href="/member/mylinks">View All Links <i class="fa fa-arrow-circle-right"></i></a>
+                    <a href="/publisher/mylinks">View All Links <i class="fa fa-arrow-circle-right"></i></a>
                 </div>
             </div>
             

@@ -28,14 +28,7 @@ class Stat extends Shared\Model {
      * @readwrite
      * @type integer
      */
-    protected $_verifiedClicks;
-    
-    /**
-     * @column
-     * @readwrite
-     * @type integer
-     */
-    protected $_shortUrlClicks;
+    protected $_click;
 
     /**
      * @column
@@ -45,11 +38,12 @@ class Stat extends Shared\Model {
      */
     protected $_item_id;
 
+    
     /**
      * @column
      * @readwrite
-     * @type text
-     * @length 255
+     * @type decimal
+     * @lenght 10,2
      */
     protected $_amount;
 
@@ -57,8 +51,7 @@ class Stat extends Shared\Model {
      * @column
      * @readwrite
      * @type decimal
-     * @lenght 10,3
+     * @lenght 10,2
      */
     protected $_rpm;
-    
 }

@@ -17,7 +17,8 @@ class CRON extends Auth {
     
     protected function verify() {
         $counter = 0;
-        $startdate = date('Y-m-d', strtotime("-7 day"));
+        $now = strftime("%Y-%m-%d", strtotime('now'));
+        $startdate = date('Y-m-d', strtotime("-15 day"));
         $enddate = date('Y-m-d', strtotime("now"));
         $where = array(
             "live = ?" => true,
@@ -27,36 +28,33 @@ class CRON extends Auth {
         $links = Link::all($where, array("id", "short", "item_id", "user_id"));
 
         foreach ($links as $link) {
-            $data = $link->stat();
-            if ($data["click"] > 20) {
+            $data = $link->stat($now);
+            if ($data["click"] > 10) {
                 $this->saveStats($data, $link);
 
                 //sleep the script
-                if ($counter == 10) {
-                    sleep(1);
-                    $counter = 0;
-                }
-                ++$counter;
+                sleep(1);
             }
         }
     }
 
     protected function saveStats($data, $link) {
-        $now = date('Y-m-d', strtotime("now"));
-        $exist = Stat::first(array("link_id = ?" => $link->id, "created > ?" => $now));
-        if(!$exist) {
+        $stat = Stat::first(array("link_id = ?" => $link->id));
+        if(!$stat) {
             $stat = new Stat(array(
                 "user_id" => $link->user_id,
                 "link_id" => $link->id,
-                "verifiedClicks" => $data["verified"],
-                "shortUrlClicks" => $data["click"],
                 "item_id" => $link->item_id,
+                "click" => $data["click"],
                 "amount" => $data["earning"],
                 "rpm" => $data["rpm"]
             ));
-            $stat->save();
-            return $stat;
+        } else {
+            $stat->click = $data["click"];
+            $stat->amount = $data["earning"];
+            $stat->rpm = $data["rpm"];
         }
+        $stat->save();
     }
     
 }

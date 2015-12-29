@@ -22,7 +22,7 @@ class Publisher extends Analytics {
         $database = Registry::get("database");
         $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?", $this->user->id)->all();
         $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short"), "created", "desc", 5, 1);
-        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks"))->where("user_id=?", $this->user->id)->all();
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "clicks"))->where("user_id=?", $this->user->id)->all();
     
         $view->set("total", $total);
         $view->set("paid", round($paid[0]["earn"], 2));
@@ -81,9 +81,9 @@ class Publisher extends Analytics {
             $diff = date_diff(date_create($startdate), date_create($enddate));
             for ($i = 0; $i < $diff->format("%a"); $i++) {
                 $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));$count = 0;
-                $stats = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("shortUrlClicks"));
+                $stats = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("click"));
                 foreach ($stats as $stat) {
-                    $count += $stat->shortUrlClicks;
+                    $count += $stat->click;
                 }
                 $obj[] = array('y' => $date, 'a' => $count);
             }

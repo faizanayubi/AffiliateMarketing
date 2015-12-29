@@ -14,28 +14,18 @@ class Publisher extends Analytics {
      * @before _secure, publisherLayout
      */
     public function index() {
-        $this->seo(array(
-            "title" => "Dashboard",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Dashboard","view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $news = Meta::first(array("property = ?" => "news", "live = ?" => 1));
         $yesterday = strftime("%Y-%m-%d", strtotime('-1 day'));
-        $yrpm = array();
-        $trpm = array();
         
         $database = Registry::get("database");
         $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?", $this->user->id)->all();
-
         $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short"), "created", "desc", 5, 1);
-        
-        $view->set("totalEarning", 0);
-        $view->set("totalClicks", 0);
-        $view->set("totalRPM", 0);
-        $view->set("yesterdayEarning", 0);
-        $view->set("yesterdayClicks", 0);
-        $view->set("yesterdayRPM", 0);
-        $view->set("paid", 0);
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks"))->where("user_id=?", $this->user->id)->all();
+    
+        $view->set("total", $total);
+        $view->set("paid", round($paid[0]["earn"], 2));
         $view->set("links", $links);
         $view->set("news", $news);
         $view->set("today", $this->today());
@@ -154,7 +144,6 @@ class Publisher extends Analytics {
 
         $records = $collection->find(array('created' => $today));
         $records->sort(array("click" => -1));
-        $records->limit(10);
         if (isset($records)) {
             foreach ($records as $record) {
                 if (isset($stats[$record['user_id']])) {

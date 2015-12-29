@@ -102,45 +102,18 @@ class Analytics extends Admin {
     /**
      * @before _secure
      */
-    public function link($duration = "allTime") {
+    public function link($date = NULL) {
         $this->JSONview();
         $view = $this->getActionView();
 
         $shortURL = RequestMethods::get("shortURL");
         $link = Link::first(array("short = ?" => $shortURL), array("item_id", "short", "user_id"));
-        $result = $link->stat($duration);
+        $result = $link->stat($date);
         
         $view->set("earning", $result["earning"]);
         $view->set("click", $result["click"]);
         $view->set("rpm", $result["rpm"]);
-        $view->set("verified", $result["verified"]);
-    }
-
-    /**
-     * @before _secure
-     */
-    public function realtime($duration = "allTime") {
-        $this->JSONview();
-        $view = $this->getActionView();
-
-        $earnings = 0;
-        $clicks = 0;
-        $verified = 0;
-        $links = Link::all(array("user_id = ?" => $this->user->id, "created >= ?" => date('Y-m-d', strtotime("-3 day"))), array("short", "item_id", "user_id"));
-        foreach ($links as $link) {
-            $result = $link->stat($duration);
-            if ($result) {
-                $clicks += $result["click"];
-                $earnings += $result["earning"];
-                $verified += $result["verified"];
-            }
-            $result = 0;
-        }
-
-        $view->set("avgrpm", round(($earnings*1000)/($clicks), 2));
-        $view->set("earnings", $earnings);
-        $view->set("clicks", $clicks);
-        $view->set("verified", $verified);
+        $view->set("analytics", $result["analytics"]);
     }
 
     /**
@@ -170,33 +143,41 @@ class Analytics extends Admin {
     }
 
     protected function today() {
-        $today = strftime("%Y-%m-%d", strtotime('now'));
-        $m = new MongoClient();
-        $db = $m->stats;
+        $now = strftime("%Y-%m-%d", strtotime('now'));
+        $total_click = 0;
+        $earning = 0;
+        $analytics = array();
+        $countries = array("IN", "US", "CA", "AU","GB");
+        $rpm = array("IN" => 135, "US" => 220, "CA" => 220, "AU" => 220, "GB" => 220, "NONE" => 100);
+        $return = array("click" => 0, "rpm" => 0, "earning" => 0, "analytics" => array());
+
+        $connection = new Mongo();
+        $db = $connection->stats;
         $collection = $db->hits;
-        $stats = array();$stat = array();
 
-        $records = $collection->find(array('user_id' => $this->user->id, 'created' => $today));
-        if (isset($records)) {
-            foreach ($records as $record) {
-                if (isset($stats[$record['country']])) {
-                    $stats[$record['country']] += $record['click'];
-                } else {
-                    $stats[$record['country']] = $record['click'];
-                }
-            }
-
-            foreach ($stats as $key => $value) {
-                array_push($stat, array(
-                    "country" => $key,
-                    "count" => $value
-                ));
+        $cursor = $collection->find(array('user_id' => $this->user->id, 'created' => $now));
+        foreach ($cursor as $id => $result) {
+            $code = $result["country"];
+            $total_click += $result["click"];
+            if (in_array($code, $countries)) {
+                $earning += ($rpm[$code])*($result["click"])/1000;
+                $analytics[$code] += $result["click"];
+            } else {
+                $earning += ($rpm["NONE"])*($result["click"])/1000;
+                $analytics["NONE"] += $result["click"];
             }
             
-            return $stat;
-        } else{
-            return 0;
         }
-    }
-    
+
+        if ($total_click > 0) {
+            $return = array(
+                "click" => round($total_click),
+                "rpm" => round($earning*1000/$total_click, 2),
+                "earning" => round($earning, 2),
+                "analytics" => $analytics
+            );
+        }
+
+        return $return;
+    }    
 }

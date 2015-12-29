@@ -18,16 +18,19 @@
                 {$news->value}
             </div>
         {/if}
-        {if($today)}
+        {if($today['click'])}
         <div class="panel panel-success">
             <div class="panel-heading text-center">
                 <strong>Today Clicks</strong>
             </div>
             <table class="table">
                 <tr>
-                    {foreach $t in $today}
-                    <td>{echo $t['country']}: {echo $t['count']}</td>
-                    {/foreach}
+                    <td>IN: {echo $today['analytics']['IN']}</td>
+                    <td>US: {echo $today['analytics']['US']}</td>
+                    <td>CA: {echo $today['analytics']['CA']}</td>
+                    <td>AU: {echo $today['analytics']['AU']}</td>
+                    <td>GB: {echo $today['analytics']['GB']}</td>
+                    <td>Others: {echo $today['analytics']['NONE']}</td>
                 </tr>
             </table>
         </div>
@@ -36,46 +39,35 @@
 </div>
 <div class="row">
 
-    <div class="col-lg-3 col-md-3">
-        <div class="panel panel-default">
-            <ul class="list-group" onclick="realtime();">
-                <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Last 3 Day Links</li>
-                <li class="list-group-item">Clicks<span class="badge" id="realtime_clicks">View</span></li>
-                <li class="list-group-item">Average RPM <span class="badge" id="realtime_avgrpm">View</span></li>
-                <li class="list-group-item">Earnings <span class="badge" id="realtime_earnings">View</span></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-4 col-md-4">
         <div class="panel panel-default">
             <ul class="list-group">
-                <li class="list-group-item active text-center"><i class="fa fa-line-chart"></i> Yesterday Stats</li>
-                <li class="list-group-item">Clicks <span class="badge">{$yesterdayClicks}</span></li>
-                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $yesterdayRPM}</span></li>
-                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {$yesterdayEarning}</span></li>
+                <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Today</li>
+                <li class="list-group-item">Clicks<span class="badge">{echo $today['click']}</span></li>
+                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $today['rpm']}</span></li>
+                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo $today['earning']}</span></li>
             </ul>
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-4 col-md-4">
         <div class="panel panel-default">
             <ul class="list-group">
-                <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Verified Stats</li>
-                <li class="list-group-item">Clicks <span class="badge">{$totalClicks}</span></li>
-                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $totalRPM}</span></li>
-                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {$totalEarning}</span></li>
+                <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Stats</li>
+                <li class="list-group-item">Clicks <span class="badge">{echo round($total[0]["click"], 2)}</span></li>
+                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</span></li>
+                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
             </ul>
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-3">
+    <div class="col-lg-4 col-md-4">
         <div class="panel panel-default">
             <ul class="list-group">
                 <li class="list-group-item active text-center"><i class="fa fa-money"></i> Total Payments</li>
-                <li class="list-group-item">Earned <span class="badge"><i class="fa fa-inr"></i> {$totalEarning}</span></li>
+                <li class="list-group-item">Earned <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
                 <li class="list-group-item">Paid <span class="badge"><i class="fa fa-inr"></i> {$paid}</span></li>
-                <li class="list-group-item">Pending <span class="badge"><i class="fa fa-inr"></i> {echo $totalEarning-$paid}</span></li>
+                <li class="list-group-item">Pending <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)-$paid}</span></li>
             </ul>
         </div>
     </div>

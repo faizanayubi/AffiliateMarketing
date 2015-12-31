@@ -123,43 +123,37 @@ class Publisher extends Analytics {
      * @before _secure, publisherLayout
      */
     public function topearners() {
-        $this->seo(array(
-            "title" => "Top Earners",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Top Earners", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $today = strftime("%Y-%m-%d", strtotime('now'));
-        $database = Registry::get("database");
-        $result = $database->execute("SELECT user_id, SUM(shortUrlClicks) as click FROM stats GROUP BY user_id ORDER BY click DESC LIMIT 10");
-        $earners = array();
-        for ($i = 0; $i < $result->num_rows; $i++) {
-            $data = $result->fetch_array(MYSQLI_ASSOC);
-            $earners[] = $data;
-        }
-
-        $m = new MongoClient();
+        
+        $m = new Mongo();
         $db = $m->stats;
         $collection = $db->hits;
         $stats = array();$stat = array();
 
-        $records = $collection->find(array('created' => $today));
-        $records->sort(array("click" => -1));
-        if (isset($records)) {
-            foreach ($records as $record) {
-                if (isset($stats[$record['user_id']])) {
+        $cursor = $collection->find(array('created' => $today));
+        if ($cursor) {
+            foreach ($cursor as $key => $record) {
+                if ($stats[$record['user_id']]) {
                     $stats[$record['user_id']] += $record['click'];
                 } else {
                     $stats[$record['user_id']] = $record['click'];
                 }
             }
 
+            $stats = $this->array_sort($stats, 'click', SORT_DESC);
+            $count = 0;
             foreach ($stats as $key => $value) {
                 array_push($stat, array(
                     "user_id" => $key,
                     "count" => $value
                 ));
+                if ($count > 10) {
+                    break;
+                }
+                $count++;
             }
-            
             $view->set("today", $stat);
         }
 
@@ -178,7 +172,7 @@ class Publisher extends Analytics {
         $limit = RequestMethods::get("limit", 10);
         
         $view = $this->getActionView();
-        $stats = Stat::all(array("user_id = ?" => $this->user->id), array("DISTINCT link_id"), "created", "desc", $limit, $page);
+        $stats = Stat::all(array("user_id = ?" => $this->user->id), array("link_id"), "created", "desc", $limit, $page);
         $count = count($stats);
 
         $view->set("stats", $stats);

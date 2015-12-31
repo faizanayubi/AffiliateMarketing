@@ -35,12 +35,12 @@
                 </thead>
                 <tbody>
                     {foreach $stat in $stats}
-                    {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "shortUrlClicks"), "created", "desc")}
+                    {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "click"), "created", "desc")}
                     {script $link = Link::first(array("id = ?" => $stat->link_id), array("short"))}
                     <tr>
                         <td>{$stat->id}</td>
                         <td>{$link->short}</td>
-                        <td>{$stat->shortUrlClicks}</td>
+                        <td>{$stat->click}</td>
                         <td><i class="fa fa-inr"></i> {$stat->rpm}</td>
                         <td>{echo \Framework\StringMethods::only_date($stat->created)}</td>
                         <td><i class="fa fa-inr"></i> {echo $stat->amount}</td>

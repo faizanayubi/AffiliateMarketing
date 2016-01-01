@@ -105,6 +105,55 @@ $(document).ready(function() {
 
 });
 
+function today () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    } 
+
+    if(mm<10) {
+        mm='0'+mm
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    return today;
+}
+
+function stats() {
+    request.read({
+        action: "analytics/stats/" + today(),
+        callback: function(data) {
+            $('#today_click').html(data.stats.click);
+            $('#today_rpm').html('<i class="fa fa-inr"></i> '+ data.stats.rpm);
+            $('#today_earning').html('<i class="fa fa-inr"></i> '+ data.stats.earning);
+
+            var gdpData = data.stats.analytics;
+            $('#world-map').vectorMap({
+                map: 'world_mill_en',
+                series: {
+                    regions: [{
+                        values: gdpData,
+                        scale: ['#C8EEFF', '#0071A4'],
+                        normalizeFunction: 'polynomial'
+                    }]
+                },
+                onRegionTipShow: function(e, el, code) {
+                    if (gdpData.hasOwnProperty(code)) {
+                        el.html(el.html() + ' (Clicks - ' + gdpData[code] + ')');
+                    } else{
+                        el.html(el.html() + ' (Clicks - 0)');
+                    };
+                }
+            });
+        }
+    });
+}
+
+
 function toArray(object) {
     var array = $.map(object, function(value, index) {
         return [value];
@@ -137,25 +186,8 @@ function copy() {
     document.execCommand("Copy", false, null);
 }
 
-function realtime () {
-    $('#realtime_earnings').html('<i class="fa fa-spinner fa-pulse"></i>');
-    $('#realtime_clicks').html('<i class="fa fa-spinner fa-pulse"></i>');
-    $('#realtime_avgrpm').html('<i class="fa fa-spinner fa-pulse"></i>');
-
-    request.read({
-        action: "analytics/realtime",
-        data: {},
-        callback: function(data) {
-            $('#realtime_avgrpm').html('<i class="fa fa-inr"></i>' + data.avgrpm);
-            $('#realtime_earnings').html('<i class="fa fa-inr"></i>' + data.earnings);
-            $('#realtime_clicks').html(data.clicks);
-        }
-    });
-}
-
-//zopim chat
 window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
 d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
 _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-$.src="//v2.zopim.com/?3UYLJ4Bx85yteg0JLqupr1VkHpkSBm5L";z.t=+new Date;$.
+$.src="//v2.zopim.com/?3PC3XA60lWz8HPyy7BkzGZoo5L1PUKUw";z.t=+new Date;$.
 type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");

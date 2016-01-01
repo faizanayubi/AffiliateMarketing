@@ -56,44 +56,14 @@
                     <hr>
                     <label>Initial RPM(Rates per thousands Clicks)</label>
                     <div class="form-inline">
+                        {foreach $rpm in $rpms}
                         <div class="form-group">
                             <div class="input-group">
-                                <div class="input-group-addon">IN</div>
-                                <input type="number" class="form-control" placeholder="India" name="rpm[IN]" required="" value="135">
+                                <div class="input-group-addon">{echo $rpm['country']}</div>
+                                <input type="number" class="form-control" style="width: 70px;" name="rpm[{echo $rpm['country']}]" required="" value="{echo $rpm['value']}">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">US</div>
-                                <input type="number" class="form-control" placeholder="United States" name="rpm[US]" required="" value="220">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">CA</div>
-                                <input type="number" class="form-control" placeholder="Canada" name="rpm[CA]" required="" value="220">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">AU</div>
-                                <input type="number" class="form-control" placeholder="Australia" name="rpm[AU]" required="" value="220">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">UK</div>
-                                <input type="number" class="form-control" placeholder="United Kingdom" name="rpm[GB]" required="" value="220">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-addon">Other</div>
-                                <input type="number" class="form-control" placeholder="Others" name="rpm[NONE]" required="" value="100">
-                            </div>
-                        </div>
+                        {/foreach}
                     </div>
                     <input type="hidden" name="action" value="content">
                     <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check-circle"></i> Create</button>

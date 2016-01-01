@@ -1,39 +1,11 @@
+<link rel="stylesheet" href="{echo CDN}css/jquery-jvectormap-2.0.3.css" type="text/css" media="screen"/>
 <div class="row">
     <div class="col-lg-12"><br>
-        {if(!$user->domain)}
-        <div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-            <h4>Custom Domain Not Created!</h4>
-            <p>Hi there, you have not created your custom domain by which we will track your links, also add your bank account number for payouts.</p>
-            <p>
-                <a href="/publisher/profile" class="btn btn-default">Create Domain</a>
-            </p>
-        </div>
-        {/if}
-        {if(isset($news))}
-            <div class="alert alert-success alert-dismissible fade in" role="alert">
+        {if isset($news)}
+            <div class="alert alert-info alert-dismissible fade in" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                 {$news->value}
             </div>
-        {/if}
-        {if($today['click'])}
-        <div class="panel panel-success">
-            <div class="panel-heading text-center">
-                <strong>Today Clicks</strong>
-            </div>
-            <table class="table">
-                <tr>
-                    <td>IN: {echo $today['analytics']['IN']}</td>
-                    <td>US: {echo $today['analytics']['US']}</td>
-                    <td>CA: {echo $today['analytics']['CA']}</td>
-                    <td>AU: {echo $today['analytics']['AU']}</td>
-                    <td>GB: {echo $today['analytics']['GB']}</td>
-                    <td>Others: {echo $today['analytics']['NONE']}</td>
-                </tr>
-            </table>
-        </div>
         {/if}
     </div>
 </div>
@@ -43,9 +15,9 @@
         <div class="panel panel-default">
             <ul class="list-group">
                 <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Today</li>
-                <li class="list-group-item">Clicks<span class="badge">{echo $today['click']}</span></li>
-                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo $today['rpm']}</span></li>
-                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo $today['earning']}</span></li>
+                <li class="list-group-item">Clicks<span class="badge" id="today_click"><i class="fa fa-spinner fa-pulse"></i></span></li>
+                <li class="list-group-item">Average RPM <span class="badge" id="today_rpm"><i class="fa fa-spinner fa-pulse"></i></span></li>
+                <li class="list-group-item">Earnings <span class="badge" id="today_earning"><i class="fa fa-spinner fa-pulse"></i></span></li>
             </ul>
         </div>
     </div>
@@ -54,8 +26,8 @@
         <div class="panel panel-default">
             <ul class="list-group">
                 <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Stats</li>
-                <li class="list-group-item">Clicks <span class="badge">{echo round($total[0]["clicks"], 2)}</span></li>
-                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"]*1000/$total[0]["clicks"], 2)}</span></li>
+                <li class="list-group-item">Clicks <span class="badge">{echo round($total[0]["click"], 2)}</span></li>
+                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</span></li>
                 <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
             </ul>
         </div>
@@ -73,6 +45,28 @@
     </div>
 
 </div>
+<div class="row text-center">
+    <div class="col-lg-12" id="world-map" style="max-width: 1100px; height: 400px"></div>
+</div>
+{if($user->domain == "")}
+<div class="row text-center">
+    <form class="form-horizontal" method="post" action="/publisher/profile">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Custom Domain</label>
+            <div class="col-sm-6">
+                <div class="input-group">
+                    <span class="input-group-addon">http://</span>
+                    <input type="text" name="domain" class="form-control" placeholder="Enter Custom Domain name" required="">
+                    <span class="input-group-addon">.{$domain}</span>
+                    <input type="hidden" name="target" value=".{$domain}">
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="action" value="saveUser">
+    </form>
+    <strong>Note : </strong><i>You can only set custom domain once, do not include any special characters or space</i>
+</div>
+{/if}
 
 <div class="row">
     <div class="col-lg-12">
@@ -117,3 +111,10 @@
         </div>
     </div>
 </div>
+<script src="{echo CDN}js/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="{echo CDN}js/jquery-jvectormap-world-mill-en.js"></script>
+<script type="text/javascript">
+    $(function(){
+        stats();
+    });
+</script>

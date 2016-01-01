@@ -8,7 +8,6 @@
 use Framework\Registry as Registry;
 use Framework\RequestMethods as RequestMethods;
 use \Curl\Curl;
-use ClusterPoint\DB as DB;
 
 class Analytics extends Admin {
     
@@ -113,7 +112,7 @@ class Analytics extends Admin {
         $view->set("earning", $result["earning"]);
         $view->set("click", $result["click"]);
         $view->set("rpm", $result["rpm"]);
-        $view->set("analytics", $result["analytics"]);
+        $view->set("verified", $result["verified"]);
     }
 
     /**
@@ -142,30 +141,49 @@ class Analytics extends Admin {
         $view->set("logs", $logs);
     }
 
-    protected function today() {
+    /**
+     * @before _secure, changeLayout
+     */
+    public function clicks() {
+        $this->seo(array("title" => "Clicks Stats", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+
         $now = strftime("%Y-%m-%d", strtotime('now'));
-        $total_click = 0;
-        $earning = 0;
-        $analytics = array();
-        $countries = array("IN", "US", "CA", "AU","GB");
-        $rpm = array("IN" => 135, "US" => 220, "CA" => 220, "AU" => 220, "GB" => 220, "NONE" => 100);
+        $view->set("date", $now);
+    }
+
+    /**
+     * Today Stats of user
+     * @return array earnings, clicks, rpm, analytics
+     * @before _secure
+     */
+    public function stats($created = NULL, $auth = 1, $user_id = NULL, $item_id = NULL) {
+        $this->seo(array("title" => "Stats", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $total_click = 0;$earning = 0;$analytics = array();$query = array();
+        $rpm = array("IN" => 135, "US" => 270, "CA" => 380, "AU" => 400, "GB" => 310, "NP" => 70, "PK" => 70, "AF" => 70, "BD" => 70, "BR" => 70, "MX" => 70, "NONE" => 105);
         $return = array("click" => 0, "rpm" => 0, "earning" => 0, "analytics" => array());
+
+        is_null($created) ? NULL : $query['created'] = $created;
+        is_null($item_id) ? NULL : $query['item_id'] = $item_id;
+        if ($auth) {
+            $query['user_id'] = (is_null($user_id) ? $this->user->id : $user_id);
+        }
 
         $connection = new Mongo();
         $db = $connection->stats;
         $collection = $db->hits;
 
-        $cursor = $collection->find(array('user_id' => $this->user->id, 'created' => $now));
+        $cursor = $collection->find($query);
         foreach ($cursor as $id => $result) {
             $code = $result["country"];
             $total_click += $result["click"];
-            if (in_array($code, $countries)) {
+            if (array_key_exists($code, $rpm)) {
                 $earning += ($rpm[$code])*($result["click"])/1000;
-                $analytics[$code] += $result["click"];
             } else {
                 $earning += ($rpm["NONE"])*($result["click"])/1000;
-                $analytics["NONE"] += $result["click"];
             }
+            $analytics[$code] += $result["click"];
             
         }
 
@@ -178,7 +196,7 @@ class Analytics extends Admin {
             );
         }
 
-        return $return;
+        $view->set("stats", $return);
     }
 
     protected function array_sort($array, $on, $order=SORT_ASC) {
@@ -214,4 +232,5 @@ class Analytics extends Admin {
 
         return $new_array;
     }
+    
 }

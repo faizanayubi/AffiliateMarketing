@@ -19,26 +19,28 @@ class Finance extends Admin {
     public function pending() {
         $this->seo(array("title" => "Records Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
-
+        $database = Registry::get("database");
+        $where = array();
         $live = RequestMethods::get("live", 0);
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
-        $offset = $limit * ($page - 1);
+        if (RequestMethods::get("user_id")) {
+            $where = array("user_id = ?" => RequestMethods::get("user_id"));
+        }
         
         $accounts = array();
-        
-        $database = Registry::get("database");
-        $result = $database->execute("SELECT SUM(`amount`) AS earn, user_id FROM `stats` WHERE live = {$live} GROUP BY `user_id` LIMIT {$offset}, {$limit}");
-        for ($i=0; $i<$result->num_rows; $i++) {
-            $row=(object) $result->fetch_array(MYSQLI_ASSOC);
-            $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?",$row->user_id)->all();
-            $pending = $row->earn - $paid[0]['earn'];
-            array_push($accounts, array("user_id" => $row->user_id, "pending" => $pending, "paid" => $paid[0]['earn']));
+        $stats = Stat::all($where, array("DISTINCT user_id"), "created", "desc", $limit, $page);
+        foreach ($stats as $stat) {
+            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("user_id=?", $stat->user_id)->all();
+            $payments = $database->query()->from("payments", array("SUM(amount)" => "payment"))->where("user_id=?", $stat->user_id)->all();
+            $pending = $earnings[0]['earn'] - $payments[0]['payment'];
+            if ($pending > 0) {
+                array_push($accounts, array("user_id" => $stat->user_id, "pending" => $pending, "paid" => round($payments[0]["payment"], 2)));
+            }
         }
-        //echo "<pre>", print_r($row), "</pre>";
-
+        
         $view->set("accounts", $accounts);
-        $view->set("count", count($accounts));
+        $view->set("count", count($stats));
         $view->set("page", $page);
         $view->set("limit", $limit);
         $view->set("live", $live);

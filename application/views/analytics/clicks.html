@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="{echo CDN}css/jquery-jvectormap-2.0.3.css" type="text/css" media="screen"/>
+<div id="page-wrapper">
+    <div class="row col-lg-12">
+        <h3 class="page-header text-center">Click Stats</h3>
+        <form class="form-inline text-center" role="form" id="click-stats">
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Date</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                    <input type="date" style="width: 180px" name="date" id="date" class="form-control" value="{$now}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Show</button>
+            <div class="form-group pull-right">
+            	Click: <span id="today_click"></span><br>
+            	RPM: <span id="today_rpm"></span><br>
+            	Earning: <span id="today_earning"></span>
+            </div>
+        </form>
+        <hr>
+    </div>
+    <div class="row text-center">
+        <div class="col-lg-12" id="world-map" style="max-width: 1100px; height: 400px"></div>
+    </div>
+</div>
+<script src="{echo CDN}js/jquery-jvectormap-2.0.3.min.js"></script>
+<script src="{echo CDN}js/jquery-jvectormap-world-mill-en.js"></script>

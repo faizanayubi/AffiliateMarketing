@@ -1,6 +1,15 @@
 <div id="page-wrapper">
     <div class="row col-lg-12">
-        <h1 class="page-header text-center">Finance Records</h1>
+        <h3 class="page-header text-center">Finance Records</h3>
+        <form class="form-inline text-center" role="form" method="get" action="">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" style="width: 150px" name="user_id" class="form-control" placeholder="Enter User Id" value="{$id}" />
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Find</button>
+        </form>
+        <hr>
         <div class="panel panel-default">
             <table class="table">
                 <thead>
@@ -22,9 +31,9 @@
                         {if($account['paid'])}
                             <a href="/finance/payments?user_id={$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Payment History </a>
                         {/if}
-                        {else}
+                        {if($account['pending'] > 0)}
                             <a href="/finance/makepayment/{$user->id}" class="btn btn-primary btn-xs"><i class="fa fa-bank"></i> Make Payment </a>&nbsp;
-                        {/else}
+                        {/if}
                         <a href="/admin/search?model=stat&key=user_id&sign=equal&value={$user->id}" class="btn btn-info btn-xs"><i class="fa fa-inr"></i> Earnings Details</a>&nbsp;
                         <a href="/auth/loginas/{$user->id}" class="btn btn-warning btn-xs"><i class="fa fa-sign-in"></i> Login As</a>
                         </td>

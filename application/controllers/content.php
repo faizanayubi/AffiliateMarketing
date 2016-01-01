@@ -10,14 +10,7 @@ use Framework\Registry as Registry;
 
 class Content extends Publisher {
 
-    protected $rpm = array(
-        "IN" => 135,
-        "US" => 220,
-        "CA" => 220,
-        "AU" => 220,
-        "GB" => 220,
-        "NONE" => 100
-    );
+    protected $rpm = array("IN" => 135, "US" => 270, "CA" => 380, "AU" => 400, "GB" => 310, "NP" => 70, "PK" => 70, "AF" => 70, "BD" => 70, "BR" => 70, "MX" => 70, "NONE" => 105);
 
     /**
      * @before _secure, publisherLayout
@@ -32,7 +25,7 @@ class Content extends Publisher {
         $limit = RequestMethods::get("limit", 12);
 
         $where = array(
-            "title LIKE ?" => "%{$title}%",
+            "url LIKE ?" => "%{$title}%",
             "category LIKE ?" => "%{$category}%",
             "live = ?" => true
         );
@@ -57,6 +50,13 @@ class Content extends Publisher {
     public function create() {
         $this->seo(array("title" => "Create Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+        $rpms = array();
+        foreach ($this->rpm as $key => $value) {
+            array_push($rpms, array(
+                "country" => $key,
+                "value" => $value
+            ));
+        }
         
         if (RequestMethods::post("action") == "content") {
             $item = new Item(array(
@@ -78,6 +78,7 @@ class Content extends Publisher {
 
             $view->set("success", true);
         }
+        $view->set("rpms", $rpms);
     }
     
     /**

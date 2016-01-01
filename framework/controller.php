@@ -177,7 +177,6 @@ namespace Framework {
                                 }
                             }
                         }
-
                         echo json_encode($obj, JSON_PRETTY_PRINT);
                     }
 

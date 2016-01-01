@@ -75,46 +75,11 @@ $(document).ready(function () {
         });
     });
 
-    $('#getstats').submit(function (e) {
-        $('#stats').html('<p class="text-center"><i class="fa fa-spinner fa-spin fa-5x"></i></p>');
+    $('#click-stats').submit(function (e) {
         e.preventDefault();
-        var data = $(this).serializeArray();
-        request.read({
-            action: "member/stats",
-            data: data,
-            callback: function (data) {
-                $('#stats').html('');
-                if (data.data) {
-                    Morris.Bar({
-                        element: 'stats',
-                        data: toArray(data.data),
-                        xkey: 'y',
-                        ykeys: ['a'],
-                        labels: ['Total']
-                    });
-                }
-            }
-        });
-    });
-
-    $('button[name=message]').click(function (e) {
-        var self = this;
-        window.opts.subject = $(this).data("subject");
-        window.opts.email = $(this).data("from");
-        $('#message_modal').modal('show');
-    });
-
-    $('#messageform').submit(function (e) {
-        e.preventDefault();
-        var body = $('#body').val();
-        request.create({
-            action: "employer/messages",
-            data: {action: 'support', subject: window.opts.subject, email: window.opts.email, body: body},
-            callback: function (data) {
-                $('#status').html('Message Sent Successfully!!!');
-                $('#message_modal').modal('hide');
-            }
-        });
+        var date = $('#date').val();
+        $('#world-map').html('');
+        stats(date);
     });
 
     // find all the selectors 
@@ -185,4 +150,52 @@ function toArray(object) {
         return [value];
     });
     return array;
+}
+
+function stats(date) {
+    request.read({
+        action: "analytics/stats/" + date + "/0",
+        callback: function(data) {
+            $('#today_click').html(data.stats.click);
+            $('#today_rpm').html('<i class="fa fa-inr"></i> '+ data.stats.rpm);
+            $('#today_earning').html('<i class="fa fa-inr"></i> '+ data.stats.earning);
+
+            var gdpData = data.stats.analytics;
+            $('#world-map').vectorMap({
+                map: 'world_mill_en',
+                series: {
+                    regions: [{
+                        values: gdpData,
+                        scale: ['#C8EEFF', '#0071A4'],
+                        normalizeFunction: 'polynomial'
+                    }]
+                },
+                onRegionTipShow: function(e, el, code) {
+                    if (gdpData.hasOwnProperty(code)) {
+                        el.html(el.html() + ' (Clicks - ' + gdpData[code] + ')');
+                    } else{
+                        el.html(el.html() + ' (Clicks - 0)');
+                    };
+                }
+            });
+        }
+    });
+}
+
+function today () {
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if(dd<10) {
+        dd='0'+dd
+    } 
+
+    if(mm<10) {
+        mm='0'+mm
+    } 
+
+    today = yyyy+'-'+mm+'-'+dd;
+    return today;
 }

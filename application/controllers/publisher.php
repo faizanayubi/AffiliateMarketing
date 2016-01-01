@@ -6,7 +6,6 @@
  */
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
-use MongoDB\MongoQB as MongoQB;
 
 class Publisher extends Analytics {
 
@@ -22,78 +21,38 @@ class Publisher extends Analytics {
         $database = Registry::get("database");
         $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?", $this->user->id)->all();
         $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short"), "created", "desc", 5, 1);
-        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "clicks"))->where("user_id=?", $this->user->id)->all();
+        
+        $totalEarning = 0; $totalClicks = 0; $yesterdayEarning = 0; $yesterdayClicks = 0;
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "click"))->where("user_id=?", $this->user->id)->all();
     
         $view->set("total", $total);
         $view->set("paid", round($paid[0]["earn"], 2));
         $view->set("links", $links);
         $view->set("news", $news);
-        $view->set("today", $this->today());
+        $view->set("domain", substr($this->target()[array_rand($this->target())], 7));
     }
 
     /**
      * @before _secure, publisherLayout
      */
     public function mylinks() {
-        $this->seo(array(
-            "title" => "Stats Charts",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Stats Charts", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime($startdate . " -7 day")));
-        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime($startdate . "now")));
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
-        
-        $where = array(
-            "user_id = ?" => $this->user->id,
-            "created >= ?" => $this->changeDate($startdate, "-1"),
-            "created <= ?" => $this->changeDate($enddate, "1")
-        );
 
-        $links = Link::all($where, array("id", "item_id", "short", "created"), "created", "desc", $limit, $page);
-        $count = Link::count($where);
+        $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short", "created"), "created", "desc", $limit, $page);
+        $count = Link::count(array("user_id = ?" => $this->user->id));
 
         $view->set("links", $links);
         $view->set("limit", $limit);
         $view->set("page", $page);
         $view->set("count", $count);
-        $view->set("total", Link::count(array("user_id = ?" => $this->user->id)));
     }
     
     /**
-     * @before _secure, publisherLayout
-     */
-    public function stats($id='') {
-        $this->seo(array(
-            "title" => "Stats Charts",
-            "view" => $this->getLayoutView()
-        ));
-        $view = $this->getActionView();
-        
-        if (RequestMethods::get("action") == "showStats") {
-            $startdate = RequestMethods::get("startdate");
-            $enddate = RequestMethods::get("enddate");
-
-            $link = Link::first(array("id = ?" => $id, "user_id = ?" => $this->user->id), array("id"));
-            
-            $diff = date_diff(date_create($startdate), date_create($enddate));
-            for ($i = 0; $i < $diff->format("%a"); $i++) {
-                $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));$count = 0;
-                $stats = Stat::first(array("link_id = ?" => $link->id, "created LIKE ?" => "%{$date}%"), array("click"));
-                foreach ($stats as $stat) {
-                    $count += $stat->click;
-                }
-                $obj[] = array('y' => $date, 'a' => $count);
-            }
-            
-            $view->set("data", \Framework\ArrayMethods::toObject($obj));
-        }
-    }
-    
-    /**
-     * Shortens the url for member
+     * Shortens the url for publishers
      * @before _secure, publisherLayout
      */
     public function shortenURL() {
@@ -185,10 +144,7 @@ class Publisher extends Analytics {
      * @before _secure, publisherLayout
      */
     public function profile() {
-        $this->seo(array(
-            "title" => "Profile",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Profile", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         $account = Account::first(array("user_id = ?" => $this->user->id));
         
@@ -199,7 +155,7 @@ class Publisher extends Analytics {
             $user->phone = RequestMethods::post('phone', $user->phone);
             $user->name = RequestMethods::post('name', $user->name);
             $user->username = RequestMethods::post('username', $user->username);
-            if(empty($user->domain)) {
+            if(!$user->domain) {
                 $domain = "http://".RequestMethods::post('domain').RequestMethods::post("target");
                 $exist = User::first(array("domain = ?" => $domain), array("id"));
                 if($exist) {
@@ -235,14 +191,10 @@ class Publisher extends Analytics {
      * @before _secure, publisherLayout
      */
     public function payments() {
-        $this->seo(array(
-            "title" => "Payments",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Payments", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
 
         $payments = Payment::all(array("user_id = ?" => $this->user->id));
-
-        $view = $this->getActionView();
         $view->set("payments", $payments);
     }
 
@@ -250,10 +202,7 @@ class Publisher extends Analytics {
      * @before _secure, publisherLayout
      */
     public function platforms() {
-        $this->seo(array(
-            "title" => "Platforms",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Platforms", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
         if (RequestMethods::post("action") == "addPlatform") {
@@ -380,27 +329,27 @@ class Publisher extends Analytics {
         $this->defaultLayout = "layouts/publisher";
         $this->setLayout();
     }
-	
-	/**
+    
+    /**
      * @before _secure, changeLayout, _admin
      */
-	public function settings() {
-		$this->seo(array("title" => "Settings", "view" => $this->getLayoutView()));
+    public function settings() {
+        $this->seo(array("title" => "Settings", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
         $login = Meta::first(array("property = ?" => "login"), array("id", "value"));
         $commision = Meta::first(array("property = ?" => "commision"));
 
         if (RequestMethods::post("commision")) {
-        	$commision->value = RequestMethods::post("commision");
-        	$commision->save();
+            $commision->value = RequestMethods::post("commision");
+            $commision->save();
         }
 
         $view->set("login", $login);
         $view->set("commision", $commision);
-	}
+    }
 
-	/**
+    /**
      * @before _secure, changeLayout, _admin
      */
     public function fraud() {

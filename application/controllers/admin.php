@@ -22,9 +22,8 @@ class Admin extends Auth {
         $latest = strftime("%Y-%m-%d", strtotime($record->created));
 
         $database = Registry::get("database");
-        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks", "SUM(verifiedClicks)" => "vclicks"))->where("created LIKE ?", "%{$latest}%")->all();
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "clicks"))->all();
         $payments = $database->query()->from("payments", array("SUM(amount)" => "payment"))->all();
-        $yesterday = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(shortUrlClicks)" => "clicks", "SUM(verifiedClicks)" => "vclicks"))->where("created LIKE ?", "%{$yesterday}%")->all();
         
         $view->set("now", $now);
         $view->set("total", $total);
@@ -52,6 +51,7 @@ class Admin extends Auth {
         $view->set("items", array());
         $view->set("values", array());
         $view->set("model", $model);
+        $view->set("models", Shared\Markup::models());
         $view->set("page", $page);
         $view->set("limit", $limit);
         $view->set("property", $property);
@@ -218,8 +218,12 @@ class Admin extends Auth {
             }
             $view->set("data", \Framework\ArrayMethods::toObject($obj));
         }
+        $view->set("models", Shared\Markup::models());
     }
 
+    /**
+     * @before _secure, _admin
+     */
     protected function sync($model) {
         $this->noview();
         $db = Framework\Registry::get("database");

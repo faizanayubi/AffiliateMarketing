@@ -6,17 +6,9 @@
                 <div class="input-group">
                     <label class="sr-only">Table</label>
                     <select name="model" class="form-control" value="{$model}" id="searchModel">
-                        <option value="account">Account</option>
-                        <option value="earning">Earning</option>
-                        <option value="item">Item</option>
-                        <option value="link">Link</option>
-                        <option value="meta">Meta</option>
-                        <option value="payment">Payment</option>
-                        <option value="platform">Platform</option>
-                        <option value="rpm">RPM</option>
-                        <option value="social">Social</option>
-                        <option value="stat">Stat</option>
-                        <option value="user" selected="selected">User</option>
+                        {foreach $m in $models}
+                        <option value="{$m}">{echo ucfirst($m)}</option>
+                        {/foreach}
                     </select>
                 </div>
             </div>

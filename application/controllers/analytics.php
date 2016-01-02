@@ -112,7 +112,7 @@ class Analytics extends Admin {
         $view->set("earning", $result["earning"]);
         $view->set("click", $result["click"]);
         $view->set("rpm", $result["rpm"]);
-        $view->set("verified", $result["verified"]);
+        $view->set("analytics", $result["analytics"]);
     }
 
     /**

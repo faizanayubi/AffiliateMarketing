@@ -11,7 +11,7 @@ class CRON extends Auth {
     public function index() {
         $this->noview();
         $this->log("CRON Started");
-        $this->reset();
+        $this->verify();
         $this->log("CRON Ended");
     }
     
@@ -28,7 +28,7 @@ class CRON extends Auth {
 
         foreach ($links as $link) {
             $data = $link->stat($yesterday);
-            if ($data["click"] > 20) {
+            if ($data["click"] > 30) {
                 $this->saveStats($data, $link);
 
                 //sleep the script
@@ -54,17 +54,17 @@ class CRON extends Auth {
             $stat->rpm = $data["rpm"];
         }
         $stat->save();
+        $this->log(print_r($stat));
     }
 
     protected function reset() {
         $db = Framework\Registry::get("database");
         $db->sync(new Stat);
-
-        $links = Link::all($where, array("id", "short", "item_id", "user_id"));
+        $links = Link::all(array(), array("id", "short", "item_id", "user_id"));
         $startdate = date('Y-m-d', strtotime("-5 day"));
         $enddate = date('Y-m-d', strtotime("-1 day"));
         $diff = date_diff(date_create($startdate), date_create($enddate));
-        for ($i = 0; $i < $diff->format("%a"); $i++) {
+        for ($i = 0; $i <= $diff->format("%a"); $i++) {
             $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));
             foreach ($links as $link) {
                 $data = $link->stat($date);

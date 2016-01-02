@@ -132,7 +132,7 @@ class Publisher extends Analytics {
         
         $view = $this->getActionView();
         $stats = Stat::all(array("user_id = ?" => $this->user->id), array("link_id"), "created", "desc", $limit, $page);
-        $count = count($stats);
+        $count = Stat::count(array("user_id = ?" => $this->user->id));
 
         $view->set("stats", $stats);
         $view->set("limit", $limit);

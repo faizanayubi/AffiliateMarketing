@@ -38,7 +38,7 @@ class Link extends Shared\Model {
     }
 
     public function mongodb($date = NULL) {
-        $m = new MongoClient();
+        $m = new Mongo();
         $db = $m->stats;
         $collection = $db->hits;
         $stats = array();$stat = array();
@@ -75,35 +75,38 @@ class Link extends Shared\Model {
     }
 
     public function stat($date = NULL) {
-        $total_click = 0;
-        $earning = 0;
-        $analytics = array();
-        $countries = array("IN", "US", "CA", "AU","GB");
+        $total_click = 0;$earning = 0;$analytics = array();
         $return = array("click" => 0, "rpm" => 0, "earning" => 0, "analytics" => 0);
 
-        
         $results = $this->mongodb($date);
         if (is_array($results)) {
+            //commision
+            $meta = Meta::first(array("property = ?" => "commision"), array("value"));
+            $commision = 1 - ($meta->value)/100;
 
             //rpm
             $rpms = RPM::first(array("item_id = ?" => $this->item_id), array("value"));
-            $rpm = json_decode($rpms->value);
+            $rpm = json_decode($rpms->value, true);
 
             foreach ($results as $result) {
                 $code = $result["country"];
                 $total_click += $result["count"];
-                if (in_array($code, $countries)) {
-                    $earning += ($rpm->$code)*($result["count"])/1000;
+                if (array_key_exists($code, $rpm)) {
+                    $earning += ($rpm[$code])*($result["count"])*($commision)/1000;
+                } else {
+                    $earning += ($rpm["NONE"])*($result["count"])*($commision)/1000;
+                }
+
+                if (array_key_exists($code, $analytics)) {
                     $analytics[$code] += $result["count"];
                 } else {
-                    $earning += ($rpm->NONE)*($result["count"])/1000;
-                    $analytics["NONE"] += $result["count"];
+                    $analytics[$code] = $result["count"];
                 }
             }
 
             if ($total_click > 0) {
                 $return = array(
-                    "click" => round($total_click),
+                    "click" => round($total_click*$commision),
                     "rpm" => round($earning*1000/$total_click, 2),
                     "earning" => round($earning, 2),
                     "analytics" => $analytics

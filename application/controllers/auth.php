@@ -35,7 +35,7 @@ class Auth extends Controller {
             }
         }
         
-        if (RequestMethods::post("action") == "login") {
+        if (RequestMethods::post("action") == "login" && $this->reCaptcha()) {
             $email = RequestMethods::post("email");
             $exist = User::first(array("email = ?" => $email), array("id", "email"));
             if($exist) {
@@ -57,7 +57,7 @@ class Auth extends Controller {
                             $this->setUser($user);
                             $this->session();
                         }
-                        $view->set("message", "We are Updating Login on Saturday, Tomorrow");
+                        $view->set("message", "We are Updating Login after sometime");
                     }
                 } else{
                     $view->set("message", 'Wrong Password, Try again or <a href="/auth/login?action=reset&email='.$email.'">Reset Password</a>');
@@ -81,7 +81,7 @@ class Auth extends Controller {
         ));
         $view = $this->getActionView();
         
-        if (RequestMethods::post("action") == "register") {
+        if (RequestMethods::post("action") == "register" && $this->reCaptcha()) {
             $exist = User::first(array("email = ?" => RequestMethods::post("email")));
             if (!$exist) {
                 $user = new User(array(
@@ -162,6 +162,16 @@ class Auth extends Controller {
         self::redirect("/publisher");
     }
 
+    protected function reCaptcha() {
+        $g_recaptcha_response = RequestMethods::post("g-recaptcha-response", '03AHJ_Vut4zQ1SeLzhjSRqza49bNphfWsmpzejAkFADRA5hUN9hcBZdDq6fr8iA8aUhmJPlWxrG_7ImqQ3mheofTBVoT8MhUJRWNLTGpUofNVeVPREHmVqBPOQC80S70Gpt5UzT4E390NOhrOxc93gR5-h998bllqaWF180_yyMX2JqsfsgBx8R1gED5sJ8Zu8M7aRVRrAMBvfx8BBmUOG5QPnvPhcdIaq9pkCYiNC2Smr_JDLoL9jeB2uFGFsNaZaNuAIqffi9d_aF0HypLlo3TOCyhrPSeIz8lLmMpamOGjJqq_62SufW4vJ4ZYBSG4dBW0J_g7saqWljmULRJqW9veba-3AIErK7cDoDmgZCP9HtKDgx2ZOQXkvS_8Rnqwj-iAXFmHsLmOJ8CBMQ4j0dYwEHelkwlL6q5hUOqswrWrCab8eZ8xXEhme-qsjoHeTSlbwGSXHW5i-gPV_-qKOkWwxGDKkFzk6QkaJ6vRXRoGygaTcYQXO4ClDaUZOgKPJEhK0LbS-Hs4excNlCk-Ff23wiwGcyuqOOZ1oRH-L9X1eNwqHd-MFFZoPG99s45gURcHA4UMEPkAy60WT8BHGD1Z3_HbsVTX7Ana9d0vyuhr0ou7E0kWfwdHCrEQ5jOpp2J4z4Kn6aeMnpExO028-4VhAL-pGy_gcErEohBaQO7BZPtR4jB7iC4iytQrl6u5KDaSkWHO9KunFgO3UCHzoA3C08z6PjkU4Eq5fYSy5bwTMH_R6WHsH3RON0VQwJCuJu8XlwnDwKqC5siYVJ5EVE50r0xNEAGQgPUjwZIHFzoZO0g7NejN_1p3hgzpoAYFaW6mSzXxK08aaLD0nbxRWxWO9fbIIPQfRVLnkSMHikTZyqwPBJyVQJlEe65CFV1KdDzYUsAOZH3wUKFRC1L4EgkRLlvFnq1wlRA');
+        $curl = new Curl();
+        $curl->post('https://www.google.com/recaptcha/api/siteverify', array(
+            'secret' => '6LfRZRQTAAAAABxnjW_9e6x_BgzVc_b2ghnxmE8D',
+            'response' => $g_recaptcha_response
+        ));
+        return $curl->response->success;
+    }
+
     /**
      * @before _secure, _admin
      */
@@ -209,8 +219,8 @@ class Auth extends Controller {
                 $sendgrid = $this->sendgrid();
                 $email = new \SendGrid\Email();
                 $email->setSmtpapiTos($emails)
-                        ->setFrom('info@swiftintern.com')
-                        ->setFromName("Swiftintern Team")
+                        ->setFrom('info@earnings.in')
+                        ->setFromName("EarnBugs Team")
                         ->setSubject($options["subject"])
                         ->setHtml($body);
                 $sendgrid->send($email);

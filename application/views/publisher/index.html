@@ -48,26 +48,6 @@
 <div class="row text-center">
     <div class="col-lg-12" id="world-map" style="max-width: 1100px; height: 400px"></div>
 </div>
-{if($user->domain == "")}
-<div class="row text-center">
-    <form class="form-horizontal" method="post" action="/publisher/profile">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Custom Domain</label>
-            <div class="col-sm-6">
-                <div class="input-group">
-                    <span class="input-group-addon">http://</span>
-                    <input type="text" name="domain" class="form-control" placeholder="Enter Custom Domain name" required="">
-                    <span class="input-group-addon">.{$domain}</span>
-                    <input type="hidden" name="target" value=".{$domain}">
-                </div>
-            </div>
-        </div>
-        <input type="hidden" name="action" value="saveUser">
-    </form>
-    <strong>Note : </strong><i>You can only set custom domain once, do not include any special characters or space</i>
-</div>
-{/if}
-
 <div class="row">
     <div class="col-lg-12">
         <div class="panel panel-default">

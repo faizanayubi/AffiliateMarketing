@@ -42,29 +42,26 @@ $(document).ready(function() {
         var btn = $(this),
             hash = btn.data('hash'),
             title = btn.data('title'),
-            item = btn.data('item');
+            description = btn.data('description'),
+            item = btn.data('item'),
+            domain = btn.closest('div').find('.domain option:selected').text();
 
-        if ($('#domain').length) {
-            request.read({
-                action: "publisher/shortenURL",
-                data: {
-                    hash: hash,
-                    item: item
-                },
-                callback: function(data) {
-                    btn.closest('div').find('.shorturl').val(data.shortURL);
-                    btn.closest('div').find('.shorturl').focus();
-                    $('#link_data').val(title+"\n"+data.shortURL);
-                    $('#link_modal').modal('show');
-                    document.execCommand('SelectAll');
-                    document.execCommand("Copy", false, null);
-                }
-            });
-        } else {
-            alert("Select your domain first");
-            window.location.href = "/publisher/profile";
-        };
-
+        request.read({
+            action: "publisher/shortenURL",
+            data: {
+                hash: hash,
+                item: item,
+                domain: domain
+            },
+            callback: function(data) {
+                btn.closest('div').find('.shorturl').val(data.shortURL);
+                btn.closest('div').find('.shorturl').focus();
+                $('#link_data').val(title+"\n"+description+"\n"+data.shortURL);
+                $('#link_modal').modal('show');
+                document.execCommand('SelectAll');
+                document.execCommand("Copy", false, null);
+            }
+        });
     });
 
     $('#link_data').mouseup(function() {

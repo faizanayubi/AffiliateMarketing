@@ -7,7 +7,6 @@
                 Content Updated <strong>Successfully!</strong>
             </div>
             {/if}
-            <p>Note : Do not Include <b>"&", "=" or any special character</b> in any field below(these are reserved for tracking)</p>
             <form class="panel panel-default text-center" method="post" action="">
                 <table class="table">
                     <tbody>
@@ -73,47 +72,14 @@
                         <tr>
                             <td><b>RPM</b></td>
                             <td class="form-inline">
+                                {foreach $rpm in $rpms}
                                 <div class="form-group">
                                     <div class="input-group">
-                                        <div class="input-group-addon">IN</div>
-                                        <input type="number" class="form-control" placeholder="India" name="rpm_in" value="{echo $rpm_in->value}" required="">
+                                        <div class="input-group-addon">{echo $rpm['country']}</div>
+                                        <input type="number" class="form-control" style="width: 70px;" name="rpm[{echo $rpm['country']}]" required="" value="{echo $rpm['value']}">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">US</div>
-                                        <input type="number" class="form-control" placeholder="United States" name="rpm_us" value="{echo $rpm_us->value}" required="">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">CA</div>
-                                        <input type="number" class="form-control" placeholder="Canada" name="rpm_ca" value="{echo $rpm_ca->value}" required="">
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>RPM</b></td>
-                            <td class="form-inline">
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">AU</div>
-                                        <input type="number" class="form-control" placeholder="Australia" name="rpm_au" value="{echo $rpm_au->value}" required="">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">UK</div>
-                                        <input type="number" class="form-control" placeholder="New Zealand" name="rpm_uk" value="{echo $rpm_uk->value}" required="">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">Other</div>
-                                        <input type="number" class="form-control" placeholder="None" name="rpm_none" value="{echo $rpm_none->value}" required="">
-                                    </div>
-                                </div>
+                                {/foreach}
                             </td>
                         </tr>
                         <tr>

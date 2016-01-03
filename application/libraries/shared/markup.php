@@ -44,11 +44,11 @@ namespace Shared {
         public static function models() {
             $model = array();
             $path = APP_PATH . "/application/models";
-            $iterator = new DirectoryIterator($path);
+            $iterator = new \DirectoryIterator($path);
 
             foreach ($iterator as $item) {
                 if (!$item->isDot()) {
-                    array_push($model, $item->getFilename());
+                    array_push($model, substr($item->getFilename(), 0, -4));
                 }
             }
 

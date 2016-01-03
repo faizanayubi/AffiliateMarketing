@@ -59,20 +59,18 @@ class Publisher extends Analytics {
         $this->JSONview();
         $view = $this->getActionView();
         
-        if($this->user->domain) {
-            $longURL = $this->user->domain . '?item=' . RequestMethods::get("hash");
-            $googl = Registry::get("googl");
-            $object = $googl->shortenURL($longURL);
-            $link = Link::first(array("short = ?" => $object->id));
-            if (!$link) {
-                $link = new Link(array(
-                    "user_id" => $this->user->id,
-                    "short" => $object->id,
-                    "item_id" => RequestMethods::get("item"),
-                    "live" => 1
-                ));
-                $link->save();
-            }
+        $longURL = RequestMethods::get("domain") . '?item=' . RequestMethods::get("hash");
+        $googl = Registry::get("googl");
+        $object = $googl->shortenURL($longURL);
+        $link = Link::first(array("short = ?" => $object->id));
+        if (!$link) {
+            $link = new Link(array(
+                "user_id" => $this->user->id,
+                "short" => $object->id,
+                "item_id" => RequestMethods::get("item"),
+                "live" => 1
+            ));
+            $link->save();
         }
         $view->set("shortURL", $object->id);
         $view->set("googl", $object);

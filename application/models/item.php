@@ -62,7 +62,12 @@ class Item extends Shared\Model {
      */
     protected $_user_id;
 
-    public function encode($username, $user_id) {
-        return base64_encode("id={$this->id}&title={$this->title}&description={$this->description}&image={$this->image}&url={$this->url}&username={$username}&user_id={$user_id}");
+    public function cleanand($subject) {
+        return str_replace(array("&", "="), array("", ""), $subject);
+    }
+
+    public function encode($user_id, $username) {
+        $e = "id=".$this->id."&title=".$this->cleanand($this->title)."&description=".$this->cleanand($this->description)."&image=".$this->cleanand($this->image)."&url=".$this->cleanand($this->url)."&username=".$this->cleanand($username)."&user_id=".$user_id."&time=".time();
+        return base64_encode($e);
     }
 }

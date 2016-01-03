@@ -54,7 +54,7 @@ class CRON extends Auth {
             $stat->rpm = $data["rpm"];
         }
         $stat->save();
-        $this->log(print_r($stat));
+        $this->log("<pre>", print_r($stat), "</pre>");
     }
 
     protected function reset() {

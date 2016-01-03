@@ -19,13 +19,15 @@ class Content extends Publisher {
         $this->seo(array("title" => "Favourite Categories", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
+        $query = RequestMethods::get("query", "");
         $title = RequestMethods::get("title", "");
         $category = implode(",", RequestMethods::get("category", ""));
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 12);
 
         $where = array(
-            "url LIKE ?" => "%{$title}%",
+            "url LIKE ?" => "%{$query}%",
+            "title LIKE ?" => "%{$title}%",
             "category LIKE ?" => "%{$category}%",
             "live = ?" => true
         );
@@ -33,9 +35,8 @@ class Content extends Publisher {
         $items = Item::all($where, array("id", "title", "image", "url", "description"), "created", "desc", $limit, $page);
         $count = Item::count($where);
 
-        $session = Registry::get("session");
-
         $view->set("limit", $limit);
+        $view->set("query", $query);
         $view->set("title", $title);
         $view->set("page", $page);
         $view->set("count", $count);
@@ -96,8 +97,7 @@ class Content extends Publisher {
 
         $where = array(
             "url LIKE ?" => "%{$website}%",
-            "created >= ?" => $this->changeDate($startdate, "-1"),
-            "created <= ?" => $this->changeDate($enddate, "1")
+            "title LIKE ?" => "%{$website}%"
         );
         
         $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "created", "desc", $limit, $page);
@@ -117,6 +117,14 @@ class Content extends Publisher {
         $view = $this->getActionView();
         $item = Item::first(array("id = ?" => $id));
         $rpm = RPM::first(array("item_id = ?" => $item->id));
+
+        $rpms = array();
+        foreach (json_decode($rpm->value, true) as $key => $value) {
+            array_push($rpms, array(
+                "country" => $key,
+                "value" => $value
+            ));
+        }
         
         if (RequestMethods::post("action") == "update") {
             $item->title = RequestMethods::post("title");
@@ -134,6 +142,7 @@ class Content extends Publisher {
             $view->set("errors", $item->getErrors());
         }
         $view->set("item", $item);
+        $view->set("rpms", $rpms);
         $view->set("categories", explode(",", $item->category));
     }
     

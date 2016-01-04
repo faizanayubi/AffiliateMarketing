@@ -1,0 +1,8 @@
+# basic password protection
+
+AuthUserFile .htpasswd
+AuthName "Username and password required"
+AuthType Basic
+<Limit GET POST>
+	Require valid-user
+</Limit>

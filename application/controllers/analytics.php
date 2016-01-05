@@ -232,5 +232,16 @@ class Analytics extends Admin {
 
         return $new_array;
     }
+
+    public function test() {
+        $this->noview();
+        $cache = new Framework\Cache(array("type" =>"mongod"));
+        $m = $cache->initialize();
+        $m->connect('stats');
+        $data = $m->get("hits", array(), 10);
+        foreach ($data as $key => $value) {
+            echo "<pre>", print_r($value), "</pre>";
+        }
+    }
     
 }

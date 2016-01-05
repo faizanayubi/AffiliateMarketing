@@ -1,6 +1,6 @@
 # basic password protection
 
-AuthUserFile .htpasswd
+AuthUserFile /home/admin/web/earnbugs.in/public_html/application/libraries/MongoDB/.htpasswd
 AuthName "Username and password required"
 AuthType Basic
 <Limit GET POST>

@@ -7,6 +7,7 @@
 use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 use Framework\Registry as Registry;
+use \Curl\Curl;
 
 class Auth extends Controller {
     

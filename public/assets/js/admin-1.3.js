@@ -75,6 +75,20 @@ $(document).ready(function () {
         });
     });
 
+    tinymce.init({
+        selector: ".editor",
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        autosave_ask_before_unload: false,
+        max_height: 200,
+        min_height: 160,
+        height: 180
+    });
+
     $('#click-stats').submit(function (e) {
         e.preventDefault();
         var date = $('#date').val();

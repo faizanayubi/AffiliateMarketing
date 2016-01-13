@@ -1,75 +1,71 @@
-<div class="row">
-    <div class="col-lg-12">
-        <h3 class="page-header text-center">Earnings</h3>
-        <form class="form-inline text-center" role="form" method="get" action="">
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">From</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
-                    <input type="date" style="width: 200px" name="startdate" class="form-control" />
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header text-center">Earnings</h3>
+                <form class="form-inline text-center" role="form" method="get" action="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">From</label>
+                            <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                            <input type="date" style="width: 200px" name="startdate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">To</label>
+                            <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                            <input type="date" style="width: 200px" name="enddate" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Show</button>
+                </form>
+                <hr> {if($stats)}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Link</th>
+                                <th>Clicks</th>
+                                <th>Avg RPM</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $stat in $stats} {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "click"), "created", "desc")} {script $link = Link::first(array("id = ?" => $stat->link_id), array("short"))}
+                            <tr>
+                                <td>{$stat->id}</td>
+                                <td>{$link->short}</td>
+                                <td>{$stat->click}</td>
+                                <td><i class="fa fa-inr"></i> {$stat->rpm}</td>
+                                <td>{echo \Framework\StringMethods::only_date($stat->created)}</td>
+                                <td><i class="fa fa-inr"></i> {echo $stat->amount}</td>
+                                <td>
+                                    {if($stat->live)}
+                                    <span class="label label-success">Paid</span> {/if} {else}
+                                    <span class="label label-warning">UnPaid</span> {/else}
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">To</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
-                    <input type="date" style="width: 200px" name="enddate" class="form-control" />
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Show</button>
-        </form>
-        <hr>
-        {if($stats)}
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Link</th>
-                        <th>Clicks</th>
-                        <th>Avg RPM</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach $stat in $stats}
-                    {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "click"), "created", "desc")}
-                    {script $link = Link::first(array("id = ?" => $stat->link_id), array("short"))}
-                    <tr>
-                        <td>{$stat->id}</td>
-                        <td>{$link->short}</td>
-                        <td>{$stat->click}</td>
-                        <td><i class="fa fa-inr"></i> {$stat->rpm}</td>
-                        <td>{echo \Framework\StringMethods::only_date($stat->created)}</td>
-                        <td><i class="fa fa-inr"></i> {echo $stat->amount}</td>
-                        <td>
-                            {if($stat->live)}
-                                <span class="label label-success">Paid</span>
+                {/if} {else}
+                <p>Check Later</p>
+                {/else}
+                <div class="text-center">
+                    <ul class="pager">
+                        {if($page != 1)}
+                        <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                        {/if} {if($page
+                        < $count/$limit)} <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
                             {/if}
-                            {else}
-                                <span class="label label-warning">UnPaid</span>
-                            {/else}
-                        </td>
-                    </tr>
-                    {/foreach}
-                </tbody>
-            </table>
-        </div>
-        {/if}
-        {else}
-            <p>Check Later</p>
-        {/else}
-        <div class="text-center">
-            <ul class="pager">
-                {if($page != 1)}
-                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-                {/if}
-                {if($page < $count/$limit)}
-                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-                {/if}
-            </ul>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

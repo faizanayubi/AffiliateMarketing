@@ -1,71 +1,71 @@
-<div class="row">
-    <div class="col-lg-12">
-        <h3 class="page-header text-center">Link Stats</h3>
-        <form class="form-inline text-center" role="form" method="get" action="">
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">From</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
-                    <input type="date" style="width: 200px" name="startdate" class="form-control" />
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header text-center">Link Stats</h3>
+                <form class="form-inline text-center" role="form" method="get" action="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">From</label>
+                            <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
+                            <input type="date" style="width: 200px" name="startdate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">To</label>
+                            <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
+                            <input type="date" style="width: 200px" name="enddate" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Show</button>
+                </form>
+                <hr>
+                <div class="panel panel-default">
+                    {if($links)}
+                    <div class="panel-body text-center">
+                        <p><b>{echo $count}</b> Links found of <b>{echo $total}</b> links</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Link Title</th>
+                                    <th>Short URL</th>
+                                    <th>Created</th>
+                                    <th>Realtime</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {foreach $link in $links} {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
+                                <tr>
+                                    <td>{$link->id}</td>
+                                    <td>{$item->title}</td>
+                                    <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
+                                    <td>{$link->created}</td>
+                                    <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
+                                        <span class="label label-success">View</span>
+                                    </td>
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/if} {else}
+                    <p class="text-center">Hi, you have not generated any link to share on your platform.</p>
+                    {/else}
+                </div>
+                <div class="text-center">
+                    <ul class="pager">
+                        {if($page != 1)}
+                        <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                        {/if} {if($page
+                        < $count/$limit)} <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                            {/if}
+                    </ul>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">To</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
-                    <input type="date" style="width: 200px" name="enddate" class="form-control" />
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Show</button>
-        </form>
-        <hr>
-        <div class="panel panel-default">
-            {if($links)}
-            <div class="panel-body text-center">
-                <p><b>{echo $count}</b> Links found of <b>{echo $total}</b> links</p>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Link Title</th>
-                            <th>Short URL</th>
-                            <th>Created</th>
-                            <th>Realtime</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {foreach $link in $links}
-                        {script $item = Item::first(array("id = ?" => $link->item_id), array("title"))}
-                        <tr>
-                            <td>{$link->id}</td>
-                            <td>{$item->title}</td>
-                            <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
-                            <td>{$link->created}</td>
-                            <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
-                                <span class="label label-success">View</span>
-                            </td>
-                        </tr>
-                        {/foreach}
-                    </tbody>
-                </table>
-            </div>
-            {/if} {else}
-            <p class="text-center">Hi, you have not generated any link to share on your platform.</p>
-            {/else}
         </div>
-
-        <div class="text-center">
-            <ul class="pager">
-                {if($page != 1)}
-                <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-                {/if}
-                {if($page < $count/$limit)}
-                <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-                {/if}
-            </ul>
-        </div>
-        
     </div>
 </div>

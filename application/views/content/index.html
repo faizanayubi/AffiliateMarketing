@@ -1,67 +1,71 @@
 {include publisher/modal_link.html}
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header text-center">{$category}</h1>
-        <form class="form-inline text-center" role="form" method="get" action="">
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">Website</label>
-                    <select name="query" class="form-control" value="{$query}">
-                        <option value="filmycity">FilmyCity.in</option>
-                        <option value="filmymagic">FilmyMagic.com</option>
-                        <option value="viraltabloid">Viraltabloid.in</option>
-                        <option value="kapilsharmafc">Kapilsharmafc.com</option>
-                    </select>
-                </div>
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header text-center">{$category}</h1>
+                <form class="form-inline text-center" role="form" method="get" action="">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">Website</label>
+                            <select name="query" class="form-control" value="{$query}">
+                                <option value="filmycity">FilmyCity.in</option>
+                                <option value="filmymagic">FilmyMagic.com</option>
+                                <option value="viraltabloid">Viraltabloid.in</option>
+                                <option value="kapilsharmafc">Kapilsharmafc.com</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <label class="sr-only">Title</label>
+                            <input type="text" style="width: 300px" name="title" class="form-control" placeholder="Search here..." value="{$title}" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+                <hr>
             </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">Title</label>
-                    <input type="text" style="width: 300px" name="title" class="form-control" placeholder="Search here..." value="{$title}" />
+            <div class="row">
+                {foreach $item in $items}
+                <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">{echo substr($item->title, 0, 68)}</div>
+                        <div class="panel-body">
+                            <a href="{echo $item->url}" target="_blank"><img src="/content/resize/{echo base64_encode($item->image)}" alt="{echo $item->title}" width="440"></a>
+                        </div>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {script $k = array_rand($domains)}
+                                        <select class="form-control domain">
+                                            <option value="{echo $domains[$k]}">{echo $domains[$k]}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control shorturl">
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-success shortenURL" data-item="{echo $item->id}" data-hash="{echo $item->encode($user->id, $user->username)}" data-title="{echo $item->title}" data-description="{echo $item->description}">Generate Link</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                {/foreach}
             </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-        </form>
-        <hr>
-    </div>
-    <div class="row">
-        {foreach $item in $items}
-        <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">{echo substr($item->title, 0, 68)}</div>
-                <div class="panel-body">
-                    <a href="{echo $item->url}" target="_blank"><img src="/content/resize/{echo base64_encode($item->image)}" alt="{echo $item->title}" width="460"></a>
-                </div>
-                <table class="table">
-                    <tbody>
-                        <tr>
-                            <td>
-                                {script $k = array_rand($domains)}
-                                <select class="form-control domain">
-                                <option value="{echo $domains[$k]}">{echo $domains[$k]}</option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control shorturl">
-                            </td>
-                            <td>
-                                <button class="btn btn-success shortenURL" data-item="{echo $item->id}" data-hash="{echo $item->encode($user->id, $user->username)}" data-title="{echo $item->title}" data-description="{echo $item->description}">Generate Link</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="text-center">
+                <ul class="pager">
+                    {if($page != 1)}
+                    <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                    {/if}
+                    {if($page < $count/$limit)}
+                    <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                    {/if}
+                </ul>
             </div>
         </div>
-        {/foreach}
-    </div>
-    <div class="text-center">
-        <ul class="pager">
-            {if($page != 1)}
-            <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-            {/if}
-            {if($page < $count/$limit)}
-            <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-            {/if}
-        </ul>
     </div>
 </div>

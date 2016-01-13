@@ -1,100 +1,97 @@
-<link rel="stylesheet" href="{echo CDN}css/jquery-jvectormap-2.0.3.css" type="text/css" media="screen"/>
-<div class="row">
-    <div class="col-lg-12"><br>
-        {if isset($news)}
-            <div class="alert alert-info alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                {$news->value}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <link rel="stylesheet" href="{echo CDN}css/jquery-jvectormap-2.0.3.css" type="text/css" media="screen" />
+        <div class="row">
+            <div class="col-lg-12">
+                <br> {if isset($news)}
+                <div class="alert alert-info alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    {$news->value}
+                </div>
+                {/if}
             </div>
-        {/if}
-    </div>
-</div>
-<div class="row">
-
-    <div class="col-lg-4 col-md-4">
-        <div class="panel panel-default">
-            <ul class="list-group">
-                <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Today</li>
-                <li class="list-group-item">Clicks<span class="badge" id="today_click"><i class="fa fa-spinner fa-pulse"></i></span></li>
-                <li class="list-group-item">Average RPM <span class="badge" id="today_rpm"><i class="fa fa-spinner fa-pulse"></i></span></li>
-                <li class="list-group-item">Earnings <span class="badge" id="today_earning"><i class="fa fa-spinner fa-pulse"></i></span></li>
-            </ul>
         </div>
-    </div>
-
-    <div class="col-lg-4 col-md-4">
-        <div class="panel panel-default">
-            <ul class="list-group">
-                <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Stats</li>
-                <li class="list-group-item">Clicks <span class="badge">{echo round($total[0]["click"], 2)}</span></li>
-                <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</span></li>
-                <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="col-lg-4 col-md-4">
-        <div class="panel panel-default">
-            <ul class="list-group">
-                <li class="list-group-item active text-center"><i class="fa fa-money"></i> Total Payments</li>
-                <li class="list-group-item">Earned <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
-                <li class="list-group-item">Paid <span class="badge"><i class="fa fa-inr"></i> {$paid}</span></li>
-                <li class="list-group-item">Pending <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)-$paid}</span></li>
-            </ul>
-        </div>
-    </div>
-
-</div>
-<div class="row text-center">
-    <div class="col-lg-12" id="world-map" style="max-width: 1100px; height: 400px"></div>
-</div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
-            </div>
-            {if($links)}
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>Link Title</th>
-                            <th>Short URL</th>
-                            <th>Realtime Stats</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {foreach $link in $links}
-                            {script $item = Item::first(array("id = ?" => $link->item_id), array("title", "url"))}
-                            <tr>
-                                <td><a href="{$item->url}" target="_blank">{$item->title}</a></td>
-                                <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
-                                <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
-                                    <span class="label label-success">View</span>
-                                </td>
-                            </tr>
-                        {/foreach}
-                    </tbody>
-                </table>
-            </div>
-            {/if}
-            {else}
-                <p>Hi, you have not generated any link to share on your platform.</p>
-            {/else}
-            <div class="panel-body">
-                <div class="text-right">
-                    <a href="/publisher/mylinks">View All Links <i class="fa fa-arrow-circle-right"></i></a>
+        <div class="row">
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item active text-center"><i class="fa fa-globe"></i> Realtime Today</li>
+                        <li class="list-group-item">Clicks<span class="badge" id="today_click"><i class="fa fa-spinner fa-pulse"></i></span></li>
+                        <li class="list-group-item">Average RPM <span class="badge" id="today_rpm"><i class="fa fa-spinner fa-pulse"></i></span></li>
+                        <li class="list-group-item">Earnings <span class="badge" id="today_earning"><i class="fa fa-spinner fa-pulse"></i></span></li>
+                    </ul>
                 </div>
             </div>
-            
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item active text-center"><i class="fa fa-check-circle"></i> Overall Stats</li>
+                        <li class="list-group-item">Clicks <span class="badge">{echo round($total[0]["click"], 2)}</span></li>
+                        <li class="list-group-item">Average RPM <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</span></li>
+                        <li class="list-group-item">Earnings <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        <li class="list-group-item active text-center"><i class="fa fa-money"></i> Total Payments</li>
+                        <li class="list-group-item">Earned <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)}</span></li>
+                        <li class="list-group-item">Paid <span class="badge"><i class="fa fa-inr"></i> {$paid}</span></li>
+                        <li class="list-group-item">Pending <span class="badge"><i class="fa fa-inr"></i> {echo round($total[0]["earn"], 2)-$paid}</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-lg-12" id="world-map" style="max-width: 1100px; height: 400px"></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
+                    </div>
+                    {if($links)}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Link Title</th>
+                                    <th>Short URL</th>
+                                    <th>Realtime Stats</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {foreach $link in $links} {script $item = Item::first(array("id = ?" => $link->item_id), array("title", "url"))}
+                                <tr>
+                                    <td><a href="{$item->url}" target="_blank">{$item->title}</a></td>
+                                    <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
+                                    <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
+                                        <span class="label label-success">View</span>
+                                    </td>
+                                </tr>
+                                {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/if} {else}
+                    <p>Hi, you have not generated any link to share on your platform.</p>
+                    {/else}
+                    <div class="panel-body">
+                        <div class="text-right">
+                            <a href="/publisher/mylinks">View All Links <i class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <script src="{echo CDN}js/jquery-jvectormap-2.0.3.min.js"></script>
 <script src="{echo CDN}js/jquery-jvectormap-world-mill-en.js"></script>
 <script type="text/javascript">
-    $(function(){
-        stats();
-    });
+$(function() {
+    stats();
+});
 </script>

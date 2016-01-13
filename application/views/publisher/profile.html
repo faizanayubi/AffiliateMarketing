@@ -2,7 +2,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
-                <h3 class="page-header">Profile</h3> {if isset($message)}
+                <h3 class="page-header">Profile</h3>
+                {if isset($message)}
                 <div class="alert alert-success alert-dismissible fade in" role="alert">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
                     {$message}
@@ -18,7 +19,8 @@
                         <div class="col-sm-9">
                             <input type="text" name="domain" class="form-control" placeholder="Enter Domain name only" value="{$user->domain}" disabled="">
                         </div>
-                        {/if} {else}
+                        {/if}
+                        {else}
                         <div class="col-sm-3">
                             <input type="text" name="domain" class="form-control" placeholder="Enter Domain name only" value="{$user->domain}" required="">
                         </div>

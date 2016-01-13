@@ -15,12 +15,7 @@ class Auth extends Controller {
      * @before _session
      */
     public function login() {
-        $this->defaultLayout = "layouts/blank";
-        $this->setLayout();
-        $this->seo(array(
-            "title" => "Login",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Login", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
         if (RequestMethods::get("action") == "reset") {
@@ -74,12 +69,7 @@ class Auth extends Controller {
      * @before _session
      */
     public function register() {
-        $this->defaultLayout = "layouts/blank";
-        $this->setLayout();
-        $this->seo(array(
-            "title" => "Register",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Register", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
         if (RequestMethods::post("action") == "register" && $this->reCaptcha()) {

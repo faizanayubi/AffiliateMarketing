@@ -108,12 +108,7 @@ class Auth extends Controller {
     }
 
     public function forgotpassword() {
-        $this->defaultLayout = "layouts/blank";
-        $this->setLayout();
-        $this->seo(array(
-            "title" => "Forgot Password",
-            "view" => $this->getLayoutView()
-        ));
+        $this->seo(array("title" => "Forgot Password", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
         if (RequestMethods::post("action") == "change") {

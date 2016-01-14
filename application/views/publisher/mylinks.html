@@ -1,4 +1,4 @@
-<div id="page-wrapper">
+<div id="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
@@ -60,9 +60,10 @@
                     <ul class="pager">
                         {if($page != 1)}
                         <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-                        {/if} {if($page
-                        < $count/$limit)} <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-                            {/if}
+                        {/if}
+                        {if($page < $count/$limit)}
+                        <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                        {/if}
                     </ul>
                 </div>
             </div>

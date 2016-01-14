@@ -1,7 +1,7 @@
-<div id="page-wrapper">
+<div id="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-md-12">
                 <h3 class="page-header text-center">Earnings</h3>
                 <form class="form-inline text-center" role="form" method="get" action="">
                     <div class="form-group">
@@ -21,7 +21,7 @@
                     <button type="submit" class="btn btn-primary">Show</button>
                 </form>
                 <hr> {if($stats)}
-                <div class="table-responsive">
+                <div class="table-responsive panel">
                     <table class="table table-bordered table-hover">
                         <thead>
                             <tr>
@@ -31,7 +31,6 @@
                                 <th>Avg RPM</th>
                                 <th>Date</th>
                                 <th>Amount</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,11 +42,6 @@
                                 <td><i class="fa fa-inr"></i> {$stat->rpm}</td>
                                 <td>{echo \Framework\StringMethods::only_date($stat->created)}</td>
                                 <td><i class="fa fa-inr"></i> {echo $stat->amount}</td>
-                                <td>
-                                    {if($stat->live)}
-                                    <span class="label label-success">Paid</span> {/if} {else}
-                                    <span class="label label-warning">UnPaid</span> {/else}
-                                </td>
                             </tr>
                             {/foreach}
                         </tbody>
@@ -60,9 +54,10 @@
                     <ul class="pager">
                         {if($page != 1)}
                         <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-                        {/if} {if($page
-                        < $count/$limit)} <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-                            {/if}
+                        {/if}
+                        {if($page < $count/$limit)}
+                        <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                        {/if}
                     </ul>
                 </div>
             </div>

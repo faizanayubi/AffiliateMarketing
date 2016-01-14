@@ -1,46 +1,14 @@
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/publisher">
-            <i class="fa fa-bullhorn"></i> EarnBugs
-        </a>
-    </div>
-    <!-- /.navbar-header -->
-
-    <ul class="nav navbar-top-links navbar-right">
-        {if($user->admin == "1")}
-        <li><a href="/admin"><i class="fa fa-user-secret"></i> Admin Panel</a></li>
-        {/if}
-        <li><a href="/content"><i class="fa fa-link"></i> Get Link</a></li>
-        <li><a href="https://www.facebook.com/groups/1098200856875309/" target="_blank"><i class="fa fa-facebook-square"></i> Join Group</a></li>
-        <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                <i class="fa fa-user fa-fw"></i> {echo $user->name} (ID: {$user->id}) <i class="fa fa-caret-down"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-                <li><a href="/publisher/profile"><i class="fa fa-fw fa-user"></i> Profile</a></li>
-                <li><a href="/publisher/earnings"><i class="fa fa-fw fa-inr"></i> Earnings</a></li>
-                <li class="divider"></li>
-                <li><a href="/auth/logout"><i class="fa fa-fw fa-power-off"></i> Log Out</a></li>
-            </ul>
-        </li>
-    </ul>
-</nav>
-
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
-            <li><a href="/publisher"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
-            <li><a href="/publisher/mylinks"><i class="fa fa-fw fa-bar-chart-o"></i> Link Stats</a></li>
-            <li><a href="/publisher/topearners"><i class="fa fa-fw fa-table"></i> Top Earners</a></li>
-            <li>
-                <a href="#"><i class="fa fa-area-chart fa-fw"></i> Campaigns <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
+<div id="left-menu">
+    <div class="sub-left-menu scroll">
+        <ul class="nav nav-list">
+            <li class="ripple"><a href="/publisher"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a></li>
+            <li class="ripple"><a href="/publisher/mylinks"><i class="fa fa-fw fa-bar-chart-o"></i> Link Stats</a></li>
+            <li class="ripple"><a href="/publisher/topearners"><i class="fa fa-fw fa-table"></i> Top Earners</a></li>
+            <li class="ripple">
+                <a class="tree-toggle nav-header"><span class="fa-folder fa"></span> Campaigns 
+                    <span class="fa-angle-right fa right-arrow text-right"></span>
+                </a>
+                <ul class="nav nav-list tree">
                     <li><a href="/content">All Categories</a></li>
                     <li><a href="/content?category[]=bollywood">Bollywood</a></li>
                     <li><a href="/content?category[]=sports">Sports</a></li>
@@ -57,15 +25,18 @@
                     <li><a href="/content?category[]=politics">politics</a></li>
                 </ul>
             </li>
-            <li><a href="/publisher/earnings"><i class="fa fa-fw fa-inr"></i> Earnings</a></li>
-            <li>
-                <a href="#"><i class="fa fa-user fa-fw"></i> Profile <span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level">
+            <li class="ripple"><a href="/publisher/earnings"><i class="fa fa-fw fa-inr"></i> Earnings</a></li>
+            <li class="ripple">
+                <a class="tree-toggle nav-header"><span class="fa-user fa"></span> Profile 
+                    <span class="fa-angle-right fa right-arrow text-right"></span>
+                </a>
+                <ul class="nav nav-list tree">
                     <li><a href="/publisher/payments">Payments</a></li>
                     <li><a href="/publisher/platforms">Platforms</a></li>
                     <li><a href="/publisher/profile">Settings</a></li>
                 </ul>
             </li>
+            <li><a href="/credits.html">Credits</a></li>
         </ul>
     </div>
-</nav>
+</div>

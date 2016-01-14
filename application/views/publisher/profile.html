@@ -1,4 +1,4 @@
-<div id="page-wrapper">
+<div id="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
@@ -12,7 +12,7 @@
                 <p class="text-center">
                     <i class="help-text">Note : Your Custom domain is domain from which link will be tracked, do not include special characters and space</i>
                 </p>
-                <form class="form-horizontal" method="post" action="">
+                <form class="form-horizontal panel" method="post" action="">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Custom Domain</label>
                         {if($user->domain)}
@@ -62,7 +62,7 @@
                     <button type="submit" class="btn btn-success pull-right">Save <i class="fa fa-check-circle fa-fw"></i></button>
                 </form>
                 <h3>Bank Account Details</h3> {if($account)}
-                <div class="table-responsive">
+                <div class="table-responsive panel">
                     <table class="table table-bordered table-hover">
                         <tbody>
                             <tr>
@@ -89,7 +89,7 @@
                     </table>
                 </div>
                 {/if} {else}
-                <form class="form-horizontal" method="post" action="">
+                <form class="form-horizontal panel" method="post" action="">
                     <div class="form-group">
                         <label class="col-sm-3 control-label">Bank Name</label>
                         <div class="col-sm-9">

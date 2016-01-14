@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>{echo $seo->getTitle()}</title>
-        
-        <!-- Core CSS - Include with every page -->
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 
-        <!-- Plugin CSS  -->
-        <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+<head>
+    <meta charset="utf-8">
+    <title>{echo $seo->getTitle()}</title>
+    <!-- Core CSS - Include with every page -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Plugin CSS  -->
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <link href="{echo CDN}css/publisher.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 
-        <!-- SB Admin CSS - Include with every page -->
-        <link href="{echo CDN}css/sb-admin.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+</head>
 
-        <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    </head>
-
-    <body>
-        <div id="wrapper">
+<body id="mimin" class="dashboard">
+    <div id="wrapper">
+        <nav class="navbar navbar-default header navbar-fixed-top">
+            <div class="col-md-12 nav-wrapper">
+                <div class="navbar-header" style="width:100%;">
+                    <div class="opener-left-menu is-open">
+                        <span class="top"></span>
+                        <span class="middle"></span>
+                        <span class="bottom"></span>
+                    </div>
+                    <a href="/publisher.html" class="navbar-brand">
+                        <b>EarnBugs</b>
+                    </a>
+                    <ul class="nav navbar-nav navbar-right user-nav">
+                        <li class="user-name">{$user->name} (ID: {$user->id})</li>
+                        <li><a href="/auth/logout" class="opener-right-menu"><span class="fa fa-sign-out"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid mimin-wrapper">
             {include layouts/navigation/publisher.html}
             {ayield action}
         </div>
-        
-        <footer class="footer">
-            <div class="container text-center">
-                <small class="text-muted">@Developed By <a href="http://cloudstuff.tech" target="_blank">CloudStuff.Tech</a></small>
-            </div>
-        </footer>
+    </div>
+    <!-- Core Scripts - Include with every page -->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="{echo CDN}js/metisMenu.min.js"></script>
+    <script type="text/javascript" src="{echo CDN}js/model.js"></script>
+    <script src="{echo CDN}js/publisher-1.1.js"></script>
+    <!-- Plugin Scripts  -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+</body>
 
-        <!-- Core Scripts - Include with every page -->
-        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <script src="{echo CDN}js/metisMenu.min.js"></script>
-        <script type="text/javascript" src="{echo CDN}js/model.js"></script>
-        <script src="{echo CDN}js/publisher-1.0.js"></script>
-
-        <!-- Plugin Scripts  -->
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        
-    </body>
 </html>

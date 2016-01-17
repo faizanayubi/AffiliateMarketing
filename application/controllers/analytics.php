@@ -134,10 +134,12 @@ class Analytics extends Admin {
 
         foreach ($iterator as $item) {
             if (!$item->isDot()) {
-                array_push($logs, $item->getFilename());
+                if (substr($item->getFilename(), 0, 1) != ".") {
+                    array_push($logs, $item->getFilename());
+                }
             }
         }
-
+        arsort($logs);
         $view->set("logs", $logs);
     }
 
@@ -231,17 +233,5 @@ class Analytics extends Admin {
         }
 
         return $new_array;
-    }
-
-    public function test() {
-        $this->noview();
-        $cache = new Framework\Cache(array("type" =>"mongod"));
-        $m = $cache->initialize();
-        $m->connect('stats');
-        $data = $m->get("hits", array(), 10);
-        foreach ($data as $key => $value) {
-            echo "<pre>", print_r($value), "</pre>";
-        }
-    }
-    
+    }    
 }

@@ -87,10 +87,10 @@ function stats() {
         callback: function(data) {
             $('#today_click').html(data.stats.click);
             $('#today_rpm').html('<i class="fa fa-inr"></i> ' + data.stats.rpm);
-            $('#today_earning').html('<i class="fa fa-inr"></i> ' + data.stats.earning);
+            $('#today_earning').html(data.stats.earning);
 
-            var gdpData = data.stats.analytics;
-            $('.maps').vectorMap({
+            /*var gdpData = data.stats.analytics;
+            $('#world-map').vectorMap({
                 map: 'world_mill_en',
                 backgroundColor: null,
                 color: '#fff',
@@ -104,11 +104,11 @@ function stats() {
                 onRegionTipShow: function(e, el, code) {
                     if (gdpData.hasOwnProperty(code)) {
                         el.html(el.html() + ' (Clicks - ' + gdpData[code] + ')');
-                    } else {
+                    } else{
                         el.html(el.html() + ' (Clicks - 0)');
                     };
                 }
-            });
+            });*/
         }
     });
 }

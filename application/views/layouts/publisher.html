@@ -30,6 +30,9 @@
                         <b>EarnBugs</b>
                     </a>
                     <ul class="nav navbar-nav navbar-right user-nav">
+                        {if($user->admin)}
+                        <li><a href="/admin">Admin Panel</a></li>
+                        {/if}
                         <li class="user-name">{$user->name} (ID: {$user->id})</li>
                         <li><a href="/auth/logout" class="opener-right-menu"><span class="fa fa-sign-out"></span></a></li>
                     </ul>

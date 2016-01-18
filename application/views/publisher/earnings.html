@@ -6,21 +6,15 @@
                 <form class="form-inline text-center" role="form" method="get" action="">
                     <div class="form-group">
                         <div class="input-group">
-                            <label class="sr-only">From</label>
+                            <label class="sr-only">Date</label>
                             <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
-                            <input type="date" style="width: 200px" name="startdate" class="form-control" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <label class="sr-only">To</label>
-                            <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
-                            <input type="date" style="width: 200px" name="enddate" class="form-control" />
+                            <input type="date" style="width: 200px" name="date" class="form-control" />
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Show</button>
                 </form>
-                <hr> {if($stats)}
+                <hr>
+                {if($stats)}
                 <div class="table-responsive panel">
                     <table class="table table-bordered table-hover">
                         <thead>
@@ -34,7 +28,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {foreach $stat in $stats} {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "click"), "created", "desc")} {script $link = Link::first(array("id = ?" => $stat->link_id), array("short"))}
+                        {script $tc = 0}
+                        {script $tr = 0}
+                        {script $te = 0}
+                        {foreach $stat in $stats}
+                            {script $stat = Stat::first(array("link_id = ?" => $stat->link_id), array("link_id", "rpm", "amount", "live", "created", "id", "click"), "created", "desc")}
+                            {script $link = Link::first(array("id = ?" => $stat->link_id), array("short"))}
+                            {script $tc += $stat->click}
+                            {script $tr += $stat->rpm}
+                            {script $te += $stat->amount}
                             <tr>
                                 <td>{$stat->id}</td>
                                 <td>{$link->short}</td>
@@ -43,23 +45,21 @@
                                 <td>{echo \Framework\StringMethods::only_date($stat->created)}</td>
                                 <td><i class="fa fa-inr"></i> {echo $stat->amount}</td>
                             </tr>
-                            {/foreach}
+                        {/foreach}
+                            <tr>
+                                <th>Total</th>
+                                <th>{echo $count}</th>
+                                <th>{echo $tc}</th>
+                                <th><i class="fa fa-inr"></i> {echo $tr/$count}</th>
+                                <th></th>
+                                <th><i class="fa fa-inr"></i> {echo $te}</th>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 {/if} {else}
-                <p>Check Later</p>
+                <p class="text-center">No Earning Created, Please Check Later</p>
                 {/else}
-                <div class="text-center">
-                    <ul class="pager">
-                        {if($page != 1)}
-                        <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
-                        {/if}
-                        {if($page < $count/$limit)}
-                        <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
-                        {/if}
-                    </ul>
-                </div>
             </div>
         </div>
     </div>

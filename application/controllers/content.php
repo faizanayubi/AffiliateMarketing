@@ -220,6 +220,34 @@ class Content extends Publisher {
         self::redirect($_SERVER["HTTP_REFERER"]);        
     }
 
+    /**
+     * @before _secure, publisherLayout
+     */
+    public function top() {
+        $this->seo(array("title" => "All Categories", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        $query = RequestMethods::get("query", "");
+        $title = RequestMethods::get("title", "");
+        $category = implode(",", RequestMethods::get("category", ""));
+        
+        $where = array(
+            "url LIKE ?" => "%{$query}%",
+            "title LIKE ?" => "%{$title}%",
+            "category LIKE ?" => "%{$category}%",
+            "live = ?" => true
+        );
+        
+        $items = Item::all($where, array("id"));
+        shuffle($items);
+        
+        $view->set("title", $title);
+        $view->set("page", $page);
+        $view->set("items", array_slice($items, 0, 10));
+        $view->set("category", $category);
+        $view->set("domains", $this->target());
+    }
+
     public function resize($image, $width = 470, $height = 246) {
         $path = APP_PATH . "/public/assets/uploads/images";
         $cdn = CDN;$image = base64_decode($image);

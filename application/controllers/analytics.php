@@ -74,7 +74,7 @@ class Analytics extends Admin {
         $this->seo(array("title" => "URL Debugger", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
 
-        $url = RequestMethods::get("urld", "http://likesbazar.in/");
+        $url = RequestMethods::get("urld", "http://earnbugs.in/");
         $metas = get_meta_tags($url);
 
         $facebook = new Curl();

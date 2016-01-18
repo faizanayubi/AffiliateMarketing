@@ -1,4 +1,19 @@
 <div id="content">
+    <div class="panel">
+        <div class="panel-body">
+            <div class="col-md-12 col-sm-12">
+                <h3 class="animated fadeInLeft">RPM</h3>
+                <ul class="nav navbar-nav" onclick="return false;">
+                    <li><a href="">India : <i class="fa fa-inr"></i>135</a></li>
+                    <li><a href="">US : <i class="fa fa-inr"></i>270</a></li>
+                    <li><a href="">CA : <i class="fa fa-inr"></i>380</a></li>
+                    <li><a href="">AU : <i class="fa fa-inr"></i>400</a></li>
+                    <li><a href="">GB : <i class="fa fa-inr"></i>310</a></li>
+                    <li><a href="">Others : <i class="fa fa-inr"></i>70/105</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
     <div class="col-md-12" style="padding:20px;">
         <div class="col-md-12 padding-0">
             <div class="col-md-8 padding-0">
@@ -6,16 +21,16 @@
                     <div class="col-md-6">
                         <div class="panel">
                             <div class="panel-body text-center">
-                                <h2 id="today_click">0</h2>
-                                <p>Clicks Today</p>
+                                <h2><i class="fa fa-inr"></i>  {echo round($total[0]["earn"], 2)}</h2>
+                                <p>Total Earnings</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="panel">
                             <div class="panel-body text-center">
-                                <h2 id="today_rpm">0</h2>
-                                <p>Average RPM</p>
+                                <h2><i class="fa fa-inr"></i>  {$paid}</h2>
+                                <p>Amount Paid</p>
                             </div>
                         </div>
                     </div>
@@ -54,7 +69,7 @@
                 <div class="panel">
                     <div class="panel-heading bg-white border-none" style="padding:20px;">
                         <div class="col-md-6 col-sm-6 col-sm-12 text-left">
-                            <h4>Overall Stats</h4>
+                            <h4>Overall Stats (INR)</h4>
                         </div>
                     </div>
                     <div class="panel-body" style="padding-bottom:50px;">
@@ -79,33 +94,65 @@
                 <div class="panel">
                     <div class="panel-heading bg-white border-none" style="padding:20px;">
                         <div class="col-md-6 col-sm-6 col-sm-12 text-left">
-                            <h4>Earnings</h4>
+                            <h4>Today Stats (INR)</h4>
                         </div>
                     </div>
                     <div class="panel-body" style="padding-bottom:50px;">
                         <div class="col-md-12" style="padding-top:20px;">
                             <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;">{echo round($total[0]["earn"], 2)}</h2>
-                                <small>Total</small>
+                                <h2 style="line-height:.4;" id="today_click">0</h2>
+                                <small>Today Clicks</small>
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;">{$paid}</h2>
-                                <small>Paid</small>
+                                <h2 style="line-height:.4;" id="today_earning">0</h2>
+                                <small>Today Earnings</small>
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-12 text-center">
-                                <h2 style="line-height:.4;" id="today_earning">0</h2>
-                                <small>Today</small>
+                                <h2 style="line-height:.4;" id="today_rpm">0</h2>
+                                <small>Your RPM</small>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
+        <div class="col-md-12">
+            <div class="panel">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
+                </div>
+                {if($links)}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Link Title</th>
+                                <th>Short URL</th>
+                                <th>Realtime Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $link in $links} {script $item = Item::first(array("id = ?" => $link->item_id), array("title", "url"))}
+                            <tr>
+                                <td><a href="{$item->url}" target="_blank">{$item->title}</a></td>
+                                <td><a href="{$link->short}" target="_blank">{$link->short}</a></td>
+                                <td class="googl" data-time="allTime" data-property="shortUrlClicks" data-url="{$link->short}">
+                                    <span class="label label-success">View</span>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+                {/if} {else}
+                <p>Hi, you have not generated any link to share on your platform.</p>
+                {/else}
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="panel bg-green text-white">
                 <div class="panel-body">
-                <!-- <div id="world-map" style="max-width: 1100px; height: 400px"></div> -->
+                    <!-- <div id="world-map" style="max-width: 1100px; height: 400px"></div> -->
                 </div>
             </div>
         </div>

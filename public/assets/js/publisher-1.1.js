@@ -86,7 +86,7 @@ function stats() {
         action: "analytics/stats/" + today(),
         callback: function(data) {
             $('#today_click').html(data.stats.click);
-            $('#today_rpm').html('<i class="fa fa-inr"></i> ' + data.stats.rpm);
+            $('#today_rpm').html(data.stats.rpm);
             $('#today_earning').html(data.stats.earning);
 
             /*var gdpData = data.stats.analytics;
@@ -389,7 +389,7 @@ function copy() {
     $('.mail-wrapper').find('.mail-left').css('height', $('.mail-wrapper').innerHeight());
     $("#left-menu ul li a").ripple();
     $(".ripple div").ripple();
-    $("#carousel-example3").carouselAnimate();
+    $("#left-menu .sub-left-menu").niceScroll();
 
     $(".fileupload-v1-btn").on("click", function() {
         var wrapper = $(this).parent("span").parent("div");

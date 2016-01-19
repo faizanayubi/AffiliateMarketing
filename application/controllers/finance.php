@@ -53,7 +53,8 @@ class Finance extends Admin {
     public function earnings() {
         $this->seo(array("title" => "Earnings Finance", "view" => $this->getLayoutView()));
         $view = $this->getActionView(); $amount = 0;
-        $website = RequestMethods::get("website", "http://www.khattimithi.com");
+        $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $website = RequestMethods::get("website", "filmymagic.com");
 
         $where = array("url LIKE ?" => "%{$website}%");
         $items = Item::all($where, array("id"));
@@ -61,13 +62,14 @@ class Finance extends Admin {
 
         foreach ($items as $item) {
             $database = Registry::get("database");
-            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("item_id=?",$item->id)->all();
+            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("item_id=?",$item->id)->where("modified LIKE ?","%{$date}%")->all();
             $amount += $earnings[0]["earn"];
         }
         
         $view->set("items", $items);
         $view->set("count", $count);
         $view->set("website", $website);
+        $view->set("date", $date);
         $view->set("amount", $amount);
     }
 

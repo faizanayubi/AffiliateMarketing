@@ -8,10 +8,16 @@
                     <input type="text" style="width: 200px" name="website" class="form-control" placeholder="Website" value="{$website}" />
                 </div>
             </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Date</label>
+                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> Date</span>
+                    <input type="date" style="width: 200px" name="date" class="form-control" />
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary">Show</button>
         </form>
-        <hr>
-        {if($items)}
+        <hr> {if($items)}
         <p>Total Items : {$count}</p>
         <div class="panel panel-default">
             <table class="table">
@@ -25,14 +31,13 @@
                         <td>{echo count($items)}</td>
                     </tr>
                     <tr>
-                        <td>Earning</td>
+                        <td>Earning till {$date}</td>
                         <td>{echo round($amount, 2)}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        {/if}
-        {else}
+        {/if} {else}
         <p class="text-center">Please enter a website and select date range.</p>
         {/else}
     </div>

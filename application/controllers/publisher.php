@@ -123,10 +123,11 @@ class Publisher extends Analytics {
     public function earnings() {
         $this->seo(array("title" => "Earnings", "view" => $this->getLayoutView()));
 
-        $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
+        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-6 Day")));
+        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
         
         $view = $this->getActionView();
-        $stats = Stat::all(array("user_id = ?" => $this->user->id, "created LIKE ?" => "%{$date}%"), array("link_id"), "created", "desc");
+        $stats = Stat::all(array("user_id = ?" => $this->user->id, "created >= ?" => $startdate, "created <= ?" => $enddate), array("link_id"), "created", "desc");
 
         $view->set("stats", $stats);
         $view->set("count", count($stats));

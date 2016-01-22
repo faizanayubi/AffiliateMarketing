@@ -24,7 +24,6 @@ class Content extends Publisher {
         $category = implode(",", RequestMethods::get("category", ""));
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 12);
-        $shuffle = RequestMethods::get("shuffle", "yes");
 
         $where = array(
             "url LIKE ?" => "%{$query}%",
@@ -35,9 +34,6 @@ class Content extends Publisher {
         
         $items = Item::all($where, array("id", "title", "image", "url", "description"), "created", "desc", $limit, $page);
         $count = Item::count($where);
-        if ($shuffle == "yes") {
-            shuffle($items);
-        }
 
         $view->set("limit", $limit);
         $view->set("query", $query);

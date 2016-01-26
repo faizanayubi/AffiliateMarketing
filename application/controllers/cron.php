@@ -28,7 +28,7 @@ class CRON extends Auth {
 
         foreach ($links as $link) {
             $data = $link->stat($yesterday);
-            if ($data["click"] > 30) {
+            if ($data["click"] > 50) {
                 $this->saveStats($data, $link);
 
                 //sleep the script

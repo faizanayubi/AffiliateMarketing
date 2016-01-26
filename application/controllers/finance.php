@@ -50,27 +50,29 @@ class Finance extends Admin {
      * Finds the earning from a website
      * @before _secure, changeLayout, _admin
      */
-    public function earnings() {
-        $this->seo(array("title" => "Earnings Finance", "view" => $this->getLayoutView()));
+    public function earnings($user_id) {
+        $this->seo(array("title" => "Earnings Details", "view" => $this->getLayoutView()));
         $view = $this->getActionView(); $amount = 0;
-        $date = RequestMethods::get("date", date('Y-m-d', strtotime("now")));
-        $website = RequestMethods::get("website", "filmymagic.com");
+        $datas = array();$records = array();
 
-        $where = array("url LIKE ?" => "%{$website}%");
-        $items = Item::all($where, array("id"));
-        $count = Item::count($where);
+        $stats = Stat::all(array("user_id = ?" => $user_id), array("DISTINCT item_id"));
 
-        foreach ($items as $item) {
+        foreach ($stats as $stat) {
+            $item = Item::first(array("id = ?" => $stat->item_id), array("url"));
+            $url = parse_url(trim($item->url));
             $database = Registry::get("database");
-            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("item_id=?",$item->id)->where("modified LIKE ?","%{$date}%")->all();
-            $amount += $earnings[0]["earn"];
+            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("item_id=?",$stat->item_id)->all();
+            $datas[$url["host"]] += $earnings[0]["earn"];
         }
         
-        $view->set("items", $items);
-        $view->set("count", $count);
-        $view->set("website", $website);
-        $view->set("date", $date);
-        $view->set("amount", $amount);
+        foreach ($datas as $key => $value) {
+            array_push($records, array(
+                "domain" => $key,
+                "amount" => $value
+            ));
+        }
+
+        $view->set("records", $records);
     }
 
     /**
@@ -79,8 +81,6 @@ class Finance extends Admin {
     public function makepayment($user_id) {
         $this->seo(array("title" => "Make Payment", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
-        $record = Stat::first(array("user_id = ?" => $user_id), array("created"), "created", "desc");
-        $latest = strftime("%Y-%m-%d", strtotime($record->created));
         $payee = User::first(array("id = ?" => $user_id), array("id", "name", "email", "phone"));
         $account = Account::first(array("user_id = ?" => $user_id));
 
@@ -88,7 +88,6 @@ class Finance extends Admin {
         $amount = $database->query()
             ->from("stats", array("SUM(amount)" => "earn"))
             ->where("user_id=?",$user_id)
-            ->where("created LIKE ?", "%{$latest}%")
             ->where("live=?",0)
             ->all();
 
@@ -116,12 +115,12 @@ class Finance extends Admin {
                 "account" => $account
             ));
 
-            self::redirect("/finance/records");
+            self::redirect("/finance/pending");
         }
 
         $view->set("payee", $payee);
         $view->set("account", $account);
-        $view->set("amount", $amount[0]["earn"]);
+        $view->set("amount", $amount[0]["earn"] - $paid[0]["earn"]);
     }
 
     /**

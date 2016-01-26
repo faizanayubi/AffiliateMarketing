@@ -220,7 +220,7 @@ class Content extends Publisher {
      * @before _secure, publisherLayout
      */
     public function top() {
-        $this->seo(array("title" => "All Categories", "view" => $this->getLayoutView()));
+        $this->seo(array("title" => "Top Content", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
         $query = RequestMethods::get("query", "");
@@ -241,6 +241,25 @@ class Content extends Publisher {
         $view->set("page", $page);
         $view->set("items", array_slice($items, 0, 10));
         $view->set("category", $category);
+        $view->set("domains", $this->target());
+    }
+
+    /**
+     * @before _secure, publisherLayout
+     */
+    public function viral() {
+        $this->seo(array("title" => "Viral for you", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 12);
+        
+        $stats = Stat::all(array("user_id = ?" => $this->user->id), array("DISTINCT item_id"), "amount", "desc", $limit, $page);
+        $count = Stat::count(array("user_id = ?" => $this->user->id));
+        
+        $view->set("count", $count);
+        $view->set("stats", $stats);
+        $view->set("limit", $limit);
+        $view->set("page", $page);
         $view->set("domains", $this->target());
     }
 

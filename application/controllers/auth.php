@@ -72,7 +72,7 @@ class Auth extends Controller {
         $this->seo(array("title" => "Register", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
-        if (RequestMethods::post("action") == "register" && $this->reCaptcha()) {
+        if (RequestMethods::post("action") == "register") {
             $exist = User::first(array("email = ?" => RequestMethods::post("email")));
             if (!$exist) {
                 $user = new User(array(

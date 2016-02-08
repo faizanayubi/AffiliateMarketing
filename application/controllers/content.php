@@ -276,7 +276,8 @@ class Content extends Publisher {
                     $imagine = new \Imagine\Gd\Imagine();
                     $size = new \Imagine\Image\Box($width, $height);
                     $mode = Imagine\Image\ImageInterface::THUMBNAIL_OUTBOUND;
-                    $imagine->open("{$path}/{$image}")->thumbnail($size, $mode)->save("{$path}/resize/{$thumbnail}");
+                    $imagine->open("{$path}/{$image}")->resize($size)->save("{$path}/resize/{$thumbnail}");
+                    //$imagine->open("{$path}/{$image}")->thumbnail($size, $mode)->save("{$path}/resize/{$thumbnail}");
                 }
                 header("Location: {$cdn}uploads/images/resize/{$thumbnail}");
                 exit();

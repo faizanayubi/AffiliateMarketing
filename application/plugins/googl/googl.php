@@ -2,7 +2,7 @@
 
 class googl {
 
-    protected $apiKey = 'YOUR-API-KEY';
+    protected $apiKey = 'AIzaSyCWr8fRrz-h4QHry2mpqmXC5hPb_VM0tAo';
     protected $baseURL = 'https://www.googleapis.com/urlshortener/v1/url';
 
     public function shortenURL($longUrl) {

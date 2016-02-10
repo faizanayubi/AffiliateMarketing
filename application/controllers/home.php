@@ -5,7 +5,7 @@
  *
  * @author Faizan Ayubi
  */
-use Framework\Controller as Controller;
+use Shared\Controller as Controller;
 use Framework\RequestMethods as RequestMethods;
 
 class Home extends Controller {
@@ -15,17 +15,16 @@ class Home extends Controller {
     }
     
     public function privacy() {
+
         $this->seo(array(
             "title" => "Privacy Policy",
             "view" => $this->getLayoutView()
         ));
     }
     
-    public function termsofuse() {
-        $this->seo(array(
-            "title" => "Terms of Use",
-            "view" => $this->getLayoutView()
-        ));
+    public function TermsnConditions() {
+         $this->seo(array("title" => "Terms & Conditions", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
     }
 
     public function contact() {

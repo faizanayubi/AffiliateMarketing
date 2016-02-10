@@ -27,6 +27,7 @@
                             <div class="form-group">
                                 <input name="password" type="password" class="form-control" placeholder="Your Password *" required data-validation-required-message="Please enter your password." required="">
                                 <p class="help-block text-danger"></p>
+                                <input type="checkbox" name="tnc" value="agree" id="tnc"><a href="/TermsnConditions">   &nbsp;By Signing Up you Agree to Our Terms Of Use.</a>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -52,7 +53,7 @@
                         <div class="col-lg-12 text-center">
                             <div id="success"></div>
                             <input type="hidden" name="action" value="register">
-                            <button type="submit" class="btn btn-xl">Register</button>
+                            <button type="submit" class="btn btn-xl" id="register" disabled="">Register</button>
                         </div>
                     </div>
                 </form>

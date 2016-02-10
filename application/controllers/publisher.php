@@ -349,4 +349,12 @@ class Publisher extends Analytics {
         $this->seo(array("title" => "Fraud Links", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
     }
+    /**
+     * @before _secure, publisherLayout
+     */
+    public function fnq() {
+        $this->seo(array("title" => "Frequently Asked Questions", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $today = strftime("%Y-%m-%d", strtotime('now'));
+    }
 }

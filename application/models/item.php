@@ -70,4 +70,19 @@ class Item extends Shared\Model {
         $e = "id=".$this->id."&title=".$this->cleanand($this->title)."&description=".$this->cleanand($this->description)."&image=".$this->cleanand($this->image)."&url=".$this->cleanand($this->url)."&username=".$this->cleanand($username)."&user_id=".$user_id."&time=".time();
         return base64_encode($e);
     }
+
+    public function total() {
+        $c = 0;$r = 0; $a = 0;
+        $stats = Stat::all(array("item_id = ?" => $this->id), array("click", "amount", "rpm"));
+        foreach ($stats as $s) {
+            $c += $s->click;
+            $a += $s->amount;
+            $r += $s->rpm;
+        }
+        return array(
+            "click" => $c,
+            "amount" => $a,
+            "rpm" => $r/count($stats)
+        );
+    }
 }

@@ -161,7 +161,8 @@ class Admin extends Auth {
 
     /**
      * Edits the Value and redirects user back to Referer
-     * 
+     *
+     * @before _secure, changeLayout, _admin
      * @param type $model
      * @param type $id
      * @param type $property
@@ -223,7 +224,7 @@ class Admin extends Auth {
     /**
      * @before _secure, _admin
      */
-    protected function sync($model) {
+    public function sync($model) {
         $this->noview();
         $db = Framework\Registry::get("database");
         $db->sync(new $model);

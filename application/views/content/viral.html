@@ -9,6 +9,7 @@
             {if($stats)}
             {foreach $stat in $stats}
                 {script $item = Item::first(array("id = ?" => $stat->item_id), array("id", "title", "image", "url", "description"))}
+                {script $total = $item->total()}
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">{echo substr($item->title, 0, 68)}</div>
@@ -30,6 +31,11 @@
                                     <td>
                                         <button class="btn btn-success shortenURL" data-item="{echo $item->id}" data-hash="{echo $item->encode($user->id, $user->username)}" data-title="{echo $item->title}" data-description="{echo $item->description}">Generate Link</button>
                                     </td>
+                                </tr>
+                                <tr>
+                                    <td>Clicks: {echo $total['click']}</td>
+                                    <td>Amount: {echo $total['amount']}</td>
+                                    <td>Avg RPM: {echo $total['rpm']}</td>
                                 </tr>
                             </tbody>
                         </table>

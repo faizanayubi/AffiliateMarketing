@@ -100,7 +100,7 @@ class Publisher extends Analytics {
         
         $m = new Mongo();
         $db = $m->stats;
-        $collection = $db->hits;
+        $collection = $db->clicks;
         $stats = array();$stat = array();
 
         $cursor = $collection->find(array('created' => $today));

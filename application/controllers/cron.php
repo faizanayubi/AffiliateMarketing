@@ -28,10 +28,8 @@ class CRON extends Auth {
 
         foreach ($links as $link) {
             $data = $link->stat($yesterday);
-            if ($data["click"] > 50) {
+            if ($data["click"] > 30) {
                 $this->saveStats($data, $link);
-
-                //sleep the script
                 sleep(1);
             }
         }
@@ -44,38 +42,25 @@ class CRON extends Auth {
                 "user_id" => $link->user_id,
                 "link_id" => $link->id,
                 "item_id" => $link->item_id,
-                "click" => $data["click"],
-                "amount" => $data["earning"],
+                "click" => $data["click"] - 4,
+                "amount" => $data["earning"] - 0.6,
                 "rpm" => $data["rpm"]
             ));
+            $stat->save();
         } else {
-            $stat->click += $data["click"];
-            $stat->amount += $data["earning"];
-            $stat->rpm = $data["rpm"];
-        }
-        $stat->save();
-        $this->log("<pre>", print_r($stat), "</pre>");
-    }
+            $today =strtotime(date('Y-m-d', strtotime("now")));
+            $modified = strtotime($stat->modified);
 
-    protected function reset() {
-        $db = Framework\Registry::get("database");
-        $db->sync(new Stat);
-        $links = Link::all(array(), array("id", "short", "item_id", "user_id"));
-        $startdate = date('Y-m-d', strtotime("-5 day"));
-        $enddate = date('Y-m-d', strtotime("-1 day"));
-        $diff = date_diff(date_create($startdate), date_create($enddate));
-        for ($i = 0; $i <= $diff->format("%a"); $i++) {
-            $date = date('Y-m-d', strtotime($startdate . " +{$i} day"));
-            foreach ($links as $link) {
-                $data = $link->stat($date);
-                if ($data["click"] > 30) {
-                    $this->saveStats($data, $link);
-
-                    //sleep the script
-                    sleep(1);
-                }
+            if($modified < $today) {
+                $stat->click += $data["click"];
+                $stat->amount += $data["earning"];
+                $stat->rpm = $data["rpm"];
+                $stat->save();
             }
         }
+        
+        $stat->removeProperty();
+        $output = '<pre>'. print_r($stat, true). '</pre>';
+        $this->log($output);
     }
-    
 }

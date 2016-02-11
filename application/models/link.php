@@ -40,12 +40,9 @@ class Link extends Shared\Model {
     public function mongodb($date = NULL) {
         $m = new Mongo();
         $db = $m->stats;
-        $collection = $db->hits;
+        $collection = $db->clicks;
         $stats = array();$stat = array();
-        $doc = array(
-            "item_id" => $this->item_id,
-            "user_id" => $this->user_id
-        );
+        $doc = array("link_id" => $this->id);
 
         if ($date) {
             $doc["created"] = $date;

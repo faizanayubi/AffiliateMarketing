@@ -19,7 +19,7 @@ $(document).ready(function() {
             description = btn.data('description'),
             item = btn.data('item'),
             domain = btn.closest('div').find('.domain option:selected').text();
-
+        btn.addClass('disabled');
         request.read({
             action: "publisher/shortenURL",
             data: {
@@ -28,6 +28,7 @@ $(document).ready(function() {
                 domain: domain
             },
             callback: function(data) {
+                btn.removeClass('disabled');
                 btn.closest('div').find('.shorturl').val(data.shortURL);
                 btn.closest('div').find('.shorturl').focus();
                 $('#link_data').val(title + "\n" + description + "\n" + data.shortURL);

@@ -92,12 +92,8 @@ class Content extends Publisher {
         $limit = RequestMethods::get("limit", 10);
         
         $website = RequestMethods::get("website", "");
-        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
-        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
-
         $where = array(
-            "url LIKE ?" => "%{$website}%",
-            "title LIKE ?" => "%{$website}%"
+            "url LIKE ?" => "%{$website}%"
         );
         
         $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "created", "desc", $limit, $page);
@@ -107,6 +103,7 @@ class Content extends Publisher {
         $view->set("page", $page);
         $view->set("count", $count);
         $view->set("limit", $limit);
+        $view->set("website", $website);
     }
     
     /**

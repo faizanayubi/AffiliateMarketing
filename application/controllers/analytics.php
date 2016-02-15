@@ -14,6 +14,38 @@ class Analytics extends Admin {
     /**
      * @before _secure, changeLayout, _admin
      */
+    public function googl() {
+        $this->seo(array("title" => "shortURL Analytics", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        
+        if (RequestMethods::get("shortURL")) {
+            $shortURL = RequestMethods::get("shortURL");
+            $googl = Registry::get("googl");
+            $object = $googl->analyticsFull($shortURL);
+            $link = Link::first(array("short = ?" => $shortURL), array("item_id", "user_id"));
+            if ($link) {
+                $view->set("verified", $link->clusterpoint());
+            }
+
+            $longUrl = explode("?item=", $object->longUrl);
+            if($longUrl) {
+                $str = base64_decode($longUrl[1]);
+                $datas = explode("&", $str);
+                foreach ($datas as $data) {
+                    $property = explode("=", $data);
+                    $item[$property[0]] = $property[1];
+                }
+            }
+
+            $view->set("shortURL", $shortURL);
+            $view->set("googl", $object);
+            $view->set("item", $item);
+        }
+    }
+
+    /**
+     * @before _secure, changeLayout, _admin
+     */
     public function content($id='') {
         $this->seo(array("title" => "Content Analytics", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
@@ -73,14 +105,15 @@ class Analytics extends Admin {
         $this->JSONview();
         $view = $this->getActionView();
 
-        $shortURL = RequestMethods::get("shortURL");
-        $link = Link::first(array("short = ?" => $shortURL), array("item_id", "short", "user_id"));
+        $link_id = RequestMethods::get("link");
+        $link = Link::first(array("id = ?" => $link_id), array("item_id", "id"));
         $result = $link->stat($date);
         
         $view->set("earning", $result["earning"]);
         $view->set("click", $result["click"]);
         $view->set("rpm", $result["rpm"]);
         $view->set("analytics", $result["analytics"]);
+        $view->set("link", $link);
     }
 
     /**

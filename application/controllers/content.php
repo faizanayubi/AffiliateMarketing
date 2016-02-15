@@ -91,9 +91,10 @@ class Content extends Publisher {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $website = RequestMethods::get("website", "");
+        $property = RequestMethods::get("property", "title");
+        $value = RequestMethods::get("value", "");
         $where = array(
-            "url LIKE ?" => "%{$website}%"
+            "{$property} LIKE ?" => "%{$value}%"
         );
         
         $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "created", "desc", $limit, $page);
@@ -103,7 +104,8 @@ class Content extends Publisher {
         $view->set("page", $page);
         $view->set("count", $count);
         $view->set("limit", $limit);
-        $view->set("website", $website);
+        $view->set("property", $property);
+        $view->set("value", $value);
     }
     
     /**

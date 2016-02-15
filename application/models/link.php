@@ -42,8 +42,7 @@ class Link extends Shared\Model {
         $db = $m->stats;
         $collection = $db->clicks;
         $stats = array();$stat = array();
-        $doc = array("link_id" => $this->id);
-
+        $doc = array("link_id" => (int) $this->id);
         if ($date) {
             $doc["created"] = $date;
         }
@@ -78,8 +77,9 @@ class Link extends Shared\Model {
         $results = $this->mongodb($date);
         if (is_array($results)) {
             //commision
-            $meta = Meta::first(array("property = ?" => "commision"), array("value"));
-            $commision = 1 - ($meta->value)/100;
+            // $meta = Meta::first(array("property = ?" => "commision"), array("value"));
+            // $commision = 1 - ($meta->value)/100;
+            $commision = 1;
 
             //rpm
             $rpms = RPM::first(array("item_id = ?" => $this->item_id), array("value"));

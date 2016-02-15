@@ -5,9 +5,17 @@
             <form class="form-inline text-center" role="form" method="get" action="">
                 <div class="form-group">
                     <div class="input-group">
-                        <label class="sr-only">Link</label>
-                        <span class="add-on input-group-addon"><i class="fa fa-link fa-fw"></i></span>
-                        <input type="text" style="width: 200px" name="website" class="form-control" value="{echo $website}" />
+                        <label class="sr-only">Field</label>
+                        <select name="property" class="form-control" value="{echo $property}">
+                            <option value="title">Title</option>
+                            <option value="url">URL</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only">Value</label>
+                        <input type="text" style="width: 200px" name="value" class="form-control" value="{echo $value}" />
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Show</button>

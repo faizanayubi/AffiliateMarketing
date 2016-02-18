@@ -5,7 +5,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">Table</label>
-                    <select name="model" class="form-control" value="{$model}" id="searchModel">
+                    <select name="model" class="form-control searchModel" value="{$model}">
                         {foreach $m in $models}
                         <option value="{$m}">{echo ucfirst($m)}</option>
                         {/foreach}
@@ -15,7 +15,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">Field</label>
-                    <select name="key" class="form-control" value="{$property}" id="searchField">
+                    <select name="key" class="form-control searchField" value="{$property}">
                         <option value="{$property}">{$property}</option>
                     </select>
                 </div>
@@ -32,7 +32,24 @@
             <div class="form-group">
                 <div class="input-group">
                     <label class="sr-only">Keyword</label>
-                    <input type="text" style="width: 300px" name="value" class="form-control" placeholder="value..." value="{$val}" />
+                    <input type="text" style="width: 150px" name="value" class="form-control" placeholder="value..." value="{$val}" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Direction</label>
+                    <select name="sort" class="form-control" value="{$direction}">
+                        <option value="DESC">DESC</option>
+                        <option value="ASC">ASC</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <label class="sr-only">Order</label>
+                    <select name="order" class="form-control searchField" value="{$property}">
+                        <option value="{$property}">{$property}</option>
+                    </select>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Search</button>
@@ -41,6 +58,9 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-list fa-fw"></i> Results
+                <div class="pull-right">
+                    <div class="btn-group"><a href="{echo URL.'&csv=true';}" target="_blank" class="btn btn-success btn-xs"><i class="fa fa-file-excel-o"></i> Export</a></div>
+                </div>
             </div>
             <div class="panel panel-body text-center" id="result_status">
                 {if(isset($success))}
@@ -50,7 +70,7 @@
                     Select field to search and enter keyword and then click on search button to see results.
                 {/else}
             </div>
-            <table class="table table-striped text-center table-hover table-bordered">
+            <table class="table table-striped text-center table-hover table-bordered table-responsive">
                 <thead>
                     <tr>
                         {foreach $value in $values}

@@ -116,21 +116,21 @@ $(document).ready(function () {
         document.execCommand('SelectAll');
     });
 
-    $("#searchModel").change(function() {
+    $(".searchModel").change(function() {
         var self = $(this);
-        $('#searchField').html('');
+        $('.searchField').html('');
         request.read({
             action: "admin/fields/" + this.value,
             callback: function(data) {
                 var d = $.parseJSON(data);
                 $.each(d, function (field, property) {
-                    $('#searchField').append('<option value="'+ field +'">'+ field +'</option>');
+                    $('.searchField').append('<option value="'+ field +'">'+ field +'</option>');
                 })
             }
         });
     });
 
-    $(document).on('change', '#searchField', function(event) {
+    $(document).on('change', '.searchField', function(event) {
         var fields = ["created", "modified"],
             date = $.inArray(this.value, fields);
         if (date !== -1) {

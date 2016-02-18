@@ -51,20 +51,10 @@ class Analytics extends Admin {
         $view = $this->getActionView();
 
         $item = Item::first(array("id = ?" => $id));
-
-        $earn = 0;
-        $stats = Stat::all(array("item_id = ?" => $item->id), array("amount"));
-        foreach ($stats as $stat) {
-            $earn += $stat->amount;
-        }
-
-        $links = Link::count(array("item_id = ?" => $item->id));
-        $rpm = RPM::count(array("item_id = ?" => $item->id));
+        $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "click"))->where("item_id=?", $item->id)->all();
 
         $view->set("item", $item);
-        $view->set("earn", $earn);
-        $view->set("links", $links);
-        $view->set("rpm", $rpm);
+        $view->set("total", $total);
     }
 
     /**

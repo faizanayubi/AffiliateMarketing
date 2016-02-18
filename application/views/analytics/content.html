@@ -52,21 +52,28 @@
                 <tbody>
                     <tr>
                         <td>Total Links</td>
-                        <td>{$links}</td>
+                        <td>{echo Link::count(array("item_id = ?" => $item->id))}</td>
                         <td>
                             <a href="/admin/search?model=link&key=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
                         </td>
                     </tr>
                     <tr>
                         <td>Total Earnings</td>
-                        <td>{$earn}</td>
+                        <td>{echo round($total[0]["earn"], 2)}</td>
                         <td>
                             <a href="/admin/search?model=earning&key=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
                         </td>
                     </tr>
                     <tr>
-                        <td>Total RPM</td>
-                        <td>{$rpm}</td>
+                        <td>Average RPM</td>
+                        <td>{echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</td>
+                        <td>
+                            <a href="/admin/search?model=rpm&ke y=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total Clicks</td>
+                        <td>{echo round($total[0]["click"], 2)}</td>
                         <td>
                             <a href="/admin/search?model=rpm&ke y=item_id&sign=equal&value={$item->id}" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i> View </a>&nbsp;
                         </td>

@@ -9,7 +9,7 @@
             {if($stats)}
             {foreach $stat in $stats}
                 {script $item = Item::first(array("id = ?" => $stat->item_id), array("id", "title", "image", "url", "description"))}
-                {script $total = $item->total()}
+                {script $total = $item->total($user->id)}
                 <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                     <div class="panel panel-default">
                         <div class="panel-heading">{echo substr($item->title, 0, 68)}</div>

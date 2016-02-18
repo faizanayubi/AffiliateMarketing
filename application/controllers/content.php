@@ -93,9 +93,15 @@ class Content extends Publisher {
         
         $property = RequestMethods::get("property", "title");
         $value = RequestMethods::get("value", "");
-        $where = array(
-            "{$property} LIKE ?" => "%{$value}%"
-        );
+        switch ($property) {
+            case 'id':
+                $where = array("{$property} = ?" => $value);
+                break;
+            
+            default:
+                $where = array("{$property} LIKE ?" => "%{$value}%");
+                break;
+        }
         
         $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "created", "desc", $limit, $page);
         $count = Item::count($where);
@@ -106,6 +112,34 @@ class Content extends Publisher {
         $view->set("limit", $limit);
         $view->set("property", $property);
         $view->set("value", $value);
+    }
+
+    /**
+     * @before _secure, changeLayout, _admin
+     */
+    public function stats() {
+        $this->seo(array("title" => "Manage Stats", "view" => $this->getLayoutView()));
+        $view = $this->getActionView();
+        $page = RequestMethods::get("page", 1);
+        $limit = RequestMethods::get("limit", 10);
+        $offset = ($page - 1) * $limit;
+        
+        $property = RequestMethods::get("property", "c");
+        $sort = RequestMethods::get("sort", "DESC");
+        $stats = array();
+        $database = Registry::get("database");
+        $result = $database->execute("SELECT item_id, SUM(click) c, SUM(amount) a FROM `stats` GROUP BY item_id ORDER BY {$property} {$sort} LIMIT {$offset}, {$limit}");
+        for ($i=0; $i<$result->num_rows; $i++) {
+            $stats[]=(object) $result->fetch_array(MYSQLI_ASSOC);
+        }
+        $count = Item::count(array());
+
+        $view->set("stats", $stats);
+        $view->set("page", $page);
+        $view->set("count", $count);
+        $view->set("limit", $limit);
+        $view->set("property", $property);
+        $view->set("sort", $sort);
     }
     
     /**

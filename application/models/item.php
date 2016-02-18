@@ -71,9 +71,9 @@ class Item extends Shared\Model {
         return base64_encode($e);
     }
 
-    public function total() {
+    public function total($user_id) {
         $c = 0;$r = 0; $a = 0;
-        $stats = Stat::all(array("item_id = ?" => $this->id), array("click", "amount", "rpm"));
+        $stats = Stat::all(array("item_id = ?" => $this->id, "user_id = ?" => $user_id), array("click", "amount", "rpm"));
         foreach ($stats as $s) {
             $c += $s->click;
             $a += $s->amount;

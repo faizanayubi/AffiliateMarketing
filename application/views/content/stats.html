@@ -1,0 +1,75 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header text-center">Manage</h1>
+            <form class="form-inline text-center" role="form" method="get" action="">
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only">Field</label>
+                        <select name="property" class="form-control" value="{echo $property}">
+                            <option value="c">Click</option>
+                            <option value="a">Amount</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <label class="sr-only">Sort</label>
+                        <select name="sort" class="form-control" value="{echo $sort}">
+                            <option value="ASC">ASC</option>
+                            <option value="DESC">DESC</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Show</button>
+            </form>
+            <hr>
+            <div class="panel panel-default">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Links</th>
+                            <th>Clicks</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach $stat in $stats}
+                        {script $content = Item::first(array("id = ?" => $stat->item_id), array("id", "title", "created", "image", "url", "live"))}
+                        <tr>
+                            <td><a href="/public/assets/uploads/images/{$content->image}" target="_blank"><img src="/content/resize/{echo base64_encode($content->image)}/50/50"></a></td>
+                            <td><a href="/admin/info/item/{$content->id}" target="_blank">{echo $content->title}</a></td>
+                            <td>{echo Link::count(array("item_id = ?" => $stat->item_id))}</td>
+                            <td>{echo $stat->c}</td>
+                            <td><i class="fa fa-inr"></i>{echo $stat->a}</td>
+                            <td>
+                                {if($content->live)}
+                                    <a href="/admin/edit/item/{$content->id}/live/0" class="btn btn-danger btn-xs"><i class="fa fa-ban"></i></a>
+                                {/if}
+                                {else}
+                                    <a href="/admin/edit/item/{$content->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
+                                {/else}
+                            </td>
+                        </tr>
+                        {/foreach}
+                    </tbody>
+                </table>   
+            </div>
+            
+            <div class="text-center">
+                <ul class="pager">
+                    {if($page != 1)}
+                    <li><a href="{echo Shared\Markup::pagination($page - 1)}">Previous</a></li>
+                    {/if}
+                    {if($page < $count/$limit)}
+                    <li><a href="{echo Shared\Markup::pagination($page + 1)}">Next</a></li>
+                    {/if}
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>

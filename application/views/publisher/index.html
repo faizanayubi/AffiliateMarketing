@@ -17,20 +17,24 @@
     <div class="col-md-12" style="padding:20px;">
         <div class="col-md-12 padding-0">
             <div class="col-md-8 padding-0">
-                <div class="col-md-12 padding-0">
-                    <div class="col-md-6">
-                        <div class="panel">
-                            <div class="panel-body text-center">
-                                <h2><i class="fa fa-inr"></i>  {echo round($total[0]["earn"], 2)}</h2>
-                                <p>Total Earnings</p>
+                <div class="panel">
+                    <div class="panel-body" style="padding-bottom:50px;">
+                        <div class="col-md-12" style="padding-top:20px;">
+                            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                                <h2 style="line-height:.4;">{echo round($total[0]["click"], 2)}</h2>
+                                <small>Clicks</small>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="panel">
-                            <div class="panel-body text-center">
-                                <h2><i class="fa fa-inr"></i>  {$paid}</h2>
-                                <p>Amount Paid</p>
+                            <div class="col-md-3 col-sm-3 col-xs-6 text-center">
+                                <h2 style="line-height:.4;">{echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</h2>
+                                <small>Average RPM</small>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12 text-center">
+                                <h2 style="line-height:.4;">{echo round($total[0]["earn"], 2)}</h2>
+                                <small>Earnings</small>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12 text-center">
+                                <h2 style="line-height:.4;">{echo round($paid, 2)}</h2>
+                                <small>Paid</small>
                             </div>
                         </div>
                     </div>
@@ -64,62 +68,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12 card-wrap padding-0">
-            <div class="col-md-6">
-                <div class="panel">
-                    <div class="panel-heading bg-white border-none" style="padding:20px;">
-                        <div class="col-md-6 col-sm-6 col-sm-12 text-left">
-                            <h4>Overall Stats (INR)</h4>
-                        </div>
-                    </div>
-                    <div class="panel-body" style="padding-bottom:50px;">
-                        <div class="col-md-12" style="padding-top:20px;">
-                            <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;">{echo round($total[0]["click"], 2)}</h2>
-                                <small>Clicks</small>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;">{echo round($total[0]["earn"]*1000/$total[0]["click"], 2)}</h2>
-                                <small>Average RPM</small>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 text-center">
-                                <h2 style="line-height:.4;">{echo round($total[0]["earn"], 2)}</h2>
-                                <small>Earnings</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="panel">
-                    <div class="panel-heading bg-white border-none" style="padding:20px;">
-                        <div class="col-md-6 col-sm-6 col-sm-12 text-left">
-                            <h4>Today Stats (INR)</h4>
-                        </div>
-                    </div>
-                    <div class="panel-body" style="padding-bottom:50px;">
-                        <div class="col-md-12" style="padding-top:20px;">
-                            <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;" id="today_click">0</h2>
-                                <small>Today Clicks</small>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-6 text-center">
-                                <h2 style="line-height:.4;" id="today_earning">0</h2>
-                                <small>Today Earnings</small>
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12 text-center">
-                                <h2 style="line-height:.4;" id="today_rpm">0</h2>
-                                <small>Your RPM</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="col-md-12">
             <div class="panel">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><i class="fa fa-line-chart fa-fw"></i> Active Links</h3>
+                    <h3 class="panel-title">
+                        <i class="fa fa-line-chart fa-fw"></i> Active Links
+                        <span class="pull-right"><a href="/publisher/mylinks">All Links</a></span>
+                    </h3>
                 </div>
                 {if($links)}
                 <div class="table-responsive">
@@ -150,19 +105,5 @@
                 {/else}
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="panel bg-green text-white">
-                <div class="panel-body">
-                    <!-- <div id="world-map" style="max-width: 1100px; height: 400px"></div> -->
-                </div>
-            </div>
-        </div>
     </div>
 </div>
-<script src="/public/assets/js/jquery-jvectormap-2.0.3.min.js"></script>
-<script src="/public/assets/js/jquery-jvectormap-world-mill-en.js"></script>
-<script type="text/javascript">
-$(function() {
-    stats();
-});
-</script>

@@ -20,26 +20,13 @@ class Analytics extends Admin {
         
         if (RequestMethods::get("shortURL")) {
             $shortURL = RequestMethods::get("shortURL");
-            $googl = Registry::get("googl");
-            $object = $googl->analyticsFull($shortURL);
-            $link = Link::first(array("short = ?" => $shortURL), array("item_id", "user_id"));
-            if ($link) {
-                $view->set("verified", $link->clusterpoint());
-            }
-
-            $longUrl = explode("?item=", $object->longUrl);
-            if($longUrl) {
-                $str = base64_decode($longUrl[1]);
-                $datas = explode("&", $str);
-                foreach ($datas as $data) {
-                    $property = explode("=", $data);
-                    $item[$property[0]] = $property[1];
-                }
-            }
-
-            $view->set("shortURL", $shortURL);
-            $view->set("googl", $object);
-            $view->set("item", $item);
+            $link = Link::first(array("short = ?" => $shortURL), array("short", "item_id"));
+            $result = $link->googl();
+            
+            $view->set("earning", $result["earning"]);
+            $view->set("click", $result["click"]);
+            $view->set("rpm", $result["rpm"]);
+            $view->set("analytics", $result["analytics"]);
         }
     }
 

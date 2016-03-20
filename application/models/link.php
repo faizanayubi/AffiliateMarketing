@@ -32,9 +32,39 @@ class Link extends Shared\Model {
     protected $_user_id;
 
     public function googl() {
+        $click = 0;$earning = 0;$analytics = array();
         $googl = Framework\Registry::get("googl");
         $object = $googl->analyticsFull($this->short);
-        return isset($object) ? $object : NULL;
+        if (isset($object)) {
+            $click = $object->analytics->allTime->shortUrlClicks;
+            $countries = $object->analytics->allTime->countries;
+            if (!empty($countries)) {
+                $rpms = RPM::first(array("item_id = ?" => $this->item_id), array("value"));
+                $rpm = json_decode($rpms->value, true);
+
+                foreach ($countries as $country) {
+                    $code = $country->id;
+                    if (array_key_exists($code, $rpm)) {
+                        $earning += ($rpm[$code])*($country->count)/1000;
+                    } else {
+                        $earning += ($rpm["NONE"])*($country->count)/1000;
+                    }
+
+                    if (array_key_exists($code, $analytics)) {
+                        $analytics[$code] += $country->count;
+                    } else {
+                        $analytics[$code] = $country->count;
+                    }
+                }
+            }
+        }
+
+        return array(
+            "click" => $click,
+            "rpm" => round($earning*1000/$click, 2),
+            "earning" => round($earning, 2),
+            "analytics" => $analytics
+        );
     }
 
     public function mongodb($date = NULL) {

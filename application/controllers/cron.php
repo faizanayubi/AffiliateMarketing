@@ -17,7 +17,7 @@ class CRON extends Auth {
     
     protected function verify() {
         $yesterday = strftime("%Y-%m-%d", strtotime('-1 day'));
-        $startdate = date('Y-m-d', strtotime("-20 day"));
+        $startdate = date('Y-m-d', strtotime("-60 day"));
         $enddate = date('Y-m-d', strtotime("now"));
         $where = array(
             "live = ?" => true,
@@ -27,7 +27,7 @@ class CRON extends Auth {
         $links = Link::all($where, array("id", "short", "item_id", "user_id"));
 
         foreach ($links as $link) {
-            $data = $link->stat($yesterday);
+            $data = $link->googl();
             if ($data["click"] > 30) {
                 $this->saveStats($data, $link);
                 sleep(1);
@@ -42,8 +42,8 @@ class CRON extends Auth {
                 "user_id" => $link->user_id,
                 "link_id" => $link->id,
                 "item_id" => $link->item_id,
-                "click" => $data["click"] - 4,
-                "amount" => $data["earning"] - 0.6,
+                "click" => $data["click"],
+                "amount" => $data["earning"],
                 "rpm" => $data["rpm"]
             ));
             $stat->save();
@@ -52,8 +52,8 @@ class CRON extends Auth {
             $modified = strtotime($stat->modified);
 
             if($modified < $today) {
-                $stat->click += $data["click"];
-                $stat->amount += $data["earning"];
+                $stat->click = $data["click"];
+                $stat->amount = $data["earning"];
                 $stat->rpm = $data["rpm"];
                 $stat->save();
             }

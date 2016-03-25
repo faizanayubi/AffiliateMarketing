@@ -52,6 +52,7 @@
                                 {else}
                                     <a href="/admin/edit/item/{$content->id}/live/1" class="btn btn-primary btn-xs"><i class="fa fa-check"></i></a>
                                 {/else}
+                                <a href="/admin/search?model=link&key=item_id&sign=equal&value={$content->id}&order=short" class="btn btn-info btn-xs"><i class="fa fa-link"></i></a>
                             </td>
                         </tr>
                         {/foreach}

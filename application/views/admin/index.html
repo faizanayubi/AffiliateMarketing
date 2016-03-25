@@ -11,8 +11,8 @@
                                 <i class="fa fa-line-chart"></i> Data
                             </a>
                             <a href="admin/search?model=user&key=live&sign=equal&value=1" class="list-group-item"><i class="fa fa-users fa-2x"></i>  Publishers <span class="badge">{echo User::count(array("admin = ?" => 0))}</span></a>
-                            <a href="/content/all" class="list-group-item"><i class="fa fa-file fa-2x"></i> Campaigns <span class="badge">{echo Item::count()}</span></a>
-                            <a href="admin/search?model=link&key=live&sign=equal&value=1" class="list-group-item"><i class="fa fa-link fa-2x"></i>  Links <span class="badge">{echo Link::count()}</span></a>
+                            <a href="/admin/search?model=item&key=live&sign=equal&value=null" class="list-group-item"><i class="fa fa-file fa-2x"></i> Unpublished Campaigns <span class="badge">{echo Item::count(array("live = ?" => 0))}</span></a>
+                            <a href="/admin/search?model=item&key=live&sign=equal&value=1" class="list-group-item"><i class="fa fa-file fa-2x"></i> Published Campaigns <span class="badge">{echo Item::count(array("live = ?" => 1))}</span></a>
                         </div>
                     </div>
 
@@ -34,6 +34,7 @@
                                 <i class="fa fa-pie-chart"></i> Monitor
                             </a>
                             <a href="admin/search?model=stat&key=created&sign=like&value={echo $now}" class="list-group-item"><i class="fa fa-database fa-2x"></i>  Link Tracking <span class="badge">{echo Stat::count()}</span></a>
+                            <a href="admin/search?model=link&key=live&sign=equal&value=1" class="list-group-item"><i class="fa fa-link fa-2x"></i>  Links <span class="badge">{echo Link::count()}</span></a>
                             <a href="admin/search?model=account&key=live&sign=equal&value=1" class="list-group-item"><i class="fa fa-bank fa-2x"></i>  Bank <span class="badge">{echo Account::count()}</span></a>
                         </div>
                     </div>                    

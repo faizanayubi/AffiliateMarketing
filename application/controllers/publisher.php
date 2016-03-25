@@ -137,11 +137,13 @@ class Publisher extends Analytics {
 
         $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-6 Day")));
         $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
+        $yesterday = date('Y-m-d', strtotime("-1 day"));
         
         $view = $this->getActionView();
-        $stats = Stat::all(array("user_id = ?" => $this->user->id, "created >= ?" => $startdate, "created <= ?" => $enddate), array("link_id"), "created", "desc");
+        $stats = Stat::all(array("user_id = ?" => $this->user->id, "created >= ?" => $startdate, "created <= ?" => $this->changeDate($enddate, "1")), array("link_id"), "created", "desc");
 
         $view->set("stats", $stats);
+        $view->set("yesterday", $yesterday);
         $view->set("count", count($stats));
     }
     
@@ -304,27 +306,16 @@ class Publisher extends Analytics {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $startdate = RequestMethods::get("startdate", date('Y-m-d', strtotime("-7 day")));
-        $enddate = RequestMethods::get("enddate", date('Y-m-d', strtotime("now")));
-        $id = RequestMethods::get("id", "");
+        $property = RequestMethods::get("property", "live");
+        $value = RequestMethods::get("value", false);
 
-        if (empty($id)) {
-            $where = array(
-                "created >= ?" => $this->changeDate($startdate, "-1"),
-                "created <= ?" => $this->changeDate($enddate, "1")
-            );
-        } else {
-            $where = array(
-                "id = ?" => $id
-            );
-        }
+        $where = array("{$property} = ?" => $value);
         $users = User::all($where, array("id","name", "created", "live"), "live", "asc", $limit, $page);
         $count = User::count($where);
 
         $view->set("users", $users);
-        $view->set("id", $id);
-        $view->set("startdate", $startdate);
-        $view->set("enddate", $enddate);
+        $view->set("property", $property);
+        $view->set("value", $value);
         $view->set("page", $page);
         $view->set("count", $count);
         $view->set("limit", $limit);

@@ -4,21 +4,17 @@
         <form class="form-inline text-center" role="form" method="get" action="">
             <div class="form-group">
                 <div class="input-group">
-                    <input type="text" style="width: 150px" name="id" class="form-control" placeholder="Enter User Id" value="{$id}" />
+                    <select name="property" class="form-control" value="{$property}">
+                        <option value="id">Id</option>
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="live">Live</option>
+                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <label class="sr-only">From</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> From</span>
-                    <input type="date" style="width: 180px" name="startdate" class="form-control" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="input-group">
-                    <label class="sr-only">To</label>
-                    <span class="add-on input-group-addon"><i class="fa fa-calendar fa-fw"></i> To</span>
-                    <input type="date" style="width: 180px" name="enddate" class="form-control" />
+                    <input type="text" name="value" class="form-control" placeholder="Enter value" value="{$value}" />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Show</button>

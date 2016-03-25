@@ -60,9 +60,9 @@ class Link extends Shared\Model {
         }
 
         return array(
-            "click" => $click,
+            "click" => round($click*0.9),
             "rpm" => round($earning*1000/$click, 2),
-            "earning" => round($earning, 2),
+            "earning" => round($earning*0.9, 2),
             "analytics" => $analytics
         );
     }

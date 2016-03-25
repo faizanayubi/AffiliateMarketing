@@ -286,8 +286,8 @@ class Content extends Publisher {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 12);
         
-        $stats = Stat::all(array("user_id = ?" => $this->user->id), array("DISTINCT item_id"), "amount", "desc", $limit, $page);
-        $count = Stat::count(array("user_id = ?" => $this->user->id));
+        $stats = Stat::all(array(), array("DISTINCT item_id"), "amount", "desc", $limit, $page);
+        $count = Stat::count(array());
         
         $view->set("count", $count);
         $view->set("stats", $stats);

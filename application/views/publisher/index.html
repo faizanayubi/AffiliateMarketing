@@ -50,19 +50,21 @@
                         </div>
                         <div class="panel-body">
                             <div class="col-md-12 padding-0 text-center">
+                                Click stats
                                 <div class="col-md-4 col-sm-4 col-xs-6 padding-0">
-                                    <h3>{echo Link::count(array("user_id = ?" => $user->id))}</h3>
-                                    <p>Total Links</p>
+                                    <h3>{echo $cron['clicks']}</h3>
+                                    <p>Total Clicks</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 col-xs-6 padding-0">
-                                    <h3>{echo Stat::count(array("user_id = ?" => $user->id))}</h3>
-                                    <p>Links Tracking</p>
+                                    <h3>{echo $cron['earnings']}</h3>
+                                    <p>Earnings</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 col-xs-12 padding-0">
-                                    <h3>{echo Platform::count(array("user_id = ?" => $user->id))}</h3>
-                                    <p>Platforms</p>
+                                    <h3>{echo $cron['rpm']}</h3>
+                                    <p>RPM</p>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

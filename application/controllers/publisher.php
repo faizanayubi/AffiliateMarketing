@@ -22,12 +22,23 @@ class Publisher extends Analytics {
         $paid = $database->query()->from("payments", array("SUM(amount)" => "earn"))->where("user_id=?", $this->user->id)->all();
         $links = Link::all(array("user_id = ?" => $this->user->id), array("id", "item_id", "short"), "created", "desc", 5, 1);
         $total = $database->query()->from("stats", array("SUM(amount)" => "earn", "SUM(click)" => "click"))->where("user_id=?", $this->user->id)->all();
+
+        $cron = Registry::get("MongoDB")->cron;
+        $record = $cron->findOne(['user_id' => (int) $this->user->id]);
+        if (!$record) {
+            $record = [
+                'clicks' => 0,
+                'earnings' => 0,
+                'rpm' => 0
+            ];
+        }
     
         $view->set("total", $total);
         $view->set("paid", round($paid[0]["earn"], 2));
         $view->set("links", $links);
         $view->set("news", $news);
-        $view->set("domain", substr($this->target()[array_rand($this->target())], 7));
+        $view->set("domain", substr($this->target()[array_rand($this->target())], 7))
+            ->set("cron", $record);
     }
 
     /**

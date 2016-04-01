@@ -17,26 +17,32 @@ class ClicksCron extends Auth {
 
 		foreach ($users as $u) {
 			$links = Link::all(array("user_id = ?" => $u->id));
-			$i = 0; $record = $cron->findOne(['user_id' => (int) $u->id]);
+			$i = 0;$count = 0; $record = $cron->findOne(['user_id' => (int) $u->id]);
 
 			if ($record && ($record['created']->sec - time()) < 3600) {
 				continue;
 			}
 			$clicks = 0; $earnings = 0; $rpm = 0;
 			foreach ($links as $l) {
-				$result = $l->googl();
+				$result = $l->googl("twoHours");
 				$clicks += $result['click'];
 				$earnings += $result['earning'];
-				$rpm = $result['rpm'];
+				$rpm += $result['rpm'];
+				if ($result["click"] > 1) {
+					++$count;
+				}
 
-				if ($i > 5) sleep(1);
+				if ($i > 5) {
+					sleep(1);
+					$i = 0;
+				}
 				++$i;
 			}
 
 			$doc = [
 				'clicks' => $clicks,
 				'earnings' => $earnings,
-				'rpm' => $rpm,
+				'rpm' => $rpm/$count,
 				'created' => new \MongoDate()
 			];
 			if (isset($record)) {

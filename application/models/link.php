@@ -31,13 +31,13 @@ class Link extends Shared\Model {
      */
     protected $_user_id;
 
-    public function googl() {
+    public function googl($period = "allTime") {
         $click = 0;$earning = 0;$analytics = array();
         $googl = Framework\Registry::get("googl");
         $object = $googl->analyticsFull($this->short);
         if (isset($object)) {
-            $click = $object->analytics->allTime->shortUrlClicks;
-            $countries = $object->analytics->allTime->countries;
+            $click = $object->analytics->$period->shortUrlClicks;
+            $countries = $object->analytics->$period->countries;
             if (!empty($countries)) {
                 $rpms = RPM::first(array("item_id = ?" => $this->item_id), array("value"));
                 $rpm = json_decode($rpms->value, true);

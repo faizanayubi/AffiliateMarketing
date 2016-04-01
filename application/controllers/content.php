@@ -77,7 +77,7 @@ class Content extends Publisher {
             ));
             $rpm->save();
 
-            $view->set("success", true);
+            $view->set("success", "Content Created Successfully with id : ". $item->id);
         }
         $view->set("rpms", $rpms);
     }
@@ -91,19 +91,15 @@ class Content extends Publisher {
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $property = RequestMethods::get("property", "title");
-        $value = RequestMethods::get("value", "");
-        switch ($property) {
-            case 'id':
-                $where = array("{$property} = ?" => $value);
-                break;
-            
-            default:
-                $where = array("{$property} LIKE ?" => "%{$value}%");
-                break;
+        $property = RequestMethods::get("property", "live");
+        $value = RequestMethods::get("value", 0);
+        $likes = array("title", "url");
+        $where = array("{$property} = ?" => $value);
+        if (in_array($property, $likes)) {
+            $where = array("{$property} LIKE ?" => "%{$value}%");
         }
         
-        $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "created", "desc", $limit, $page);
+        $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "id", "desc", $limit, $page);
         $count = Item::count($where);
 
         $view->set("contents", $contents);

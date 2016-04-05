@@ -8,22 +8,29 @@
 use Framework\Registry as Registry;
 
 class ClicksCron extends Auth {
+	public function __construct($options = []) {
+		parent::__construct($options);
+		$this->noview();
+	}
+
 	/**
 	 * @before _secure
 	 */
 	public function index() {
 		$this->log("Clicks Cron started");
 		$cron = Registry::get("MongoDB")->cron;
+		$urls = Registry::get("MongoDB")->urls;
 		$users = User::all();
 
 		foreach ($users as $u) {
 			$this->log("User: " . $u->id);
-			$links = Link::all(array("user_id = ?" => $u->id));
+			$links = $urls->find(['user_id' => $u->id], ['link_id']);
 			$i = 0; $count = 0; $record = $cron->findOne(['user_id' => (int) $u->id]);
 
 			$clicks = 0; $earnings = 0; $rpm = 0;
 			foreach ($links as $l) {
-				$result = $l->googl("twoHours");
+				$link = Link::first(["id = ?" => $l['link_id']]);
+				$result = $link->googl("twoHours");
 				$clicks += $result['click'];
 				$earnings += $result['earning'];
 				$rpm += $result['rpm'];
@@ -31,7 +38,7 @@ class ClicksCron extends Auth {
 					++$count;
 				}
 
-				if ($i > 5) {
+				if ($i > 3) {
 					sleep(1);
 					$i = 0;
 				}

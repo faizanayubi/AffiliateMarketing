@@ -35,10 +35,11 @@ class Link extends Shared\Model {
         $click = 0;$earning = 0;$analytics = array();
         $googl = Framework\Registry::get("googl");
         $object = $googl->analyticsFull($this->short);
-        if (isset($object)) {
+        if (is_object($object) && property_exists($object, 'analytics')) {
             $click = $object->analytics->$period->shortUrlClicks;
+            if ($click < 1 || !property_exists($object->analytics->$period, 'countries')) return;
             $countries = $object->analytics->$period->countries;
-            if (!empty($countries)) {
+            if (isset($countries)) {
                 $rpms = RPM::first(array("item_id = ?" => $this->item_id), array("value"));
                 $rpm = json_decode($rpms->value, true);
 

@@ -49,16 +49,25 @@ class ClicksCron extends Auth {
 				'clicks' => $clicks,
 				'earnings' => $earnings,
 				'rpm' => $rpm/$count,
-				'updated' => new \MongoDate(),
-				'created' => new \MongoDate()
+				'updated' => new \MongoDate()
 			];
 			if (isset($record)) {
+				$last = date('Y-m-d', $record['created']->sec);
+				$today = date('Y-m-d');
+
+				$interval = date_diff(date_create($today), date_create($date));
+				if ($interval->format('%a') != "1") {
+					$doc['clicks'] = $record['clicks'] + $clicks;
+					$doc['earnings'] = $record['earnings'] + $earnings;	
+				}
+
 				$cron->update(['_id' => $record['_id']], [
 					'$set' => $doc
 				]);
 			} else {
-				$cron->insert(array_merge($doc,[
-					'user_id' => (int) $u->id
+				$cron->insert(array_merge($doc, [
+					'user_id' => (int) $u->id,
+					'created' => new \MongoDate()
 				]));
 			}
 		}

@@ -110,7 +110,7 @@ class Publisher extends Analytics {
         $collection = Registry::get("MongoDB")->cron;
         $cursor = $collection->find([], ['user_id', 'clicks']);
         $cursor->sort(['clicks' => -1]);
-        $cursor->limit(20);
+        $cursor->limit(10);
 
         $earners = [];
         foreach ($cursor as $c) {

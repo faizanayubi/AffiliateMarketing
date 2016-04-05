@@ -19,20 +19,20 @@ class Content extends Publisher {
         $this->seo(array("title" => "Favourite Categories", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
         
-        $query = RequestMethods::get("query", "");
-        $title = RequestMethods::get("title", "");
-        $category = implode(",", RequestMethods::get("category", ""));
+        $query = RequestMethods::get("query", null);
+        $title = RequestMethods::get("title", null);
+        $cats = RequestMethods::get("category");
+        strpos($cats, ",") ? $category = implode(",", $cats) : NULL;
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 12);
 
-        $where = array(
-            "url LIKE ?" => "%{$query}%",
-            "title LIKE ?" => "%{$title}%",
-            "category LIKE ?" => "%{$category}%",
-            "live = ?" => true
-        );
+        isset($query) ? $where["url LIKE ?"] = "%{$query}%" : NULL;
+        isset($title) ? $where["title LIKE ?"] = "%{$title}%" : NULL;
+        isset($category) ? $where["category LIKE ?"] = "%{$category}%" : NULL;
+
+        $where["live = ?"] = true;
         
-        $items = Item::all($where, array("id", "title", "image", "url", "description"), "created", "desc", $limit, $page);
+        $items = Item::all($where, array("id", "title", "image", "url", "description"), "id", "desc", $limit, $page);
         $count = Item::count($where);
 
         $view->set("limit", $limit);
@@ -87,16 +87,18 @@ class Content extends Publisher {
      */
     public function all() {
         $this->seo(array("title" => "Manage Content", "view" => $this->getLayoutView()));
-        $view = $this->getActionView();
+        $view = $this->getActionView(); $where = array();
         $page = RequestMethods::get("page", 1);
         $limit = RequestMethods::get("limit", 10);
         
-        $property = RequestMethods::get("property", "live");
-        $value = RequestMethods::get("value", 0);
+        $property = RequestMethods::get("property", null);
+        $value = RequestMethods::get("value", null);
         $likes = array("title", "url");
-        $where = array("{$property} = ?" => $value);
-        if (in_array($property, $likes)) {
-            $where = array("{$property} LIKE ?" => "%{$value}%");
+        if ($property) {
+            $where = array("{$property} = ?" => $value);
+            if (in_array($property, $likes)) {
+                $where = array("{$property} LIKE ?" => "%{$value}%");
+            }
         }
         
         $contents = Item::all($where, array("id", "title", "created", "image", "url", "live"), "id", "desc", $limit, $page);

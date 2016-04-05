@@ -53,8 +53,10 @@ try {
     Framework\Registry::set("session", $session->initialize());
     
     // 7. load the Router class and provide the url + extension
+    $c = (isset($argv[1])) ? $argv[1] : "cron";
+    $a = (isset($argv[2])) ? $argv[2] : "index";
     $router = new Framework\Router(array(
-        "url" => isset($_GET["url"]) ? $_GET["url"] : "cron/index",
+        "url" => "$c/$a",
         "extension" => !empty($_GET["extension"]) ? $_GET["extension"] : "html"
     ));
     Framework\Registry::set("router", $router);

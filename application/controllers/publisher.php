@@ -5,6 +5,7 @@
  * @author Faizan Ayubi
  */
 use Framework\RequestMethods as RequestMethods;
+use Framework\ArrayMethods as ArrayMethods;
 use Framework\Registry as Registry;
 
 class Publisher extends Analytics {
@@ -105,38 +106,22 @@ class Publisher extends Analytics {
     public function topearners() {
         $this->seo(array("title" => "Top Earners", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
-        $today = strftime("%Y-%m-%d", strtotime('now'));
         
-        $m = new Mongo();
-        $db = $m->stats;
-        $collection = $db->clicks;
-        $stats = array();$stat = array();
+        $collection = Registry::get("MongoDB")->cron;
+        $cursor = $collection->find([], ['user_id', 'clicks']);
+        $cursor->sort(['clicks' => -1]);
+        $cursor->limit(20);
 
-        $cursor = $collection->find(array('created' => $today));
-        if ($cursor) {
-            foreach ($cursor as $key => $record) {
-                if ($stats[$record['user_id']]) {
-                    $stats[$record['user_id']] += $record['click'];
-                } else {
-                    $stats[$record['user_id']] = $record['click'];
-                }
-            }
-
-            $stats = $this->array_sort($stats, 'click', SORT_DESC);
-            $count = 0;
-            foreach ($stats as $key => $value) {
-                array_push($stat, array(
-                    "user_id" => $key,
-                    "count" => $value
-                ));
-                if ($count > 10) {
-                    break;
-                }
-                $count++;
-            }
-            $view->set("today", $stat);
+        $earners = [];
+        foreach ($cursor as $c) {
+            $usr = User::first(["id = ?" => $c['user_id']], ['username']);
+            $earners[] = ArrayMethods::toObject([
+                'username' => $usr->username,
+                'user_id' => $c['user_id'],
+                'clicks' => $c['clicks']
+            ]);
         }
-
+        
         $view->set("earners", $earners);
     }
     

@@ -9,11 +9,15 @@
                         <div class="panel panel-default">
                             <ul class="list-group">
                                 <li class="list-group-item active text-center"><i class="fa fa-trophy"></i> Today</li>
-                                {foreach $t in $today} {script $user = User::first(array("id = ?" => $t['user_id']), array("username"))}
                                 <li class="list-group-item">
-                                    {$user->username}
+                                    Username
+                                    <span class="badge">Clicks</span>
+                                </li>
+                                {foreach $e in $earners}
+                                <li class="list-group-item">
+                                    {echo ($e->username) ? $e->username : "--Not Provided--"}
                                     <span class="badge">
-                                    {echo $t['count']}
+                                    {echo $e->clicks}
                                 </span>
                                 </li>
                                 {/foreach}

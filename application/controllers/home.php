@@ -15,7 +15,6 @@ class Home extends Controller {
     }
     
     public function privacy() {
-
         $this->seo(array(
             "title" => "Privacy Policy",
             "view" => $this->getLayoutView()

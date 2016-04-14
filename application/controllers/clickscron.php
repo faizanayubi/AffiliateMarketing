@@ -55,9 +55,12 @@ class ClicksCron extends Auth {
 				$last = date('Y-m-d', $record['created']->sec);
 				$today = date('Y-m-d');
 
-				$interval = date_diff(date_create($today), date_create($date));
-				if ($interval->format('%a') != "1") {
-					$doc['clicks'] = $record['clicks'] + $clicks;
+				$interval = date_diff(date_create($today), date_create($last));
+				if ((int) $interval->format('%a') >= 1) {
+					$doc['clicks'] = 0;
+					$doc['earnings'] = 0;	
+				} else {
+					$doc['clicks'] = (int) $record['clicks'] + $clicks;
 					$doc['earnings'] = $record['earnings'] + $earnings;	
 				}
 

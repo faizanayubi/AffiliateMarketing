@@ -4,17 +4,19 @@
         <div class="panel panel-default">
             <div class="panel-heading">Total Earning</div>
             <table class="table">
-                <thead>
-                    <th>Domain</th>
-                    <th>Amount</th>
-                </thead>
                 <tbody>
+                {script $total1 = 0}
                 {foreach $record in $records}
+                {script $total1 += $record['amount']}
                     <tr>
                         <td>{echo $record['domain']}</td>
                         <td>{echo $record['amount']}</td>
                     </tr>
                 {/foreach}
+                    <tr>
+                        <th>Total</th>
+                        <th>{echo $total1}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -26,12 +28,22 @@
                     <th>Amount</th>
                 </thead>
                 <tbody>
+                {script $total2 = 0}
                 {foreach $payment in $payments}
+                {script $total2 += $payment->amount}
                     <tr>
                         <td>{echo $payment->website}</td>
                         <td>{echo $payment->amount}</td>
                     </tr>
                 {/foreach}
+                    <tr>
+                        <th>Total</th>
+                        <th>{echo $total2}</th>
+                    </tr>
+                    <tr>
+                        <th>Pending</th>
+                        <th>{echo $total1-$total2}</th>
+                    </tr>
                 </tbody>
             </table>
         </div>

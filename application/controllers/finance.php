@@ -56,7 +56,6 @@ class Finance extends Admin {
         $datas = array();$records = array();
 
         $stats = Stat::all(array("user_id = ?" => $user_id), array("DISTINCT item_id"));
-
         foreach ($stats as $stat) {
             $item = Item::first(array("id = ?" => $stat->item_id), array("url"));
             $url = parse_url(trim($item->url));
@@ -82,6 +81,7 @@ class Finance extends Admin {
     public function makepayment($user_id) {
         $this->seo(array("title" => "Make Payment", "view" => $this->getLayoutView()));
         $view = $this->getActionView();
+        $datas = array();$records = array();
         $payee = User::first(array("id = ?" => $user_id), array("id", "name", "email", "phone"));
         $account = Account::first(array("user_id = ?" => $user_id));
 
@@ -118,6 +118,24 @@ class Finance extends Admin {
 
             self::redirect("/finance/pending");
         }
+
+        $stats = Stat::all(array("user_id = ?" => $user_id), array("DISTINCT item_id"));
+        foreach ($stats as $stat) {
+            $item = Item::first(array("id = ?" => $stat->item_id), array("url"));
+            $url = parse_url(trim($item->url));
+            $earnings = $database->query()->from("stats", array("SUM(amount)" => "earn"))->where("item_id=?",$stat->item_id)->all();
+            $datas[$url["host"]] += $earnings[0]["earn"];
+        }
+        
+        foreach ($datas as $key => $value) {
+            array_push($records, array(
+                "domain" => $key,
+                "amount" => $value
+            ));
+        }
+        $payments = Payment::all(array("user_id = ?" => $user_id));
+        $view->set("records", $records);
+        $view->set("payments", $payments);
 
         $view->set("payee", $payee);
         $view->set("account", $account);

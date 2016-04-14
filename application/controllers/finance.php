@@ -71,8 +71,9 @@ class Finance extends Admin {
                 "amount" => $value
             ));
         }
-
+        $payments = Payment::all(array("user_id = ?" => $user_id));
         $view->set("records", $records);
+        $view->set("payments", $payments);
     }
 
     /**
@@ -99,12 +100,12 @@ class Finance extends Admin {
         if (RequestMethods::post("action") == "payment") {
             $payment = new Payment(array(
                 "user_id" => $user_id,
-                "amount" => round($amount[0]["earn"] - $paid[0]["earn"], 2),
+                "amount" => RequestMethods::post("amount"),
                 "mode" => RequestMethods::post("mode"),
                 "ref_id" => RequestMethods::post("ref_id"),
+                "website" => RequestMethods::post("website"),
                 "live" => 1
             ));
-
             $payment->save();
 
             $this->notify(array(

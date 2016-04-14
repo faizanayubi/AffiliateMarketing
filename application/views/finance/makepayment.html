@@ -58,7 +58,7 @@
                         <tr>
                             <td><b>Amount</b></td>
                             <td>
-                                {echo round($amount, 2)}
+                                <input type="text" class="form-control" name="amount" value="{echo round($amount, 2)}" required="">
                             </td>
                         </tr>
                         <tr>
@@ -69,6 +69,16 @@
                                     <option value="online">Online Transfer</option>
                                     <option value="cash">Cash</option>
                                     <option value="others">Others</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Website</b></td>
+                            <td>
+                                <select class="form-control" name="website">
+                                    <option value="filmymagic.com">Filmymagic.com</option>
+                                    <option value="filmycity.in">FilmyCity.in</option>
+                                    <option value="viraltabloid.in">VIraltabloid.in</option>
                                 </select>
                             </td>
                         </tr>

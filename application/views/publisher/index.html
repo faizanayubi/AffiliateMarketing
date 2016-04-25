@@ -60,7 +60,7 @@
                                     <p>Earnings</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 col-xs-12 padding-0">
-                                    <h3>{echo $cron['rpm']}</h3>
+                                    <h3>{echo round((int) $cron['earnings'] * 1000 / $cron['clicks'])}</h3>
                                     <p>RPM</p>
                                 </div>
                             </div>

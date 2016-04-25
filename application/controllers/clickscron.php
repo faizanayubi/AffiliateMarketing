@@ -20,7 +20,7 @@ class ClicksCron extends Auth {
 		$this->log("Clicks Cron started");
 		$cron = Registry::get("MongoDB")->cron;
 		$urls = Registry::get("MongoDB")->urls;
-		$users = User::all();
+		$users = User::all([], ['id']);
 
 		foreach ($users as $u) {
 			$this->log("User: " . $u->id);
@@ -29,14 +29,10 @@ class ClicksCron extends Auth {
 
 			$clicks = 0; $earnings = 0; $rpm = 0;
 			foreach ($links as $l) {
-				$link = Link::first(["id = ?" => $l['link_id']]);
+				$link = Link::first(["id = ?" => $l['link_id']], ['short', 'item_id']);
 				$result = $link->googl("twoHours");
 				$clicks += $result['click'];
 				$earnings += $result['earning'];
-				$rpm += $result['rpm'];
-				if ($result["click"] > 1) {
-					++$count;
-				}
 
 				if ($i > 3) {
 					sleep(1);
@@ -48,11 +44,10 @@ class ClicksCron extends Auth {
 			$doc = [
 				'clicks' => $clicks,
 				'earnings' => $earnings,
-				'rpm' => $rpm/$count,
 				'updated' => new \MongoDate()
 			];
 			if (isset($record)) {
-				$last = date('Y-m-d', $record['created']->sec);
+				$last = date('Y-m-d', $record['updated']->sec);
 				$today = date('Y-m-d');
 
 				$interval = date_diff(date_create($today), date_create($last));

@@ -189,6 +189,10 @@ class Content extends Publisher {
             $googl = Registry::get("googl");
             $object = $googl->shortenURL($longURL);
             
+            $facebook = new \Curl\Curl();
+            $facebook->post('https://graph.facebook.com/?id='. $longURL .'&scrape=true');
+            $facebook->close();
+            
             $view->set("shortURL", $object->id);
             $view->set("googl", $object);
         }

@@ -94,6 +94,10 @@ class Publisher extends Analytics {
         $googl = Registry::get("googl");
         $object = $googl->shortenURL($longURL);
 
+        $facebook = new \Curl\Curl();
+        $facebook->post('https://graph.facebook.com/?id='. $longURL .'&scrape=true');
+        $facebook->close();
+
         $link->short = $object->id;
         $link->save();
 
